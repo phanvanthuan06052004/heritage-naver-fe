@@ -316,7 +316,7 @@ function HeritageMapView({ center, markers: initialMarkers = [], onMarkerClick, 
                             size={Math.min(suggestions.length, 5)}
                             onChange={handleSuggestionSelect}
                             className="w-full p-2 rounded border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            aria-label="Gợi ý địa điểm"
+                            aria-label="Suggestions for location"
                         >
                             {suggestions.map((suggestion, index) => (
                                 <option key={index} value={suggestion.place_name}>

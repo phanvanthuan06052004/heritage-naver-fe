@@ -30,19 +30,19 @@ const UserManagement = () => {
   const totalPages = pagination.totalPages || 1
 
   const handleDelete = async (id) => {
-    if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
+    if (window.confirm('Are you sure you want to delete this user?')) {
       try {
         await deleteUser(id).unwrap()
         toast.success('User deleted successfully!')
       } catch (err) {
-        console.error('Lỗi khi xóa người dùng:', err)
+        console.error('Error deleting user:', err)
         toast.error('Failed to delete user!')
       }
     }
   }
 
   if (isLoading) return <div className="text-center">Loading...</div>
-  if (isError) return <div className="text-center text-red-500">Lỗi: {error?.data?.message || 'Không thể tải danh sách người dùng'}</div>
+  if (isError) return <div className="text-center text-red-500">Error: {error?.data?.message || 'Unable to load user list'}</div>
 
   return (
     <div className="space-y-6">
@@ -67,9 +67,9 @@ const UserManagement = () => {
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
           >
-            <option value="ALL">Tất cả</option>
-            <option value="user">Người dùng</option>
-            <option value="admin">Quản trị viên</option>
+            <option value="ALL">All</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
           </select>
         </div>
       </div>
@@ -79,9 +79,9 @@ const UserManagement = () => {
           <TableRow>
             <TableHead>Display Name</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Vai trò</TableHead>
+            <TableHead>Role</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Ngày tạo</TableHead>
+            <TableHead>Created at</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -103,14 +103,14 @@ const UserManagement = () => {
                 <span className={`px-2 py-1 rounded-full text-xs ${
                   user.role === 'admin' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'
                 }`}>
-                  {user.role === 'admin' ? 'Quản trị viên' : 'Người dùng'}
+                  {user.role === 'admin' ? 'Admin' : 'User'}
                 </span>
               </TableCell>
               <TableCell>
                 <span className={`px-2 py-1 rounded-full text-xs ${
                   user.account.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                 }`}>
-                  {user.account.isActive ? 'Hoạt động' : 'Bị khóa'}
+                  {user.account.isActive ? 'Active' : 'Locked'}
                 </span>
               </TableCell>
               <TableCell>{new Date(user.createAt).toLocaleDateString('vi-VN')}</TableCell>
@@ -136,24 +136,24 @@ const UserManagement = () => {
       </Table>
 
       <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-4">
-          <p>Tổng: {totalItems} người dùng</p>
+          <div className="flex items-center space-x-4">
+            <p>Total: {totalItems} users</p>
         </div>
         <div className="flex items-center space-x-4">
           <Button
             disabled={currentPage === 1}
             onClick={() => setPage(currentPage - 1)}
           >
-            Trước
+            Previous
           </Button>
           {totalPages > 0 && (
-            <span>Trang {currentPage} / {totalPages}</span>
+            <span>Page {currentPage} / {totalPages}</span>
           )}
           <Button
             disabled={currentPage >= totalPages}
             onClick={() => setPage(currentPage + 1)}
           >
-            Sau
+            Next
           </Button>
         </div>
       </div>

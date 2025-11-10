@@ -18,9 +18,9 @@ const TableRow = ({ ranking, formatDate, getInitials, getRankIcon }) => {
       </div>
       <div className='flex-1'>
         <div className='font-medium text-foreground'>{ranking?.displayName}</div>
-        <div className='text-sm text-muted-foreground'>Hoàn thành: {formatDate(ranking?.completeDate)}</div>
+        <div className='text-sm text-muted-foreground'>Completed: {formatDate(ranking?.completeDate)}</div>
       </div>
-      <div className='font-bold'>{ranking?.score.toFixed(2)} điểm</div>
+      <div className='font-bold'>{ranking?.score.toFixed(2)} score</div>
     </div>
   )
 }

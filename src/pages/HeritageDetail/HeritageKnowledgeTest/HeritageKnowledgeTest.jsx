@@ -19,11 +19,11 @@ const KnowledgeTestItem = ({ test, onClick }) => (
       <div className='flex items-center text-sm text-muted-foreground'>
         <span className='mr-4 flex items-center gap-1'>
           <i className="ri-file-list-2-line text-heritage-dark"></i>
-          {test?.stats?.totalAttempts || 0} lượt làm
+          {test?.stats?.totalAttempts || 0} attempts
         </span>
         <span className='flex items-center gap-1'>
           <i className="ri-bar-chart-2-line text-heritage-dark"></i>
-          <span>Điểm TB:</span>
+          <span>Average Score:</span>
           <span className='ml-1 font-semibold text-heritage-dark'>
             {(test?.stats?.averageScore || 0).toFixed(2)}/100
           </span>
@@ -41,7 +41,7 @@ const ErrorMessage = ({ message, onRetry }) => (
       onClick={onRetry}
       className='mt-4 px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors'
     >
-      Thử lại
+      Try again
     </button>
   </div>
 )
@@ -50,7 +50,7 @@ const ErrorMessage = ({ message, onRetry }) => (
 const LoadingState = () => (
   <div className='flex justify-center items-center py-8'>
     <Loader2 className='h-6 w-6 animate-spin text-heritage' />
-    <span className='ml-2 text-muted-foreground'>Đang tải bài kiểm tra...</span>
+    <span className='ml-2 text-muted-foreground'>Loading...</span>
   </div>
 )
 
@@ -58,7 +58,7 @@ const LoadingState = () => (
 const EmptyState = () => (
   <div className='flex flex-col items-center justify-center py-6 text-muted-foreground'>
     <BookOpen className='h-8 w-8 mb-2' />
-    <p>Chưa có bài kiểm tra nào cho di tích này.</p>
+    <p>No test available for this heritage site.</p>
   </div>
 )
 
@@ -77,12 +77,12 @@ const HeritageKnowledgeTest = ({ heritageId, heritageName }) => {
 
   const openTest = (test) => {
     setActiveTest(test)
-    toast.info(`Bắt đầu làm bài kiểm tra: ${test?.title}`)
+    toast.info(`Start test: ${test?.title}`, { position: 'top-right' })
   }
 
   const closeTest = () => {
     setActiveTest(null)
-    toast.info('Đã đóng bài kiểm tra')
+    toast.info('Test finished')
   }
 
   // Memoized filtering to avoid unnecessary recalculations
@@ -91,7 +91,7 @@ const HeritageKnowledgeTest = ({ heritageId, heritageName }) => {
   ), [data?.results, heritageId])
   console.log(availableTests);
   if (error) {
-    const errorMessage = error?.data?.message || error?.error || 'Đã xảy ra lỗi.'
+    const errorMessage = error?.data?.message || error?.error || 'An error occurred.'
     toast.error(errorMessage)
     return <ErrorMessage message={errorMessage} onRetry={refetch} />
   }

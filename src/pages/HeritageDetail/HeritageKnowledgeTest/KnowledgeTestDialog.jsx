@@ -14,12 +14,12 @@ const TRANSITION_DELAY = 300
 // Sub-components
 const TestResults = ({ results, onClose }) => (
   <div className='space-y-6'>
-    <h3 className='text-xl font-semibold'>Kết quả bài kiểm tra</h3>
+    <h3 className='text-xl font-semibold'>Test results</h3>
     <div className='text-center py-4'>
       <div className='text-3xl font-bold text-heritage mb-2'>
         {(results?.score ?? 0).toFixed(2)}/100
       </div>
-      <p className='text-muted-foreground'>Điểm số của bạn</p>
+      <p className='text-muted-foreground'>Your score</p>
     </div>
 
     
@@ -27,7 +27,7 @@ const TestResults = ({ results, onClose }) => (
       onClick={onClose}
       className='w-full py-2 bg-heritage text-white rounded-md hover:bg-heritage-dark transition-colors'
     >
-      Đóng
+      Close
     </button>
   </div>
 )
@@ -38,8 +38,8 @@ const TestError = ({ onClose }) => (
       <AlertTriangle className='h-8 w-8 text-destructive' />
     </div>
     <div>
-      <p className='text-lg font-medium'>Không thể tải bài kiểm tra</p>
-      <p className='text-muted-foreground mt-1'>Vui lòng thử lại sau</p>
+      <p className='text-lg font-medium'>Cannot load test</p>
+      <p className='text-muted-foreground mt-1'>Please try again later</p>
     </div>
     <button 
       onClick={onClose} 
@@ -53,7 +53,7 @@ const TestError = ({ onClose }) => (
 const TestLoading = () => (
   <div className='flex flex-col items-center justify-center py-12'>
     <Loader2 className='h-10 w-10 animate-spin text-heritage mb-4' />
-    <p className='text-muted-foreground'>Đang tải bài kiểm tra...</p>
+    <p className='text-muted-foreground'>Loading test...</p>
   </div>
 )
 
@@ -119,13 +119,13 @@ const NavigationButtons = ({
       {isSubmitting ? (
         <>
           <Loader2 className='h-4 w-4 mr-2 animate-spin' />
-          Đang nộp bài...
+          Submitting...
         </>
       ) : isLastQuestion ? (
         'Nộp bài'
       ) : (
         <>
-          Câu tiếp theo
+          Next question
           <ChevronRight className='h-4 w-4 ml-1' />
         </>
       )}
@@ -279,7 +279,7 @@ const KnowledgeTestDialog = ({ open, onClose, testId, testInfo }) => {
       }).unwrap()
 
       setResults(result)
-      toast.success(`Chúc mừng! Bạn đã hoàn thành bài kiểm tra với số điểm ${result?.score || 0}/100`)
+      toast.success(`Congratulations! You have completed the test with a score of ${result?.score || 0}/100`)
       
       if (timerRef.current) {
         clearInterval(timerRef.current)
@@ -287,7 +287,7 @@ const KnowledgeTestDialog = ({ open, onClose, testId, testInfo }) => {
       }
     } catch (err) {
       console.error('Error submitting test:', err)
-      toast.error('Có lỗi xảy ra khi nộp bài. Vui lòng thử lại.')
+      toast.error('An error occurred while submitting the test. Please try again.')
     }
   }, [isSubmitting, test, selectedAnswers, submitAttempt, userInfo])
 
@@ -319,12 +319,12 @@ const KnowledgeTestDialog = ({ open, onClose, testId, testInfo }) => {
       setTimeLeft(prev => {
         if (prev <= 1) {
           clearInterval(timerRef.current)
-          toast.warning('Hết thời gian làm bài!')
+          toast.warning('Time is up!')
           handleSubmitTest()
           return 0
         }
         if (prev === 60) {
-          toast.warning('Còn 1 phút nữa!')
+          toast.warning('1 minute left!')
         }
         return prev - 1
       })
@@ -354,14 +354,14 @@ const KnowledgeTestDialog = ({ open, onClose, testId, testInfo }) => {
         <button
           onClick={onClose}
           className='px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors'
-          aria-label='Quay lại chọn bài kiểm tra'
+          aria-label='Back to select test'
         >
-          Quay lại chọn bài kiểm tra
+          Back to select test
         </button>
         
         {/* Question info and timer */}
         <div className='flex justify-between items-center'>
-          <div className='text-base'>Câu {currentQuestionIndex + 1}/{totalQuestions}</div>
+          <div className='text-base'>Question {currentQuestionIndex + 1}/{totalQuestions}</div>
           <div className={cn(
             'flex items-center px-3 py-1.5 rounded-full text-sm font-medium', 
             timeLeft && timeLeft < 60 
@@ -399,7 +399,7 @@ const KnowledgeTestDialog = ({ open, onClose, testId, testInfo }) => {
               <div className='mb-5'>
                 <img 
                   src={currentQuestion.image || '/placeholder.svg'} 
-                  alt='Hình minh họa câu hỏi' 
+                  alt='Question image' 
                   className='rounded-md w-full object-cover' 
                   loading='lazy'
                 />
@@ -452,10 +452,10 @@ const KnowledgeTestDialog = ({ open, onClose, testId, testInfo }) => {
     >
       <DialogHeader className='flex-shrink-0 p-6 pb-4'>
         <DialogTitle id='test-dialog-title'>
-          {test?.title || testInfo?.title || 'Kiểm tra di tích lịch sử A'}
+          {test?.title || testInfo?.title || 'Heritage History Test'}
         </DialogTitle>
         <DialogDescription>
-          {test?.content || testInfo?.content || 'Bài kiểm tra này giúp bạn hiểu rõ hơn về di tích lịch sử.'}
+          {test?.content || testInfo?.content || 'This test helps you understand the heritage history better.'}
         </DialogDescription>
       </DialogHeader>
 

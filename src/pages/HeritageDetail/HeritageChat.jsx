@@ -184,7 +184,7 @@ const HeritageChat = ({ heritageId, heritageName, landmarkData }) => {
                         <Loader2 className="w-6 h-6 animate-spin mx-auto" />
                     </div>
                 ) : messages.length === 0 ? (
-                    <p className="text-center text-gray-500 text-sm">Đang tải nội dung...</p>
+                    <p className="text-center text-gray-500 text-sm">Loading content...</p>
                 ) : (
                     messages.map((message) => (
                         <div
@@ -247,7 +247,7 @@ const HeritageChat = ({ heritageId, heritageName, landmarkData }) => {
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Hỏi gì đó..."
+                    placeholder="Your question..."
                     className="flex-1 text-sm"
                 />
                 <Button onClick={handleSendMessage} disabled={isUploading} className="p-1">

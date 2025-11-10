@@ -33,12 +33,12 @@ const UserDetail = () => {
 
     useEffect(() => {
         if (updateSuccess) {
-            toast.success('Cập nhật thành công!')
+            toast.success('Update successful!')
             navigate('/admin/users')
         }
         if (updateError) {
-            console.error('Lỗi cập nhật:', updateErrorMessage)
-            toast.error(`Cập nhật thất bại: ${updateErrorMessage?.data?.message || 'Lỗi không xác định'}`)
+            console.error('Update error:', updateErrorMessage)
+            toast.error(`Update failed: ${updateErrorMessage?.data?.message || 'Unknown error'}`)
         }
     }, [updateSuccess, updateError, updateErrorMessage, navigate])
 
@@ -69,12 +69,12 @@ const UserDetail = () => {
     }
 
     if (isLoading) return <div className="text-center">Loading...</div>
-    if (isError) return <div className="text-center text-red-500">Lỗi khi tải dữ liệu: {error?.data?.message || error.error}</div>
-    if (!user) return <div className="text-center">Không tìm thấy người dùng.</div>
+    if (isError) return <div className="text-center text-red-500">Error loading data: {error?.data?.message || error.error}</div>
+    if (!user) return <div className="text-center">User not found.</div>
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Chi tiết Người dùng</h2>
+            <h2 className="text-2xl font-semibold">User Details</h2>
             <div className="bg-white p-6 rounded-md shadow-md">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -92,7 +92,7 @@ const UserDetail = () => {
                         <Input type="email" id="email" value={user?.account?.email || ''} disabled />
                     </div>
                     <div>
-                        <Label htmlFor="role">Vai trò</Label>
+                        <Label htmlFor="role">Role</Label>
                         <select
                             id="role"
                             name="role"
@@ -105,7 +105,7 @@ const UserDetail = () => {
                         </select>
                     </div>
                     <div>
-                        <Label htmlFor="phone">Số điện thoại</Label>
+                        <Label htmlFor="phone">Phone</Label>
                         <Input
                             type="text"
                             id="phone"
@@ -115,7 +115,7 @@ const UserDetail = () => {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="gender">Giới tính</Label>
+                        <Label htmlFor="gender">Gender</Label>
                         <select
                             id="gender"
                             name="gender"
@@ -124,8 +124,8 @@ const UserDetail = () => {
                             onChange={handleInputChange}
                         >
                             <option value="men">Nam</option>
-                            <option value="woman">Nữ</option>
-                            <option value="other">Khác</option>
+                            <option value="woman">Woman</option>
+                            <option value="other">Other</option>
                         </select>
                     </div>
 
@@ -144,13 +144,13 @@ const UserDetail = () => {
                                 ? 'bg-green-100 text-green-800'
                                 : 'bg-red-100 text-red-800'
                                 }`}>
-                                {formData.isActive ? 'Hoạt động' : 'Bị khóa'}
+                                {formData.isActive ? 'Active' : 'Locked'}
                             </span>
                         </div>
                         <p className="text-sm text-gray-500 mt-1">
                             {formData.isActive
-                                ? 'Tài khoản đang hoạt động bình thường'
-                                : 'Tài khoản đang bị khóa và không thể đăng nhập'
+                                ? 'Account is active and can login'
+                                : 'Account is locked and cannot login'
                             }
                         </p>
                     </div>
@@ -163,7 +163,7 @@ const UserDetail = () => {
                                 ? 'bg-blue-100 text-blue-800'
                                 : 'bg-yellow-100 text-yellow-800'
                                 }`}>
-                                {user?.account?.isVerified ? 'Đã xác thực' : 'Chưa xác thực'}
+                                {user?.account?.isVerified ? 'Verified' : 'Unverified'}
                             </span>
                         </div>
                     </div>
@@ -171,18 +171,18 @@ const UserDetail = () => {
                     {/* Creation and Update Info */}
                     <div className="col-span-2 pt-4 border-t">
                         <div className="flex flex-col space-y-2 text-sm text-gray-500">
-                            <p>Ngày tạo: {new Date(user?.createAt).toLocaleString('vi-VN')}</p>
-                            <p>Cập nhật lần cuối: {new Date(user?.updatedAt).toLocaleString('vi-VN')}</p>
+                            <p>Created at: {new Date(user?.createAt).toLocaleString('vi-VN')}</p>
+                            <p>Last updated: {new Date(user?.updatedAt).toLocaleString('vi-VN')}</p>
                         </div>
                     </div>
                 </div>
 
                 <div className="mt-6 flex space-x-4">
                     <Button onClick={handleUpdate} disabled={isUpdating}>
-                        {isUpdating ? 'Đang cập nhật...' : 'Cập nhật'}
+                        {isUpdating ? 'Updating...' : 'Update'}
                     </Button>
                     <Button variant="outline" onClick={() => navigate('/admin/users')}>
-                        Quay lại
+                        Back
                     </Button>
                 </div>
             </div>

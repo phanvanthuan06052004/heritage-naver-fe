@@ -32,32 +32,32 @@ const Comment = ({ comment, depth = 0, heritageId, currentUser, avatar }) => {
     const handleReplySubmit = async (e) => {
         e.preventDefault()
         if (!currentUser) {
-            toast.error("Vui lòng đăng nhập để bình luận.")
+            toast.error("Please login to comment.")
             return
         }
         if (!replyForm.content.trim()) {
-            toast.error("Bình luận không được để trống.")
+            toast.error("Comment cannot be empty.")
             return
         }
 
         try {
             await createComment({ heritageId, content: replyForm.content, parentId: comment._id }).unwrap()
-            toast.success("Trả lời đã được đăng!")
+            toast.success("Reply posted!")
             setReplyForm({ content: "", isOpen: false })
             setShowReplies(true)
         } catch (err) {
             console.error("Failed to post reply:", err)
-            toast.error("Không thể đăng trả lời. Vui lòng thử lại.")
+            toast.error("Unable to post reply. Please try again.")
         }
     }
 
     const handleDeleteComment = async () => {
         try {
             await deleteComment({ heritageId: heritageId, commentId: comment._id }).unwrap()
-            toast.success("Bình luận đã được xóa!")
+            toast.success("Comment deleted!")
         } catch (err) {
             console.error("Failed to delete comment:", err)
-            toast.error("Không thể xóa bình luận. Vui lòng thử lại.")
+            toast.error("Unable to delete comment. Please try again.")
         }
     }
 
@@ -109,7 +109,7 @@ const Comment = ({ comment, depth = 0, heritageId, currentUser, avatar }) => {
                             <textarea
                                 className="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary dark:bg-gray-700 dark:text-gray-200"
                                 rows="3"
-                                placeholder="Viết câu trả lời của bạn..."
+                                placeholder="Write your reply..."
                                 value={replyForm.content}
                                 onChange={handleReplyChange}
                                 disabled={isCreating}
@@ -121,7 +121,7 @@ const Comment = ({ comment, depth = 0, heritageId, currentUser, avatar }) => {
                                     ) : (
                                         <Send className="w-4 h-4 mr-1" />
                                     )}
-                                    Đăng trả lời
+                                    Post reply
                                 </Button>
                                 <Button
                                     type="button"
@@ -158,7 +158,7 @@ const Comment = ({ comment, depth = 0, heritageId, currentUser, avatar }) => {
                             <Loader2 className="w-4 h-4 animate-spin text-primary" />
                         </div>
                     ) : repliesData?.discussArray?.length === 0 ? (
-                        <p className="mt-4 text-sm text-gray-500">Chưa có câu trả lời nào.</p>
+                        <p className="mt-4 text-sm text-gray-500">No replies yet.</p>
                     ) : (
                         repliesData?.discussArray?.map((reply) => (
                             <Comment

@@ -32,11 +32,11 @@ const AdminLayout = () => {
   const handleLogout = () => {
     try {
       dispatch(logOut())
-      toast.success('Đăng xuất thành công!')
+      toast.success('Logged out successfully!')
       navigate('/')
     } catch (error) {
       console.error('Logout failed:', error)
-      toast.error('Đăng xuất thất bại. Vui lòng thử lại!')
+      toast.error('Logout failed. Please try again!')
     }
   }
 
@@ -45,10 +45,10 @@ const AdminLayout = () => {
   }
 
   const navItems = [
-    { name: 'Quản lý Người dùng', path: '/admin/users', icon: <Users className='w-5 h-5' /> },
-    { name: 'Quản lý Di tích', path: '/admin/heritages', icon: <Users className='w-5 h-5' /> },
-    { name: 'Quản lý Bài kiểm tra', path: '/admin/knowledge-tests', icon: <BookOpen className='w-5 h-5' /> },
-    { name: 'Cài đặt', path: '/admin/settings', icon: <Settings className='w-5 h-5' /> },
+    { name: 'User Management', path: '/admin/users', icon: <Users className='w-5 h-5' /> },
+    { name: 'Heritage Management', path: '/admin/heritages', icon: <Users className='w-5 h-5' /> },
+    { name: 'Knowledge Test Management', path: '/admin/knowledge-tests', icon: <BookOpen className='w-5 h-5' /> },
+    { name: 'Settings', path: '/admin/settings', icon: <Settings className='w-5 h-5' /> },
   ]
 
   const isActiveRoute = (path) => {
@@ -75,7 +75,7 @@ const AdminLayout = () => {
                   className={`w-full text-left !justify-start ${isActiveRoute('/') ? 'bg-gray-100' : ''}`}
                 >
                   <Home className='w-5 h-5 mr-2' />
-                  {isSidebarOpen && <span>Trang chủ</span>}
+                  {isSidebarOpen && <span>Home</span>}
                 </Button>
               </Link>
             </li>
@@ -96,7 +96,7 @@ const AdminLayout = () => {
         {isSidebarOpen && (
           <div className='p-4 border-t'>
             <Button variant='destructive' className='w-full' onClick={handleLogout}>
-              <LogOut className='w-5 h-5 mr-2' /> Đăng xuất
+              <LogOut className='w-5 h-5 mr-2' /> Logout
             </Button>
           </div>
         )}
@@ -108,13 +108,13 @@ const AdminLayout = () => {
             <Button variant='ghost' onClick={toggleSidebar} className='mr-4'>
               <Menu className='w-6 h-6' />
             </Button>
-            <h1 className='text-xl font-semibold'>Quản trị hệ thống</h1>
+            <h1 className='text-xl font-semibold'>System Administration</h1>
           </div>
           <div className='flex items-center space-x-4'>
             <Link to='/'>
               <Button variant='ghost' size='sm'>
                 <Home className='w-5 h-5 mr-2' />
-                <span>Trang chủ</span>
+                <span>Home</span>
               </Button>
             </Link>
             <span className='text-sm'>{userInfo?.displayname || 'Admin'}</span>
