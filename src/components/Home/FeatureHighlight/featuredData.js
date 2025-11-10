@@ -4,22 +4,22 @@ export const featuredData = [
   {
     _id: 1,
     icon: Brain,
-    title: 'Kiểm tra kiến thức',
-    description: 'Thử thách bản thân với các câu hỏi trắc nghiệm và học hỏi thêm về di sản văn hóa.',
+    title: 'Knowledge Quiz',
+    description: 'Challenge yourself with multiple-choice questions and learn more about cultural heritage.',
     to: '/heritages'
   },
   {
     _id: 2,
     icon: Theater,
-    title: 'Trải nghiệm nhập vai',
-    description: 'Khám phá lịch sử qua góc nhìn của các nhân vật lịch sử trong các sự kiện quan trọng.',
+    title: 'Role-Playing Experience',
+    description: 'Explore history through the perspective of historical figures in important events.',
     to: '/heritages'
   },
   {
     _id: 3,
     icon: Map,
-    title: 'Khám phá bản đồ',
-    description: 'Tìm kiếm và khám phá các di tích lịch sử trên bản đồ, với sự trợ giúp từ Google Maps.',
+    title: 'Map Exploration',
+    description: 'Search and discover historical sites on the map with the help of Google Maps.',
     to: '/explore'
   }
 ]

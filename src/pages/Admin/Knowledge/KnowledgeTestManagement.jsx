@@ -31,32 +31,32 @@ const KnowledgeTestManagement = () => {
     const totalPages = pagination.totalPages || 1
 
     const handleDelete = async (id) => {
-        if (window.confirm('Bạn có chắc muốn xóa bài kiểm tra này?')) {
+        if (window.confirm('Are you sure you want to delete this knowledge test?')) {
             try {
                 await deleteKnowledgeTest(id).unwrap()
-                toast.success('Xóa bài kiểm tra thành công!')
+                toast.success('Knowledge test deleted successfully!')
             } catch (err) {
-                console.error('Lỗi khi xóa bài kiểm tra:', err)
-                toast.error(`Xóa bài kiểm tra thất bại: ${err?.data?.message || 'Lỗi không xác định'}`)
+                console.error('Error deleting knowledge test:', err)
+                toast.error(`Failed to delete knowledge test: ${err?.data?.message || 'Unknown error'}`)
             }
         }
     }
 
-    if (isLoading) return <div className="text-center">Đang tải...</div>
+    if (isLoading) return <div className="text-center">Loading...</div>
     if (isError)
         return (
             <div className="text-center text-red-500">
-                Lỗi: {error?.data?.message || 'Không thể tải danh sách bài kiểm tra'}
+                Error: {error?.data?.message || 'Unable to load knowledge test list'}
             </div>
         )
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Quản lý Bài Kiểm tra Kiến thức</h2>
+            <h2 className="text-2xl font-semibold">Knowledge Test Management</h2>
             <div className="flex justify-between items-center">
                 <div className="relative w-64">
                     <Input
-                        placeholder="Tìm kiếm theo tiêu đề"
+                        placeholder="Search by title"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-10"
@@ -69,12 +69,12 @@ const KnowledgeTestManagement = () => {
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
                     >
-                        <option value="ALL">Tất cả</option>
-                        <option value="ACTIVE">Hoạt động</option>
-                        <option value="INACTIVE">Không hoạt động</option>
+                        <option value="ALL">All</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="INACTIVE">Inactive</option>
                     </select>
                     <Button onClick={() => navigate('/admin/knowledge-tests/new')}>
-                        Thêm Bài Kiểm tra
+                        Add Knowledge Test
                     </Button>
                 </div>
             </div>
@@ -82,11 +82,11 @@ const KnowledgeTestManagement = () => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Tiêu đề</TableHead>
+                        <TableHead>Title</TableHead>
                         <TableHead>Heritage ID</TableHead>
-                        <TableHead>Trạng thái</TableHead>
-                        <TableHead>Ngày tạo</TableHead>
-                        <TableHead>Hành động</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Created at</TableHead>
+                        <TableHead>Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -94,7 +94,7 @@ const KnowledgeTestManagement = () => {
                         <TableRow key={test._id}>
                             <TableCell maxWidth="250px">{test.title}</TableCell>
                             <TableCell>{test.heritageId}</TableCell>
-                            <TableCell>{test.status === 'ACTIVE' ? 'Hoạt động' : 'Không hoạt động'}</TableCell>
+                            <TableCell>{test.status === 'ACTIVE' ? 'Active' : 'Inactive'}</TableCell>
                             <TableCell>
                                 {new Date(test.createdAt).toLocaleDateString('vi-VN')}
                             </TableCell>
@@ -121,23 +121,23 @@ const KnowledgeTestManagement = () => {
 
             <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-4">
-                    <p>Tổng: {totalItems} bài kiểm tra</p>
+                    <p>Total: {totalItems} knowledge tests</p>
                 </div>
                 <div className="flex items-center space-x-4">
                     <Button
                         disabled={currentPage === 1}
                         onClick={() => setPage(currentPage - 1)}
                     >
-                        Trước
+                        Previous
                     </Button>
                     {totalPages > 0 && (
-                        <span>Trang {currentPage} / {totalPages}</span>
+                        <span>Page {currentPage} / {totalPages}</span>
                     )}
                     <Button
                         disabled={currentPage >= totalPages}
                         onClick={() => setPage(currentPage + 1)}
                     >
-                        Sau
+                        Next
                     </Button>
                 </div>
             </div>

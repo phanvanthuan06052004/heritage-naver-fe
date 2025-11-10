@@ -30,31 +30,31 @@ const UserManagement = () => {
   const totalPages = pagination.totalPages || 1
 
   const handleDelete = async (id) => {
-    if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
+    if (window.confirm('Are you sure you want to delete this user?')) {
       try {
         await deleteUser(id).unwrap()
-        toast.success('Xóa người dùng thành công!')
+        toast.success('User deleted successfully!')
       } catch (err) {
-        console.error('Lỗi khi xóa người dùng:', err)
-        toast.error('Xóa người dùng thất bại!')
+        console.error('Error deleting user:', err)
+        toast.error('Failed to delete user!')
       }
     }
   }
 
-  if (isLoading) return <div className="text-center">Đang tải...</div>
-  if (isError) return <div className="text-center text-red-500">Lỗi: {error?.data?.message || 'Không thể tải danh sách người dùng'}</div>
+  if (isLoading) return <div className="text-center">Loading...</div>
+  if (isError) return <div className="text-center text-red-500">Error: {error?.data?.message || 'Unable to load user list'}</div>
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
         <UserCog className="w-8 h-8" />
-        <h2 className="text-2xl font-semibold">Quản lý Người dùng</h2>
+        <h2 className="text-2xl font-semibold">User Management</h2>
       </div>
 
       <div className="flex justify-between items-center">
         <div className="relative w-64">
           <Input
-            placeholder="Tìm kiếm theo tên/email"
+            placeholder="Search by name/email"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -67,9 +67,9 @@ const UserManagement = () => {
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
           >
-            <option value="ALL">Tất cả</option>
-            <option value="user">Người dùng</option>
-            <option value="admin">Quản trị viên</option>
+            <option value="ALL">All</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
           </select>
         </div>
       </div>
@@ -77,12 +77,12 @@ const UserManagement = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Tên hiển thị</TableHead>
+            <TableHead>Display Name</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Vai trò</TableHead>
-            <TableHead>Trạng thái</TableHead>
-            <TableHead>Ngày tạo</TableHead>
-            <TableHead>Hành động</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Created at</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -103,14 +103,14 @@ const UserManagement = () => {
                 <span className={`px-2 py-1 rounded-full text-xs ${
                   user.role === 'admin' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'
                 }`}>
-                  {user.role === 'admin' ? 'Quản trị viên' : 'Người dùng'}
+                  {user.role === 'admin' ? 'Admin' : 'User'}
                 </span>
               </TableCell>
               <TableCell>
                 <span className={`px-2 py-1 rounded-full text-xs ${
                   user.account.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                 }`}>
-                  {user.account.isActive ? 'Hoạt động' : 'Bị khóa'}
+                  {user.account.isActive ? 'Active' : 'Locked'}
                 </span>
               </TableCell>
               <TableCell>{new Date(user.createAt).toLocaleDateString('vi-VN')}</TableCell>
@@ -136,24 +136,24 @@ const UserManagement = () => {
       </Table>
 
       <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-4">
-          <p>Tổng: {totalItems} người dùng</p>
+          <div className="flex items-center space-x-4">
+            <p>Total: {totalItems} users</p>
         </div>
         <div className="flex items-center space-x-4">
           <Button
             disabled={currentPage === 1}
             onClick={() => setPage(currentPage - 1)}
           >
-            Trước
+            Previous
           </Button>
           {totalPages > 0 && (
-            <span>Trang {currentPage} / {totalPages}</span>
+            <span>Page {currentPage} / {totalPages}</span>
           )}
           <Button
             disabled={currentPage >= totalPages}
             onClick={() => setPage(currentPage + 1)}
           >
-            Sau
+            Next
           </Button>
         </div>
       </div>

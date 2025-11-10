@@ -29,19 +29,19 @@ const HeritageManagement = () => {
     const totalPages = pagination.totalPages || 1
 
     const handleDelete = async (id) => {
-        if (window.confirm('Bạn có chắc muốn xóa di tích này?')) {
+        if (window.confirm('Are you sure you want to delete this heritage site?')) {
             try {
                 await deleteHeritage(id).unwrap()
-                toast.success('Xóa di tích thành công!')
+                toast.success('Heritage site deleted successfully!')
             } catch (err) {
-                console.error('Lỗi khi xóa di tích:', err)
-                toast.error(`Xóa di tích thất bại: ${err?.data?.message || 'Lỗi không xác định'}`)
+                console.error('Error deleting heritage site:', err)
+                toast.error(`Failed to delete heritage site: ${err?.data?.message || 'Unknown error'}`)
             }
         }
     }
 
 
-    if (isLoading) return <div className="text-center">Đang tải...</div>
+    if (isLoading) return <div className="text-center">Loading...</div>
     if (isError)
         return (
             <div className="text-center text-red-500">
@@ -51,11 +51,11 @@ const HeritageManagement = () => {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Quản lý Di tích Lịch sử</h2>
+            <h2 className="text-2xl font-semibold">Heritage Site Management</h2>
             <div className="flex justify-between items-center">
                 <div className="relative w-64">
                     <Input
-                        placeholder="Tìm kiếm theo tên"
+                        placeholder="Search by name"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-10"
@@ -68,12 +68,12 @@ const HeritageManagement = () => {
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
                     >
-                        <option value="ALL">Tất cả</option>
-                        <option value="ACTIVE">Hoạt động</option>
-                        <option value="INACTIVE">Không hoạt động</option>
+                        <option value="ALL">All</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="INACTIVE">Inactive</option>
                     </select>
                     <Button onClick={() => navigate('/admin/heritages/new')}>
-                        Thêm Di tích
+                        Add Heritage
                     </Button>
                 </div>
             </div>
@@ -81,11 +81,11 @@ const HeritageManagement = () => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Tên Di tích</TableHead>
-                        <TableHead>Địa điểm</TableHead>
-                        <TableHead>Trạng thái</TableHead>
-                        <TableHead>Ngày tạo</TableHead>
-                        <TableHead>Hành động</TableHead>
+                        <TableHead>Heritage Name</TableHead>
+                        <TableHead>Location</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Created at</TableHead>
+                        <TableHead>Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -93,9 +93,9 @@ const HeritageManagement = () => {
                         <TableRow key={heritage._id}>
                             <TableCell maxWidth='250px'>{heritage.name}</TableCell>
                             <TableCell>{heritage.location}</TableCell>
-                            <TableCell>{heritage.status === 'ACTIVE' ? 'Hoạt động' : 'Không hoạt động'}</TableCell>
+                            <TableCell>{heritage.status === 'ACTIVE' ? 'Active' : 'Inactive'}</TableCell>
                             <TableCell>
-                                {new Date(heritage.createdAt).toLocaleDateString('vi-VN')}
+                                {new Date(heritage.createdAt).toLocaleDateString('en-US')}
                             </TableCell>
                             <TableCell className="flex space-x-2">
                                 <Button
@@ -120,23 +120,23 @@ const HeritageManagement = () => {
 
             <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-4">
-                    <p>Tổng: {totalItems} di tích</p>
+                    <p>Total: {totalItems} heritage sites</p>
                 </div>
                 <div className="flex items-center space-x-4">
                     <Button
                         disabled={currentPage === 1}
                         onClick={() => setPage(currentPage - 1)}
                     >
-                        Trước
+                        Previous
                     </Button>
                     {totalPages > 0 && (
-                        <span>Trang {currentPage} / {totalPages}</span>
+                        <span>Page {currentPage} / {totalPages}</span>
                     )}
                     <Button
                         disabled={currentPage >= totalPages}
                         onClick={() => setPage(currentPage + 1)}
                     >
-                        Sau
+                        Next
                     </Button>
                 </div>
             </div>

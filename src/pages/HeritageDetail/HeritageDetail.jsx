@@ -73,10 +73,10 @@ const HeritageDetail = () => {
 
   if (isError) {
     return (
-      <div className='lcn-container-x py-16 text CLEARcenter'>
-        <h2 className='text-2xl font-medium mb-4'>Có lỗi xảy ra</h2>
-        <p className='text-muted-foreground mb-6'>Không thể tải thông tin di tích. Vui lòng thử lại sau.</p>
-        <Button onClick={() => navigate('/heritages')}>Quay lại danh sách di tích</Button>
+      <div className='lcn-container-x py-16 text-center'>
+        <h2 className='text-2xl font-medium mb-4'>An Error Occurred</h2>
+        <p className='text-muted-foreground mb-6'>Unable to load heritage information. Please try again later.</p>
+        <Button onClick={() => navigate('/heritages')}>Back to Heritage List</Button>
       </div>
     )
   }
@@ -97,20 +97,20 @@ const HeritageDetail = () => {
                   <HeritageDetailTabs data={data} isAuthenticated={isAuthenticated} navigate={navigate} />
                 </ErrorBoundary>
                 <div className='mt-10'>
-                  <h3 className='lcn-heritage-detail-title mb-4'>Tính năng tương tác</h3>
+                  <h3 className='lcn-heritage-detail-title mb-4'>Interactive Features</h3>
                   <HeritageFeatures handleFeatureClick={handleFeatureClick} />
                 </div>
                 {!isAuthenticated && (
                   <div className='p-6 bg-heritage-light/30 rounded-md border border-heritage-light text-center mt-6'>
-                    <h4 className='text-lg font-medium mb-2'>Đăng nhập để trải nghiệm</h4>
+                    <h4 className='text-lg font-medium mb-2'>Login to Experience</h4>
                     <p className='text-sm text-muted-foreground mb-4'>
-                      Đăng nhập để sử dụng đầy đủ các tính năng tương tác và cá nhân hóa.
+                      Login to use all interactive and personalized features.
                     </p>
-                    <Button onClick={() => navigate('/login')}>Đăng nhập ngay</Button>
+                    <Button onClick={() => navigate('/login')}>Login Now</Button>
                   </div>
                 )}
                 <div className='mt-10'>
-                  <h3 className='lcn-heritage-detail-title mb-4'>Di tích liên quan</h3>
+                  <h3 className='lcn-heritage-detail-title mb-4'>Related Heritage Sites</h3>
                   <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
                     {getRandomRelatedHeritages.map((item) => (
                       <HeritageCard key={item._id} item={item} />
@@ -135,7 +135,7 @@ const HeritageDetail = () => {
           {isAuthenticated && isChatOpen && (
             <div className='fixed bottom-6 right-6 w-[300px] bg-white rounded-lg shadow-xl z-50'>
               <div className='flex justify-between items-center p-3 bg-blue-500 text-white rounded-t-lg'>
-                <h3 className='text-sm font-medium'>Chat về {data?.name}</h3>
+                <h3 className='text-sm font-medium'>Chat about {data?.name}</h3>
                 <Button
                   className='p-1 bg-transparent hover:bg-blue-600'
                   onClick={toggleChat}
@@ -153,9 +153,9 @@ const HeritageDetail = () => {
           )}
           <Dialog open={activeFeature === 'leaderboard'} onClose={closeFeatureDialog}>
             <DialogHeader>
-              <DialogTitle>Bảng xếp hạng</DialogTitle>
+              <DialogTitle>Leaderboard</DialogTitle>
               <DialogDescription>
-                Xem thứ hạng của bạn so với những người khác khi khám phá {data?.name}
+                See your ranking compared to others when exploring {data?.name}
               </DialogDescription>
             </DialogHeader>
             <div className='py-4'>
@@ -168,8 +168,8 @@ const HeritageDetail = () => {
           </Dialog>
           <Dialog open={activeFeature === 'knowledge-test'} onClose={closeFeatureDialog} className='max-h-[90vh]'>
             <DialogHeader>
-              <DialogTitle>Kiểm tra kiến thức</DialogTitle>
-              <DialogDescription>Thử thách hiểu biết của bạn về {data?.name}</DialogDescription>
+              <DialogTitle>Knowledge Test</DialogTitle>
+              <DialogDescription>Test your knowledge about {data?.name}</DialogDescription>
             </DialogHeader>
             <div className='py-4 overflow-auto'>
               <HeritageKnowledgeTest heritageId={id} heritageName={data?.name} />

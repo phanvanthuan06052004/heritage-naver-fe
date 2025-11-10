@@ -9,7 +9,7 @@ const FeatureItem = lazy(() => import('~/components/Home/FeatureHighlight/Featur
 const HowItWork = () => {
   return (
     <section>
-      <Title icon={Workflow} title={'Cách thức hoạt động'} />
+      <Title icon={Workflow} title={'How It Works'} />
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10'>
         <Suspense fallback={<div className='col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
           {Array.from({ length: 4 }).map((_, index) => (

@@ -21,7 +21,7 @@ const UserMenu = ({ userMenuLinks }) => {
   const handleLogout = () => {
     try {
       dispatch(logOut())
-      toast.success('Đăng xuất thành công!', {
+      toast.success('Logged out successfully!', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -34,7 +34,7 @@ const UserMenu = ({ userMenuLinks }) => {
       setIsOpen(false)
     } catch (error) {
       console.error('Logout failed:', error)
-      toast.error('Đăng xuất thất bại. Vui lòng thử lại!')
+      toast.error('Logout failed. Please try again!')
     }
   }
 

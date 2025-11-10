@@ -32,7 +32,7 @@ const HeritageHeader = ({ data }) => {
         <Link to='/heritages'>
           <Button variant='ghost' size='sm' className='mb-4 text-primary-foreground hover:bg-primary-foreground/30'>
             <ArrowLeft size={16} />
-            <span>Quay lại danh sách di tích</span>
+            <span>Back to heritage list</span>
           </Button>
         </Link>
         <div className='flex flex-wrap items-center justify-between gap-4'>
@@ -61,7 +61,7 @@ const HeritageHeader = ({ data }) => {
               onClick={handleShare}
             >
               <Share size={16} />
-              <span>Chia sẻ</span>
+              <span>Share</span>
             </Button>
           </div>
         </div>

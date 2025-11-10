@@ -1,52 +1,42 @@
 export const teamMembers = [
   {
-    name: 'Nguyễn An Thành Phát',
+    name: 'Nguyen An Thanh Phat',
     role: 'Founder & Leader',
-    bio: 'Với hơn 3 năm kinh nghiệm trong lĩnh vực phát triển website.',
+    bio: 'With over 3 years of experience in website development.',
     img: '/images/profile-phat.jpg',
     social: {
-      facebook: 'https://www.facebook.com/',
-      linkedin: 'https://www.linkedin.com/'
+      facebook: 'https://www.facebook.com/profile.php?id=100064192314817',
+      linkedin: 'https://www.linkedin.com'
     }
   },
   {
-    name: 'Lê Quốc Nam',
+    name: 'Phan Van Thuan',
     role: 'Backend Developer',
-    bio: 'Chuyên gia công nghệ với kinh nghiệm phát triển backend với các nền tảng tương tác và ứng dụng AI vào sản phẩm.',
-    img: '/images/profile-nam.jpg',
-    social: {
-      facebook: 'https://www.facebook.com/',
-      linkedin: 'https://www.linkedin.com/'
-    }
-  },
-  {
-    name: 'Phan Văn Thuận',
-    role: 'Backend Developer',
-    bio: 'Nhà nghiên cứu công nghệ với kinh nghiệm thiết kế database mạnh mẽ, sử dụng các công nghệ hiện đại.',
+    bio: 'Technology researcher with experience in designing robust databases using modern technologies.',
     img: '/images/profile-thuan.png',
     social: {
-      facebook: 'https://www.facebook.com/',
-      linkedin: 'https://www.linkedin.com/'
+      facebook: 'https://www.facebook.com/thuan.phanvan.39948#',
+      linkedin: 'https://www.linkedin.com'
     }
   },
   {
-    name: 'Lê Chí Nghĩa',
+    name: 'Nguyen Duc Nhat',
     role: 'Frontend Developer',
-    bio: 'Nhà thiết kế với niềm đam mê tạo ra trải nghiệm người dùng trực quan và hấp dẫn.',
-    img: '/images/profile-nghia.jpg',
+    bio: 'Designer with a passion for creating intuitive and engaging user experiences.',
+    img: '/images/profile-nhat.jpg',
     social: {
-      facebook: 'https://www.facebook.com/le.chi.nghia.621880/',
-      linkedin: 'https://www.linkedin.com/in/nghia-le-1b3bb32b8/'
+      facebook: 'https://www.facebook.com/duc.nhatt.nguyen',
+      linkedin: 'https://www.linkedin.com/in/ducnhatdev/'
     }
   },
   {
-    name: 'Nguyễn Thanh Hùng',
-    role: 'AI Specialist',
-    bio: 'Chuyên gia AI với kinh nghiệm phát triển các hệ thống trợ lý ảo thông minh.',
-    img: '/images/profile-hung.jpg',
+    name: 'Phung Minh Thien',
+    role: 'Frontend Developer',
+    bio: 'Designer with a passion for creating intuitive and engaging user experiences.',
+    img: '/images/profile-mtp.jpg',
     social: {
-      facebook: 'https://www.facebook.com/',
-      linkedin: 'https://www.linkedin.com/'
+      facebook: 'https://www.facebook.com/phungminhthien.1510',
+      linkedin: 'https://www.linkedin.com'
     }
   },
 ]

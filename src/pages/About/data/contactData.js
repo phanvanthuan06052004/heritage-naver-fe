@@ -4,34 +4,34 @@ export const contactInfo = [
   {
     icon: Mail,
     title: 'Email',
-    content: 'lechinghia202@gmail.com'
+    content: 'ducnhat0910@gmail.com'
   },
   {
     icon: Phone,
-    title: 'Điện thoại',
-    content: '0946064930'
+    title: 'Phone',
+    content: '0386076296'
   },
   {
     icon: MessagesSquare,
-    title: 'Mạng xã hội',
-    content: 'Lê Chí Nghĩa'
+    title: 'Social Media',
+    content: 'Nguyễn Đức Nhật'
   }
 ]
 
 export const socialLinks = [
   {
     icon: Facebook,
-    url: 'https://www.facebook.com/le.chi.nghia.621880/',
+    url: 'https://www.facebook.com/duc.nhatt.nguyen',
     label: 'Facebook'
   },
   {
     icon: Linkedin,
-    url: 'https://www.linkedin.com/in/nghia-le-1b3bb32b8/',
+    url: 'https://www.linkedin.com/in/ducnhatdev/',
     label: 'LinkedIn'
   },
   {
     icon: Instagram,
-    url: 'https://www.instagram.com/nghialc81/',
+    url: 'https://www.instagram.com/nhatt.1510/',
     label: 'Instagram'
   }
 ]

@@ -157,11 +157,11 @@ const ChatHeritagePage = () => {
     }
   }
 
-  // Lấy tiêu đề cuộc trò chuyện
+  // Get chat title
   const getChatTitle = () => {
-    if (activeChat === 'community') return 'Phòng Trò Chuyện Cộng Đồng'
+    if (activeChat === 'community') return 'Community Chat Room'
     const user = enhancedUsers.find((u) => u.id === activeChat)
-    return user ? user.name : 'Trò chuyện'
+    return user ? user.name : 'Chat'
   }
 
   // Nhóm tin nhắn để hiển thị avatar và định dạng
@@ -188,11 +188,11 @@ const ChatHeritagePage = () => {
     return acc
   }, [])
 
-  // Xử lý trạng thái loading và error sau khi gọi hết Hook
+  // Handle loading and error states after calling all Hooks
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        Đang tải...
+        Loading...
       </div>
     )
   }
@@ -200,7 +200,7 @@ const ChatHeritagePage = () => {
   if (isError) {
     return (
       <div className="h-screen flex items-center justify-center text-destructive">
-        Lỗi khi tải dữ liệu
+        Error loading data
       </div>
     )
   }
@@ -265,8 +265,8 @@ const ChatHeritagePage = () => {
                 <h1 className='text-lg sm:text-xl font-semibold'>{getChatTitle()}</h1>
                 <p className='text-xs sm:text-sm text-muted-foreground truncate'>
                   {activeChat === 'community'
-                    ? `${usersInRoom.length} người đang tham gia thảo luận`
-                    : 'Trò chuyện riêng tư'}
+                    ? `${usersInRoom.length} people participating in the discussion`
+                    : 'Private Chat'}
                 </p>
               </div>
               <div className='flex items-center gap-1'>
@@ -286,11 +286,11 @@ const ChatHeritagePage = () => {
             </div>
           </div>
 
-          {/* Danh sách người dùng trong phòng (hiển thị khi nhấn vào nút Users) */}
+          {/* User list in room (displayed when clicking Users button) */}
           {showInfo && activeChat === 'community' && (
             <div className='mt-2 p-2 bg-accent rounded-lg animate-fade-in'>
               <div className='flex items-center justify-between mb-1'>
-                <h3 className='font-medium text-sm'>Người dùng trong phòng</h3>
+                <h3 className='font-medium text-sm'>Users in Room</h3>
               </div>
               <div className='flex flex-wrap gap-1'>
                 {usersInRoom.map((user) => (
@@ -306,11 +306,11 @@ const ChatHeritagePage = () => {
             </div>
           )}
 
-          {/* Hiển thị lỗi nếu có */}
+          {/* Show error if any */}
           {error && (
             <div className='p-4 bg-destructive/10 text-destructive text-center animate-fade-in'>
               <p className='font-medium'>{error}</p>
-              <p className='text-sm'>Đang thử kết nối lại...</p>
+              <p className='text-sm'>Trying to reconnect...</p>
             </div>
           )}
 
@@ -322,12 +322,12 @@ const ChatHeritagePage = () => {
           >
             {activeChat === 'community' && isLoadingMessages && (
               <div className='text-center text-muted-foreground py-2 animate-pulse'>
-                <div className='inline-block px-4 py-2 bg-muted rounded-lg'>Đang tải tin nhắn...</div>
+                <div className='inline-block px-4 py-2 bg-muted rounded-lg'>Loading messages...</div>
               </div>
             )}
             {activeChat === 'community' && !hasMoreMessages && messages.length > 0 && (
               <div className='text-center text-muted-foreground py-2'>
-                <div className='inline-block px-4 py-2 bg-muted rounded-lg text-sm'>Bạn đã xem hết tin nhắn</div>
+                <div className='inline-block px-4 py-2 bg-muted rounded-lg text-sm'>You've seen all messages</div>
               </div>
             )}
             {messages.length === 0 && !isLoadingMessages && (
@@ -335,11 +335,11 @@ const ChatHeritagePage = () => {
                 <div className='w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4'>
                   <Users className='h-8 w-8 text-primary/50' />
                 </div>
-                <h3 className='text-lg font-medium text-foreground'>Chưa có tin nhắn nào</h3>
+                <h3 className='text-lg font-medium text-foreground'>No messages yet</h3>
                 <p className='max-w-xs text-sm mt-1'>
                   {activeChat === 'community'
-                    ? 'Hãy bắt đầu cuộc trò chuyện với cộng đồng!'
-                    : 'Hãy bắt đầu cuộc trò chuyện riêng tư!'}
+                    ? 'Start a conversation with the community!'
+                    : 'Start a private conversation!'}
                 </p>
               </div>
             )}
@@ -363,12 +363,12 @@ const ChatHeritagePage = () => {
             )}
           </div>
 
-          {/* Input soạn tin nhắn */}
+          {/* Message input */}
           <div className='p-3 bg-card border-t border-border'>
             <MessageInput
               onSendMessage={handleSendMessage}
               onInputChange={handleInputChange}
-              placeholder='Gửi tin nhắn...'
+              placeholder='Send a message...'
               disabled={!!error}
             />
           </div>

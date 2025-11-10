@@ -2,11 +2,12 @@ import { useCallback } from 'react'
 import { Button } from '~/components/common/ui/Button'
 
 const navigationItems = [
-  { id: 'vision', icon: '🔭', label: 'Tầm nhìn' },
-  { id: 'story', icon: '📚', label: 'Câu chuyện' },
-  { id: 'values', icon: '💎', label: 'Giá trị cốt lõi' },
-  { id: 'team', icon: '👥', label: 'Đội ngũ' },
-]
+  { id: 'vision', icon: '🔭', label: 'Vision' },
+  { id: 'story', icon: '📚', label: 'Our Story' },
+  { id: 'values', icon: '💎', label: 'Core Values' },
+  { id: 'team', icon: '👥', label: 'Team' },
+];
+
 
 const SideNavigation = ({ activeSection, setActiveSection }) => {
 

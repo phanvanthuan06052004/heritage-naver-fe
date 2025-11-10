@@ -125,8 +125,8 @@ const LeaderboardTable = ({ heritageId, heritageName = 'Di tích lịch sử', i
   if (error) {
     return (
       <div className='text-center py-8'>
-        <p className='text-destructive font-medium'>Đã xảy ra lỗi khi tải dữ liệu</p>
-        <p className='text-muted-foreground mt-2'>{error?.data?.message || 'Vui lòng thử lại sau'}</p>
+        <p className='text-destructive font-medium'>An error occurred while loading data</p>
+        <p className='text-muted-foreground mt-2'>{error?.data?.message || 'Please try again later'}</p>
         <Button
           onClick={() => {
             resetLeaderboard()
@@ -134,7 +134,7 @@ const LeaderboardTable = ({ heritageId, heritageName = 'Di tích lịch sử', i
           }}
           className='mt-4'
         >
-          Thử lại
+          Try again
         </Button>
       </div>
     )
@@ -144,7 +144,7 @@ const LeaderboardTable = ({ heritageId, heritageName = 'Di tích lịch sử', i
     return (
       <div className='text-center py-8'>
         <p className='text-muted-foreground'>
-          Chưa có người dùng nào hoàn thành khám phá {heritageName}.
+          No user has completed the discovery of {heritageName}.
         </p>
       </div>
     )
@@ -153,10 +153,10 @@ const LeaderboardTable = ({ heritageId, heritageName = 'Di tích lịch sử', i
   return (
     <div className='space-y-4 overflow-y-auto h-96'>
       <div className='flex items-center p-3 border-b text-sm text-muted-foreground font-medium'>
-        <div className='w-8 text-center'>Hạng</div>
+        <div className='w-8 text-center'>Rank</div>
         <div className='w-16'></div>
-        <div className='flex-1'>Người dùng</div>
-        <div>Điểm số</div>
+        <div className='flex-1'>Users</div>
+        <div>Score</div>
       </div>
 
       <div className='space-y-1'>
@@ -174,13 +174,13 @@ const LeaderboardTable = ({ heritageId, heritageName = 'Di tích lịch sử', i
 
         {isFetching && (
           <div className='text-center py-2 text-sm text-muted-foreground'>
-            <Spinner /> Đang tải thêm...
+            <Spinner /> Loading..
           </div>
         )}
 
         {!hasMore && (
           <div className='text-center py-2 text-muted-foreground text-sm'>
-            Đã hiển thị toàn bộ {rankings.length} người dùng
+            Displayed {rankings.length} users
           </div>
         )}
       </div>

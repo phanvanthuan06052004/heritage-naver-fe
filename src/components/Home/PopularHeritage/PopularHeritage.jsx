@@ -40,9 +40,9 @@ const PopularHeritage = () => {
   return (
     <section>
       <div className='flex justify-between mb-10'>
-        <Title icon={Landmark} title={'Di tích phổ biến'} />
+        <Title icon={Landmark} title={'Popular Heritage Sites'} />
         <Link to='/heritages' className='hidden sm:flex text-heritage items-center gap-2 hover:underline'>
-          <span>Xem tất cả</span>
+          <span>View All</span>
           <ArrowRight size={16} />
         </Link>
       </div>
@@ -51,14 +51,14 @@ const PopularHeritage = () => {
           <HeritageSkeleton count={6} />
         ) : error ? (
           <div className='text-center py-12 text-destructive'>
-            Có lỗi xảy ra khi tải dữ liệu
+            An error occurred while loading data
           </div>
         ) : (
           <>
             <HeritageList heritages={randomHeritages} />
             <Link to='/heritages' className='sm:hidden w-full'>
               <Button className='w-full mt-8'>
-                Xem tất cả di tích
+                View All Heritage Sites
                 <MoveRight className='ml-2' size={16} />
               </Button>
             </Link>

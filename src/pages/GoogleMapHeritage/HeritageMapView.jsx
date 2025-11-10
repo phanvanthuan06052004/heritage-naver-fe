@@ -23,9 +23,9 @@ function HeritageMapView({ center, markers: initialMarkers = [], onMarkerClick, 
                 `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxgl.accessToken}&country=vn`
             )
             const data = await response.json()
-            setCurrentAddress(data.features?.[0]?.place_name || 'Không tìm thấy địa chỉ')
+            setCurrentAddress(data.features?.[0]?.place_name || 'Address not found')
         } catch (error) {
-            setCurrentAddress('Lỗi khi lấy địa chỉ')
+            setCurrentAddress('Error fetching address')
             console.error('Error fetching address:', error)
         }
     }, [])
@@ -195,18 +195,18 @@ function HeritageMapView({ center, markers: initialMarkers = [], onMarkerClick, 
                         placeType = data.features[0].place_type?.[0] || 'unknown'
                         context = data.features[0].context || []
                     } else {
-                        setSearchError('Không tìm thấy địa điểm.')
+                        setSearchError('Location not found.')
                         return
                     }
                 } catch (error) {
-                    setSearchError('Lỗi khi tìm kiếm địa điểm.')
+                    setSearchError('Error searching for location.')
                     console.error('Search error:', error)
                     return
                 }
             }
 
             if (typeof lat !== 'number' || typeof lng !== 'number') {
-                setSearchError('Tọa độ không hợp lệ.')
+                setSearchError('Invalid coordinates.')
                 return
             }
 
@@ -221,8 +221,8 @@ function HeritageMapView({ center, markers: initialMarkers = [], onMarkerClick, 
             const popupContent = `
                 <div class="p-2">
                     <h3 class="font-medium">${placeName}</h3>
-                    <p class="text-sm">Loại: ${placeType}</p>
-                    <p class="text-sm">Khu vực: ${context.find((c) => c.id.includes('region'))?.text || 'Không xác định'}</p>
+                    <p class="text-sm">Type: ${placeType}</p>
+                    <p class="text-sm">Region: ${context.find((c) => c.id.includes('region'))?.text || 'Unknown'}</p>
                 </div>
             `
 
@@ -292,7 +292,7 @@ function HeritageMapView({ center, markers: initialMarkers = [], onMarkerClick, 
     }, [updateCenter, updateInitialMarkers])
 
     return (
-        <div className="w-full h-full relative" role="region" aria-label="Bản đồ di sản">
+        <div className="w-full h-full relative" role="region" aria-label="Heritage map">
             <div className="absolute top-4 left-4 z-10 w-80">
                 <form onSubmit={handleSearch} className="flex flex-col gap-2">
                     <div className="flex gap-2">
@@ -300,15 +300,15 @@ function HeritageMapView({ center, markers: initialMarkers = [], onMarkerClick, 
                             type="text"
                             value={searchQuery}
                             onChange={handleInputChange}
-                            placeholder="Tìm kiếm địa điểm ở Việt Nam..."
+                            placeholder="Search locations in Vietnam..."
                             className="flex-1 p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            aria-label="Tìm kiếm địa điểm"
+                            aria-label="Search location"
                         />
                         <Button
                             type="submit"
-                            aria-label="Tìm kiếm"
+                            aria-label="Search"
                         >
-                            Tìm
+                            Search
                         </Button>
                     </div>
                     {suggestions.length > 0 && (
@@ -316,7 +316,7 @@ function HeritageMapView({ center, markers: initialMarkers = [], onMarkerClick, 
                             size={Math.min(suggestions.length, 5)}
                             onChange={handleSuggestionSelect}
                             className="w-full p-2 rounded border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            aria-label="Gợi ý địa điểm"
+                            aria-label="Suggestions for location"
                         >
                             {suggestions.map((suggestion, index) => (
                                 <option key={index} value={suggestion.place_name}>
@@ -332,29 +332,29 @@ function HeritageMapView({ center, markers: initialMarkers = [], onMarkerClick, 
             <div className="absolute bottom-4 left-4 bg-white p-2 rounded shadow-md text-sm flex flex-col gap-2 w-[300px] sm:w-[600px]">
                 {currentCoordinates && (
                     <div>
-                        Tọa độ điểm đã chọn:
+                        Selected point coordinates:
                         <br />
                         Lat: {currentCoordinates.lat.toFixed(6)}, Lng: {currentCoordinates.lng.toFixed(6)}
                     </div>
                 )}
                 <div className="flex gap-2 items-center">
                     <div className="flex-1">
-                        <label className="block font-medium">Địa chỉ:</label>
+                        <label className="block font-medium">Address:</label>
                         <input
                             type="text"
                             value={currentAddress}
                             readOnly
-                            placeholder="Chưa chọn địa điểm"
+                            placeholder="No location selected"
                             className="w-full p-2 rounded border border-gray-300 bg-gray-100"
-                            aria-label="Địa chỉ hiện tại"
+                            aria-label="Current address"
                         />
                     </div>
                     <Button
                         onClick={handleSelectCoordinates}
-                        aria-label="Chọn tọa độ"
+                        aria-label="Select coordinates"
                         className='mt-5'
                     >
-                        Chọn
+                        Select
                     </Button>
                 </div>
             </div>

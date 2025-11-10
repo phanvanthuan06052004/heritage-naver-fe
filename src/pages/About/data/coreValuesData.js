@@ -1,37 +1,37 @@
 export const coreValues = [
   {
     icon: '🔍',
-    title: 'Chính xác',
+    title: 'Accuracy',
     description:
-      'Cam kết cung cấp thông tin chính xác, đáng tin cậy và được nghiên cứu kỹ lưỡng về di sản văn hóa.',
+      'Committed to providing accurate, reliable and thoroughly researched information about cultural heritage.',
   },
   {
     icon: '🌱',
-    title: 'Bảo tồn',
-    description: 'Đặt sự bảo tồn và tôn trọng giá trị di sản văn hóa lên hàng đầu trong mọi hoạt động.',
+    title: 'Preservation',
+    description: 'Prioritizing the preservation and respect for cultural heritage values in all activities.',
   },
   {
     icon: '🔄',
-    title: 'Đổi mới',
+    title: 'Innovation',
     description:
-      'Không ngừng đổi mới và áp dụng công nghệ tiên tiến để tạo ra trải nghiệm học tập hấp dẫn.',
+      'Continuously innovating and applying advanced technology to create engaging learning experiences.',
   },
   {
     icon: '🤝',
-    title: 'Hợp tác',
+    title: 'Collaboration',
     description:
-      'Xây dựng mối quan hệ hợp tác với các chuyên gia, tổ chức và cộng đồng để phát triển nền tảng.',
+      'Building collaborative relationships with experts, organizations and communities to develop the platform.',
   },
   {
     icon: '🌍',
-    title: 'Tiếp cận',
+    title: 'Accessibility',
     description:
-      'Cam kết tạo ra nền tảng dễ tiếp cận cho mọi đối tượng, không phân biệt tuổi tác hay nền tảng.',
+      'Committed to creating a platform that is accessible to everyone, regardless of age or background.',
   },
   {
     icon: '💡',
-    title: 'Giáo dục',
+    title: 'Education',
     description:
-      'Lấy giáo dục làm trọng tâm, truyền cảm hứng cho thế hệ trẻ về giá trị di sản văn hóa dân tộc.',
+      'Focusing on education, inspiring the younger generation about the value of national cultural heritage.',
   },
 ]

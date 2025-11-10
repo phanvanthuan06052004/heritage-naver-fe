@@ -53,7 +53,7 @@ const HeritageDetail = () => {
             setExistingImages(heritage.images || [])
         }
         if (fetchError) {
-            toast.error('Không thể tải thông tin di tích')
+            toast.error('Unable to load heritage site information')
             // navigate('/admin/heritages')
         }
     }, [heritage, fetchError, navigate])
@@ -61,13 +61,13 @@ const HeritageDetail = () => {
     // Handle update success or error
     useEffect(() => {
         if (updateSuccess) {
-            toast.success('Cập nhật di tích thành công!')
+            toast.success('Heritage site updated successfully!')
             navigate('/admin/heritages')
         }
         if (updateError) {
-            console.error('Lỗi cập nhật di tích:', updateErrorMessage)
-            const errorMsg = updateErrorMessage?.data?.message || updateErrorMessage?.error || 'Lỗi không xác định'
-            toast.error(`Cập nhật di tích thất bại: ${errorMsg}`)
+            console.error('Error updating heritage site:', updateErrorMessage)
+            const errorMsg = updateErrorMessage?.data?.message || updateErrorMessage?.error || 'Unknown error'
+            toast.error(`Failed to update heritage site: ${errorMsg}`)
         }
     }, [updateSuccess, updateError, updateErrorMessage, navigate])
 
@@ -102,12 +102,12 @@ const HeritageDetail = () => {
         const file = e.target.files[0]
         if (file) {
             if (file.size > 1 * 1024 * 1024) {
-                toast.error('Kích thước ảnh không được vượt quá 1MB')
+                toast.error('Image size cannot exceed 1MB')
                 return
             }
             const validTypes = ['image/jpeg', 'image/png', 'image/gif']
             if (!validTypes.includes(file.type)) {
-                toast.error('Chỉ chấp nhận file ảnh định dạng JPEG, PNG hoặc GIF')
+                toast.error('Only JPEG, PNG and GIF images are accepted')
                 return
             }
 
@@ -116,12 +116,12 @@ const HeritageDetail = () => {
                 const dataUrl = reader.result
                 setImagePreviews(prev => [...prev, dataUrl])
                 setImageFiles(prev => [...prev, file])
-                toast.info('Ảnh đã được thêm, bạn có thể thêm ảnh khác', {
+                toast.info('Image added, you can add another image', {
                     position: "top-right"
                 })
             }
             reader.onerror = () => {
-                toast.error('Không thể đọc file ảnh')
+                toast.error('Unable to read image file')
             }
             reader.readAsDataURL(file)
         }
@@ -136,7 +136,7 @@ const HeritageDetail = () => {
             setImageFiles(prev => prev.filter((_, i) => i !== fileIndex))
         }
         setImagePreviews(prev => prev.filter((_, i) => i !== index))
-        toast.info('Đã xóa ảnh')
+        toast.info('Image deleted')
     }
 
     const addHistoricalEvent = () => {
@@ -171,12 +171,12 @@ const HeritageDetail = () => {
             fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates.lng},${coordinates.lat}.json?access_token=pk.eyJ1IjoibmFtbGUwMjIwMDQiLCJhIjoiY205ejlmYm94MHI1djJqb2w5czloNDdrbyJ9.-P_PHQN7L283Z_qIGfgsOg&country=vn`)
                 .then(response => response.json())
                 .then(data => {
-                    const address = data.features?.[0]?.place_name || 'Không tìm thấy địa chỉ'
+                    const address = data.features?.[0]?.place_name || 'Address not found'
                     setFormData(prev => ({ ...prev, location: address }))
                 })
                 .catch(error => {
                     console.error('Error fetching address:', error)
-                    setFormData(prev => ({ ...prev, location: 'Lỗi khi lấy địa chỉ' }))
+                    setFormData(prev => ({ ...prev, location: 'Unable to fetch address' }))
                 })
         }
     }, [])
@@ -185,19 +185,19 @@ const HeritageDetail = () => {
         const newErrors = {}
 
         if (!formData.name.trim()) {
-            newErrors.name = 'Tên di tích không được để trống'
+            newErrors.name = 'Heritage name cannot be empty'
         }
         if (!formData.description.trim()) {
-            newErrors.description = 'Mô tả không được để trống'
+            newErrors.description = 'Description cannot be empty'
         }
         if (!formData.location.trim()) {
-            newErrors.location = 'Địa điểm không được để trống'
+            newErrors.location = 'Location cannot be empty'
         }
         if (!formData.coordinates.latitude || !formData.coordinates.longitude) {
-            newErrors.coordinates = 'Tọa độ không được để trống'
+            newErrors.coordinates = 'Coordinates cannot be empty'
         }
         if (existingImages.length === 0 && imageFiles.length === 0) {
-            newErrors.images = 'Vui lòng chọn ít nhất một hình ảnh'
+            newErrors.images = 'Please select at least one image'
         }
 
         setErrors(newErrors)
@@ -206,7 +206,7 @@ const HeritageDetail = () => {
             const firstErrorField = Object.keys(newErrors)[0]
             const errorElement = document.getElementById(firstErrorField)
             if (errorElement) errorElement.focus()
-            toast.error('Vui lòng kiểm tra lại thông tin nhập vào')
+            toast.error('Please check the information entered')
         }
 
         return Object.keys(newErrors).length === 0
@@ -234,20 +234,20 @@ const HeritageDetail = () => {
 
             await createHeritage(heritageData).unwrap()
         } catch (err) {
-            toast.error(`Cập nhật di tích thất bại: ${err?.data?.message || err.message || 'Đã xảy ra lỗi'}`)
+            toast.error(`Failed to update heritage site: ${err?.data?.message || err.message || 'An error occurred'}`)
         }
     }
 
     if (isFetching) {
-        return <div className="text-center">Đang tải thông tin di tích...</div>
+        return <div className="text-center">Loading information...</div>
     }
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Cập nhật Di tích Lịch sử</h2>
+            <h2 className="text-2xl font-semibold">Update Heritage Information</h2>
             <div className="bg-white p-6 rounded-md shadow-md">
                 <div className="mb-6">
-                    <Label>Chọn địa điểm trên bản đồ</Label>
+                    <Label>Select location on the map</Label>
                     <div className="w-full h-[400px]">
                         <HeritageMapView
                             center={DEFAULT_CENTER}
@@ -258,7 +258,7 @@ const HeritageDetail = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <Label htmlFor="name">Tên di tích</Label>
+                        <Label htmlFor="name">Heritage Name</Label>
                         <Input
                             type="text"
                             id="name"
@@ -270,7 +270,7 @@ const HeritageDetail = () => {
                         {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="location">Địa điểm</Label>
+                        <Label htmlFor="location">Location</Label>
                         <Input
                             type="text"
                             id="location"
@@ -282,7 +282,7 @@ const HeritageDetail = () => {
                         {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location}</p>}
                     </div>
                     <div className="col-span-2">
-                        <Label htmlFor="images">Hình ảnh</Label>
+                        <Label htmlFor="images">Images</Label>
                         <div className="flex flex-col gap-4">
                             <div className="flex items-center gap-4">
                                 <Input
@@ -297,7 +297,7 @@ const HeritageDetail = () => {
                                     variant="outline"
                                     onClick={() => document.getElementById('images').click()}
                                 >
-                                    Chọn ảnh
+                                    Select Image
                                 </Button>
                             </div>
                             {imagePreviews.length > 0 && (
@@ -314,7 +314,7 @@ const HeritageDetail = () => {
                                                 className="absolute top-1 right-1 text-red-500 border-red-500 hover:bg-red-50"
                                                 onClick={() => removeImage(index)}
                                             >
-                                                Xóa
+                                                Delete
                                             </Button>
                                         </div>
                                     ))}
@@ -324,7 +324,7 @@ const HeritageDetail = () => {
                         </div>
                     </div>
                     <div>
-                        <Label htmlFor="coordinates.latitude">Vĩ độ</Label>
+                        <Label htmlFor="coordinates.latitude">Latitude</Label>
                         <Input
                             type="text"
                             id="coordinates.latitude"
@@ -336,7 +336,7 @@ const HeritageDetail = () => {
                         {errors.coordinates && <p className="text-red-500 text-sm mt-1">{errors.coordinates}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="coordinates.longitude">Kinh độ</Label>
+                        <Label htmlFor="coordinates.longitude">Longitude</Label>
                         <Input
                             type="text"
                             id="coordinates.longitude"
@@ -347,7 +347,7 @@ const HeritageDetail = () => {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="status">Trạng thái</Label>
+                        <Label htmlFor="status">Status</Label>
                         <select
                             id="status"
                             name="status"
@@ -355,12 +355,12 @@ const HeritageDetail = () => {
                             value={formData.status}
                             onChange={handleInputChange}
                         >
-                            <option value="ACTIVE">Hoạt động</option>
-                            <option value="INACTIVE">Không hoạt động</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
                         </select>
                     </div>
                     <div className="col-span-2">
-                        <Label htmlFor="description">Mô tả</Label>
+                        <Label htmlFor="description">Description</Label>
                         <textarea
                             id="description"
                             name="description"
@@ -373,11 +373,11 @@ const HeritageDetail = () => {
                     </div>
                 </div>
                 <div className="mt-6">
-                    <Label>Sự kiện lịch sử</Label>
+                    <Label>Historical Events</Label>
                     {formData.additionalInfo.historicalEvents.map((event, index) => (
                         <div key={index} className="mt-4 p-4 border rounded">
                             <div className="mb-2">
-                                <Label htmlFor={`additionalInfo.historicalEvents.${index}.title`}>Tiêu đề sự kiện</Label>
+                                <Label htmlFor={`additionalInfo.historicalEvents.${index}.title`}>Event Title</Label>
                                 <Input
                                     type="text"
                                     id={`additionalInfo.historicalEvents.${index}.title`}
@@ -387,7 +387,7 @@ const HeritageDetail = () => {
                                 />
                             </div>
                             <div className="mb-2">
-                                <Label htmlFor={`additionalInfo.historicalEvents.${index}.description`}>Mô tả sự kiện</Label>
+                                <Label htmlFor={`additionalInfo.historicalEvents.${index}.description`}>Event Description</Label>
                                 <textarea
                                     id={`additionalInfo.historicalEvents.${index}.description`}
                                     name={`additionalInfo.historicalEvents.${index}.description`}
@@ -402,7 +402,7 @@ const HeritageDetail = () => {
                                 onClick={() => removeHistoricalEvent(index)}
                                 className="text-red-500 border-red-500 hover:bg-red-50"
                             >
-                                Xóa sự kiện
+                                Delete Event
                             </Button>
                         </div>
                     ))}
@@ -411,15 +411,15 @@ const HeritageDetail = () => {
                         onClick={addHistoricalEvent}
                         className="mt-4"
                     >
-                        + Thêm sự kiện lịch sử
+                        + Add Historical Event
                     </Button>
                 </div>
                 <div className="mt-6 flex space-x-4">
                     <Button onClick={handleUpdate} disabled={isUpdating || isFetching}>
-                        {isUpdating ? 'Đang cập nhật...' : 'Cập nhật'}
+                        {isUpdating ? 'Updating...' : 'Update'}
                     </Button>
                     <Button variant="outline" onClick={() => navigate('/admin/heritages')}>
-                        Quay lại
+                        Back
                     </Button>
                 </div>
             </div>

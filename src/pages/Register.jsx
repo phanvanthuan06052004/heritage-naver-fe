@@ -30,16 +30,16 @@ const Register = () => {
   const validateForm = () => {
     const { email, phone, password, confirmPassword } = formData
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return 'Vui lòng nhập email hợp lệ.'
+      return 'Please enter a valid email address.'
     }
     if (!phone || !/^\+?\d{10,15}$/.test(phone)) {
-      return 'Vui lòng nhập số điện thoại hợp lệ (10-15 chữ số).'
+      return 'Please enter a valid phone number (10-15 digits).'
     }
     if (!password || password.length < 8) {
-      return 'Mật khẩu phải có ít nhất 8 ký tự.'
+      return 'Password must be at least 8 characters long.'
     }
     if (password !== confirmPassword) {
-      return 'Mật khẩu xác nhận không khớp.'
+      return 'Passwords do not match.'
     }
     return null
   }
@@ -65,10 +65,10 @@ const Register = () => {
         password: formData.password,
       }).unwrap()
 
-      toast.success('Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.')
+      toast.success('Registration successful! Please check your email to verify your account.')
       navigate('/authen-confirm', { state: { email: formData.email } })
     } catch (err) {
-      const errorMessage = err?.data?.message || 'Đăng ký thất bại. Vui lòng thử lại.'
+      const errorMessage = err?.data?.message || 'Registration failed. Please try again.'
       setError(errorMessage)
       toast.error(errorMessage)
     } finally {
@@ -81,8 +81,8 @@ const Register = () => {
       <div className='max-w-md w-full animate-fade-up'>
         <div className='border shadow-lg rounded-lg border-heritage-light/50 bg-card text-card-foreground'>
           <div className='text-center p-6 space-y-1'>
-            <h3 className='text-xl sm:text-2xl text-heritage-dark font-bold tracking-tight'>Tạo tài khoản mới</h3>
-            <p className='text-sm text-muted-foreground'>Nhanh chóng và dễ dàng</p>
+            <h3 className='text-xl sm:text-2xl text-heritage-dark font-bold tracking-tight'>Create New Account</h3>
+            <p className='text-sm text-muted-foreground'>Quick and easy</p>
           </div>
           <div className='p-6 pt-0'>
             <form onSubmit={handleSubmit} className='space-y-4'>
@@ -96,7 +96,7 @@ const Register = () => {
                   id='email'
                   name='email'
                   required
-                  placeholder='Nhập email...'
+                  placeholder='Enter email...'
                   value={formData.email}
                   onChange={handleChange}
                   className='w-full h-10 px-3 py-2 rounded-md border focus:ring-2 focus:ring-heritage focus:outline-none focus:border-none placeholder:text-muted-foreground text-sm'
@@ -104,14 +104,14 @@ const Register = () => {
               </div>
               <div className='space-y-2'>
                 <label htmlFor='phone' className='text-sm font-medium'>
-                  Số điện thoại
+                  Phone Number
                 </label>
                 <input
                   type='tel'
                   id='phone'
                   name='phone'
                   required
-                  placeholder='Nhập số điện thoại...'
+                  placeholder='Enter phone number...'
                   value={formData.phone}
                   onChange={handleChange}
                   className='w-full h-10 px-3 py-2 rounded-md border focus:ring-2 focus:ring-heritage focus:outline-none focus:border-none placeholder:text-muted-foreground text-sm'
@@ -119,7 +119,7 @@ const Register = () => {
               </div>
               <div className='space-y-2'>
                 <label className='text-sm font-semibold' htmlFor='password'>
-                  Mật khẩu
+                  Password
                 </label>
                 <div className='relative'>
                   <input
@@ -147,7 +147,7 @@ const Register = () => {
               </div>
               <div className='space-y-2'>
                 <label htmlFor='confirmPassword' className='text-sm font-medium'>
-                  Xác nhận mật khẩu
+                  Confirm Password
                 </label>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -164,21 +164,21 @@ const Register = () => {
                 {isLoading ? (
                   <div className='flex items-center'>
                     <div className='animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full' />
-                    Đang xử lý...
+                    Processing...
                   </div>
                 ) : (
                   <>
                     <UserPlus size={16} />
-                    <span>Đăng ký</span>
+                    <span>Sign Up</span>
                   </>
                 )}
               </Button>
             </form>
           </div>
           <div className='text-center pt-0 p-6 text-sm'>
-            <span>Bạn đã có tài khoản ư? </span>
+            <span>Already have an account? </span>
             <Link to='/login' className='text-heritage font-medium hover:underline'>
-              Đăng nhập ngay
+              Login now
             </Link>
           </div>
         </div>

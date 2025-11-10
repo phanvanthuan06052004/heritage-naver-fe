@@ -9,13 +9,13 @@ const AuthButton = () => {
       <Link to='/login'>
         <Button variant='ghost'>
           <LogIn size={20} />
-          <span>Đăng nhập</span>
+          <span>Login</span>
         </Button>
       </Link>
       <Link to='/register'>
         <Button>
           <UserPlus size={20} />
-          <span>Đăng ký</span>
+          <span>Sign Up</span>
         </Button>
       </Link>
     </>

@@ -19,12 +19,12 @@ const MobileMenu = ({ isOpen, navLinks, userMenuLinks, onClose }) => {
   const handleLogout = () => {
     try {
       dispatch(logOut())
-      toast.success('Đăng xuất thành công!')
+      toast.success('Logged out successfully!')
       navigate('/')
       onClose()
     } catch (error) {
       console.error('Logout failed:', error)
-      toast.error('Đăng xuất thất bại. Vui lòng thử lại!')
+      toast.error('Logout failed. Please try again!')
     }
   }
 
@@ -67,7 +67,7 @@ const MobileMenu = ({ isOpen, navLinks, userMenuLinks, onClose }) => {
               </Link>
             ))}
             <Button variant='destructive' onClick={handleLogout}>
-              Đăng xuất
+              Logout
             </Button>
           </>
         ) : (
@@ -75,13 +75,13 @@ const MobileMenu = ({ isOpen, navLinks, userMenuLinks, onClose }) => {
             <Link to='/login'>
               <Button variant='outline' className='w-full'>
                 <LogIn className='h-5 w-5 mr-3' />
-                <span>Đăng nhập</span>
+                <span>Login</span>
               </Button>
             </Link>
             <Link to='/register'>
               <Button className='w-full'>
                 <UserPlus className='h-5 w-5 mr-3' />
-                <span>Đăng ký</span>
+                <span>Register</span>
               </Button>
             </Link>
           </div>

@@ -28,7 +28,7 @@ const Slide = ({ slide, index, activeIndex }) => {
                 size='lg'
                 className=' w-56'>
                 <BookOpen className='mr-2' size={20} />
-                Khám phá di tích
+                Explore Heritage
               </Button>
             </Link>
             <Link to='/explore'>
@@ -37,7 +37,7 @@ const Slide = ({ slide, index, activeIndex }) => {
                 variant='outline'
                 className='bg-primary-foreground/10 backdrop-blur-sm text-primary-foreground hover:bg-primary-foreground/20 w-56'>
                 <Map className='mr-2' size={20} />
-                Khám phá bản đồ
+                Explore Map
               </Button>
             </Link>
           </div>

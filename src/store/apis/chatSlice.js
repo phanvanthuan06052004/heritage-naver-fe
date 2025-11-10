@@ -5,6 +5,20 @@ const API_BASE_URL = 'http://localhost:8000'
 
 export const chatSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    // RAG Query - Naver CLOVA Studio RAG System
+    queryRAG: builder.mutation({
+      query: ({ question, topK, collectionName }) => ({
+        url: '/rag/query',
+        method: 'POST',
+        body: { 
+          question, 
+          topK: topK || 5,
+          collectionName: collectionName || 'heritage_documents'
+        },
+      }),
+      invalidatesTags: [{ type: 'Chat', id: 'LIST' }],
+    }),
+
     getApiResponse: builder.mutation({
       query: ({ question, sessionId, model }) => ({
         url: `${API_BASE_URL}/chat`,
@@ -59,6 +73,7 @@ export const chatSlice = apiSlice.injectEndpoints({
 })
 
 export const {
+  useQueryRAGMutation,
   useGetApiResponseMutation,
   useGetChatHistoryQuery,
   useUploadDocumentMutation,

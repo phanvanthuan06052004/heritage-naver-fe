@@ -55,12 +55,12 @@ const UserProfile = () => {
     const file = e.target.files[0]
     if (file) {
       if (file.size > 1 * 1024 * 1024) {
-        toast.error('Kích thước ảnh không được vượt quá 1MB')
+        toast.error('Image size must not exceed 1MB')
         return
       }
       const validTypes = ['image/jpeg', 'image/png', 'image/gif']
       if (!validTypes.includes(file.type)) {
-        toast.error('Chỉ chấp nhận file ảnh định dạng JPEG, PNG hoặc GIF')
+        toast.error('Only JPEG, PNG or GIF image files are accepted')
         return
       }
 
@@ -70,12 +70,12 @@ const UserProfile = () => {
         setAvatarPreview(dataUrl)
         setAvatarFile(file)
         setIsAvatarChanged(true)
-        toast.info('Ảnh đại diện sẽ được cập nhật khi bạn lưu thay đổi', {
+        toast.info('Avatar will be updated when you save changes', {
           position: 'top-right',
         })
       }
       reader.onerror = () => {
-        toast.error('Không thể đọc file ảnh')
+        toast.error('Unable to read image file')
       }
       reader.readAsDataURL(file)
     }
@@ -86,13 +86,13 @@ const UserProfile = () => {
     const newErrors = {}
 
     if (!formData.displayname.trim()) {
-      newErrors.displayname = 'Tên hiển thị không được để trống'
+      newErrors.displayname = 'Display name cannot be empty'
     } else if (formData.displayname.length < 3) {
-      newErrors.displayname = 'Tên hiển thị phải có ít nhất 3 ký tự'
+      newErrors.displayname = 'Display name must be at least 3 characters'
     }
 
     if (formData.phone && !/^\d{10,11}$/.test(formData.phone)) {
-      newErrors.phone = 'Vui lòng nhập số điện thoại hợp lệ (10-11 số)'
+      newErrors.phone = 'Please enter a valid phone number (10-11 digits)'
     }
 
     setErrors(newErrors)
@@ -101,7 +101,7 @@ const UserProfile = () => {
       const firstErrorField = Object.keys(newErrors)[0]
       const errorElement = document.getElementById(firstErrorField)
       if (errorElement) errorElement.focus()
-      toast.error('Vui lòng kiểm tra lại thông tin nhập vào')
+      toast.error('Please check the information entered')
     }
 
     return Object.keys(newErrors).length === 0
@@ -137,7 +137,7 @@ const UserProfile = () => {
       setAvatarFile(null)
       setAvatarPreview(avatarUrl || DEFAULT_AVATAR)
 
-      toast.success('Cập nhật thông tin thành công!', {
+      toast.success('Profile updated successfully!', {
         position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
@@ -147,7 +147,7 @@ const UserProfile = () => {
         progress: undefined,
       })
     } catch (err) {
-      toast.error(`Cập nhật thất bại: ${err?.data?.message || err.message || 'Đã xảy ra lỗi'}`)
+      toast.error(`Update failed: ${err?.data?.message || err.message || 'An error occurred'}`)
     }
   }
 
@@ -183,12 +183,12 @@ const UserProfile = () => {
         {/* Header */}
         <div className='relative bg-gradient-to-r from-heritage-light to-accent p-6 sm:p-8 flex flex-col sm:flex-row justify-between'>
           <div>
-            <Title title='Thông tin cá nhân' />
-            <p className='text-muted-foreground mt-2'>Quản lý thông tin cá nhân của bạn</p>
+            <Title title='Personal Information' />
+            <p className='text-muted-foreground mt-2'>Manage your personal information</p>
           </div>
           <div className='mt-4 sm:mt-0'>
             {!isEditing && (
-              <Button onClick={() => setIsEditing(true)}>Chỉnh sửa</Button>
+              <Button onClick={() => setIsEditing(true)}>Edit</Button>
             )}
           </div>
         </div>
@@ -234,7 +234,7 @@ const UserProfile = () => {
                     accept='image/*'
                     className='hidden'
                     onChange={handleAvatarChange}
-                    aria-label='Tải lên ảnh đại diện'
+                    aria-label='Upload avatar'
                   />
                 </label>
               )}
@@ -249,11 +249,11 @@ const UserProfile = () => {
 
           {/* Personal Info */}
           <div className='space-y-6'>
-            <h3 className='text-lg font-medium text-heritage-dark'>Thông tin cá nhân</h3>
+            <h3 className='text-lg font-medium text-heritage-dark'>Personal Information</h3>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
               <div className='space-y-2'>
                 <label htmlFor='displayname' className='block text-sm font-medium text-foreground'>
-                  Tên hiển thị
+                  Display Name
                 </label>
                 <input
                   type='text'
@@ -264,7 +264,7 @@ const UserProfile = () => {
                   disabled={!isEditing}
                   className={`w-full pl-4 px-3 py-2 bg-background border ${errors.displayname ? 'border-destructive' : ''
                     } rounded-md disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-ring transition-colors`}
-                  placeholder='Nhập tên hiển thị'
+                  placeholder='Enter display name'
                   aria-required='true'
                   aria-invalid={!!errors.displayname}
                   aria-describedby={errors.displayname ? 'displayname-error' : undefined}
@@ -277,7 +277,7 @@ const UserProfile = () => {
               </div>
               <div className='space-y-2'>
                 <label htmlFor='gender' className='block text-sm font-medium text-foreground'>
-                  Giới tính
+                  Gender
                 </label>
                 <select
                   id='gender'
@@ -286,16 +286,16 @@ const UserProfile = () => {
                   onChange={handleChange}
                   disabled={!isEditing}
                   className='w-full px-3 py-2 bg-background border rounded-md disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-ring transition-colors'
-                  aria-label='Chọn giới tính'
+                  aria-label='Select gender'
                 >
-                  <option value='other'>Khác</option>
-                  <option value='men'>Nam</option>
-                  <option value='woman'>Nữ</option>
+                  <option value='other'>Other</option>
+                  <option value='men'>Male</option>
+                  <option value='woman'>Female</option>
                 </select>
               </div>
               <div className='space-y-2'>
                 <label htmlFor='phone' className='block text-sm font-medium text-foreground'>
-                  Số điện thoại
+                  Phone Number
                 </label>
                 <input
                   type='tel'
@@ -306,7 +306,7 @@ const UserProfile = () => {
                   disabled={!isEditing}
                   className={`w-full pl-4 px-3 py-2 bg-background border ${errors.phone ? 'border-destructive' : 'border-input'
                     } rounded-md focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-70 disabled:cursor-not-allowed transition-colors`}
-                  placeholder='Nhập số điện thoại'
+                  placeholder='Enter phone number'
                   aria-invalid={!!errors.phone}
                   aria-describedby={errors.phone ? 'phone-error' : undefined}
                 />
@@ -318,7 +318,7 @@ const UserProfile = () => {
               </div>
               <div className='space-y-2'>
                 <label htmlFor='dateOfBirth' className='block text-sm font-medium text-foreground'>
-                  Ngày sinh
+                  Date of Birth
                 </label>
                 <input
                   type='date'
@@ -327,7 +327,7 @@ const UserProfile = () => {
                   value={formData.dateOfBirth}
                   onChange={handleChange}
                   disabled={!isEditing}
-                  aria-label='Chọn ngày sinh'
+                  aria-label='Select date of birth'
                   className='w-full pl-4 px-3 py-2 bg-background border rounded-md focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-70 disabled:cursor-not-allowed transition-colors'
                 />
               </div>
@@ -336,9 +336,9 @@ const UserProfile = () => {
 
           {isEditing && (
             <div className='flex justify-end gap-4 pt-4 border-t border-border'>
-              <Button type='button' onClick={handleCancel} variant aldrich='outline' className='flex items-center gap-2'>
+              <Button type='button' onClick={handleCancel} variant='outline' className='flex items-center gap-2'>
                 <X size={16} />
-                <span>Hủy bỏ</span>
+                <span>Cancel</span>
               </Button>
               <Button
                 type='submit'
@@ -348,12 +348,12 @@ const UserProfile = () => {
                 {(isUpdating || isUploadingAvatar) ? (
                   <>
                     <Loader2 className='h-4 w-4 animate-spin' />
-                    <span>Đang lưu...</span>
+                    <span>Saving...</span>
                   </>
                 ) : (
                   <>
                     <Check size={16} />
-                    <span>Lưu thay đổi</span>
+                    <span>Save Changes</span>
                   </>
                 )}
               </Button>

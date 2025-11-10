@@ -107,8 +107,8 @@ const Heritages = () => {
     <div className='text-center py-12'>
       <p className='text-muted-foreground'>
         {searchQuery
-          ? 'Không tìm thấy di tích nào phù hợp.'
-          : 'Không có di tích nào để hiển thị.'}
+          ? 'No matching heritage sites found.'
+          : 'No heritage sites to display.'}
       </p>
     </div>
   )
@@ -146,16 +146,16 @@ const Heritages = () => {
   const renderErrorState = () => (
     <div className='text-center py-12'>
       <p className='text-destructive font-medium'>
-        Đã xảy ra lỗi khi tải dữ liệu
+        An error occurred while loading data
       </p>
       <p className='text-muted-foreground mt-2'>
-        {error?.data?.message || 'Vui lòng thử lại sau'}
+        {error?.data?.message || 'Please try again later'}
       </p>
       <button
         onClick={() => trigger(queryParams)}
         className='mt-4 px-4 py-2 bg-heritage-dark text-white rounded hover:bg-heritage-dark/90 transition-colors'
       >
-        Thử lại
+        Try again
       </button>
     </div>
   )
@@ -166,11 +166,11 @@ const Heritages = () => {
         {/* Header */}
         <div className='text-center animate-fade-up'>
           <h1 className='text-3xl sm:text-4xl font-medium text-heritage-dark mb-4'>
-            Khám phá các di tích lịch sử
+            Explore Historical Heritage Sites
           </h1>
           <p className='text-muted-foreground max-w-2xl mx-auto'>
-            Tìm hiểu những địa danh văn hóa và lịch sử nổi bật trên khắp Việt
-            Nam, nơi đã định hình nền văn minh của dân tộc.
+            Discover prominent cultural and historical landmarks across Vietnam,
+            where our nation's civilization was shaped.
           </p>
         </div>
 

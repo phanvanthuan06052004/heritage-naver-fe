@@ -84,7 +84,7 @@ const useSocket = (userData, heritageId) => {
             const systemMessage = {
                 id: `system-${Date.now()}`,
                 content: data.message,
-                sender: { id: 'system', name: 'Hệ thống' },
+                sender: { id: 'system', name: 'System' },
                 timestamp: new Date().toISOString(),
                 isSystemMessage: true,
             }
@@ -99,8 +99,8 @@ const useSocket = (userData, heritageId) => {
         const handleUserJoined = (data) => {
             const systemMessage = {
                 id: `system-${Date.now()}`,
-                content: `${data.username} vừa tham gia phòng chat.`,
-                sender: { id: 'system', name: 'Hệ thống' },
+                content: `${data.username} joined the chat.`,
+                sender: { id: 'system', name: 'System' },
                 timestamp: new Date().toISOString(),
                 isSystemMessage: true,
             }
@@ -122,8 +122,8 @@ const useSocket = (userData, heritageId) => {
         const handleUserLeft = (data) => {
             const systemMessage = {
                 id: `system-${Date.now()}`,
-                content: `${data.username} đã rời phòng chat.`,
-                sender: { id: 'system', name: 'Hệ thống' },
+                content: `${data.username} left the chat.`,
+                sender: { id: 'system', name: 'System' },
                 timestamp: new Date().toISOString(),
                 isSystemMessage: true,
             }

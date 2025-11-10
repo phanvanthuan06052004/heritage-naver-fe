@@ -28,13 +28,13 @@ const AddHeritage = () => {
 
     useEffect(() => {
         if (createSuccess) {
-            toast.success('Tạo di tích thành công!')
+            toast.success('Create heritage site successfully!')
             navigate('/admin/heritages')
         }
         if (createError) {
-            console.error('Lỗi tạo di tích:', createErrorMessage)
-            const errorMsg = createErrorMessage?.data?.message || createErrorMessage?.error || 'Lỗi không xác định'
-            toast.error(`Tạo di tích thất bại: ${errorMsg}`)
+            console.error('Error creating heritage site:', createErrorMessage)
+            const errorMsg = createErrorMessage?.data?.message || createErrorMessage?.error || 'Unknown error'
+            toast.error(`Failed to create heritage site: ${errorMsg}`)
         }
     }, [createSuccess, createError, createErrorMessage, navigate])
 
@@ -69,12 +69,12 @@ const AddHeritage = () => {
         const file = e.target.files[0]
         if (file) {
             if (file.size > 1 * 1024 * 1024) {
-                toast.error('Kích thước ảnh không được vượt quá 1MB')
+                toast.error('Image size cannot exceed 1MB')
                 return
             }
             const validTypes = ['image/jpeg', 'image/png', 'image/gif']
             if (!validTypes.includes(file.type)) {
-                toast.error('Chỉ chấp nhận file ảnh định dạng JPEG, PNG hoặc GIF')
+                toast.error('Only JPEG, PNG and GIF images are accepted')
                 return
             }
 
@@ -83,12 +83,12 @@ const AddHeritage = () => {
                 const dataUrl = reader.result
                 setImagePreviews(prev => [...prev, dataUrl])
                 setImageFiles(prev => [...prev, file])
-                toast.info('Ảnh đã được thêm, bạn có thể thêm ảnh khác', {
+                toast.info('Image added, you can add another image', {
                     position: "top-right"
                 })
             }
             reader.onerror = () => {
-                toast.error('Không thể đọc file ảnh')
+                toast.error('Unable to read image file')
             }
             reader.readAsDataURL(file)
         }
@@ -97,7 +97,7 @@ const AddHeritage = () => {
     const removeImage = (index) => {
         setImagePreviews(prev => prev.filter((_, i) => i !== index))
         setImageFiles(prev => prev.filter((_, i) => i !== index))
-        toast.info('Đã xóa ảnh')
+        toast.info('Image deleted')
     }
 
     const addHistoricalEvent = () => {
@@ -133,12 +133,12 @@ const AddHeritage = () => {
             fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates.lng},${coordinates.lat}.json?access_token=pk.eyJ1IjoibmFtbGUwMjIwMDQiLCJhIjoiY205ejlmYm94MHI1djJqb2w5czloNDdrbyJ9.-P_PHQN7L283Z_qIGfgsOg&country=vn`)
                 .then(response => response.json())
                 .then(data => {
-                    const address = data.features?.[0]?.place_name || 'Không tìm thấy địa chỉ'
+                    const address = data.features?.[0]?.place_name || 'Address not found'
                     setFormData(prev => ({ ...prev, location: address }))
                 })
                 .catch(error => {
                     console.error('Error fetching address:', error)
-                    setFormData(prev => ({ ...prev, location: 'Lỗi khi lấy địa chỉ' }))
+                    setFormData(prev => ({ ...prev, location: 'Unable to fetch address' }))
                 })
         }
     }, [])
@@ -147,19 +147,19 @@ const AddHeritage = () => {
         const newErrors = {}
 
         if (!formData.name.trim()) {
-            newErrors.name = 'Tên di tích không được để trống'
+                newErrors.name = 'Heritage name cannot be empty'
         }
         if (!formData.description.trim()) {
-            newErrors.description = 'Mô tả không được để trống'
+            newErrors.description = 'Description cannot be empty'
         }
         if (!formData.location.trim()) {
-            newErrors.location = 'Địa điểm không được để trống'
+            newErrors.location = 'Location cannot be empty'
         }
         if (!formData.coordinates.latitude || !formData.coordinates.longitude) {
-            newErrors.coordinates = 'Tọa độ không được để trống'
+            newErrors.coordinates = 'Coordinates cannot be empty'
         }
         if (imageFiles.length === 0) {
-            newErrors.images = 'Vui lòng chọn ít nhất một hình ảnh'
+            newErrors.images = 'Please select at least one image'
         }
 
         setErrors(newErrors)
@@ -168,7 +168,7 @@ const AddHeritage = () => {
             const firstErrorField = Object.keys(newErrors)[0]
             const errorElement = document.getElementById(firstErrorField)
             if (errorElement) errorElement.focus()
-            toast.error('Vui lòng kiểm tra lại thông tin nhập vào')
+            toast.error('Please check the information entered')
         }
 
         return Object.keys(newErrors).length === 0
@@ -195,16 +195,16 @@ const AddHeritage = () => {
 
             await createHeritage(heritageData).unwrap()
         } catch (err) {
-            toast.error(`Tạo di tích thất bại: ${err?.data?.message || err.message || 'Đã xảy ra lỗi'}`)
+            toast.error(`Failed to create heritage site: ${err?.data?.message || err.message || 'An error occurred'}`)
         }
     }
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Thêm Di tích Lịch sử</h2>
+            <h2 className="text-2xl font-semibold">Add Heritage Site</h2>
             <div className="bg-white p-6 rounded-md shadow-md">
                 <div className="mb-6">
-                    <Label>Chọn địa điểm trên bản đồ</Label>
+                    <Label>Select location on the map</Label>
                     <div className="w-full h-[400px]">
                         <HeritageMapView
                             center={DEFAULT_CENTER}
@@ -215,7 +215,7 @@ const AddHeritage = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <Label htmlFor="name">Tên di tích</Label>
+                        <Label htmlFor="name">Heritage Name</Label>
                         <Input
                             type="text"
                             id="name"
@@ -227,7 +227,7 @@ const AddHeritage = () => {
                         {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="location">Địa điểm</Label>
+                        <Label htmlFor="location">Location</Label>
                         <Input
                             type="text"
                             id="location"
@@ -239,7 +239,7 @@ const AddHeritage = () => {
                         {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location}</p>}
                     </div>
                     <div className="col-span-2">
-                        <Label htmlFor="images">Hình ảnh</Label>
+                        <Label htmlFor="images">Images</Label>
                         <div className="flex flex-col gap-4">
                             <div className="flex items-center gap-4">
                                 <Input
@@ -254,7 +254,7 @@ const AddHeritage = () => {
                                     variant="outline"
                                     onClick={() => document.getElementById('images').click()}
                                 >
-                                    Chọn ảnh
+                                    Select Image
                                 </Button>
                             </div>
                             {imagePreviews.length > 0 && (
@@ -271,7 +271,7 @@ const AddHeritage = () => {
                                                 className="absolute top-1 right-1 text-red-500 border-red-500 hover:bg-red-50"
                                                 onClick={() => removeImage(index)}
                                             >
-                                                Xóa
+                                                    Delete
                                             </Button>
                                         </div>
                                     ))}
@@ -281,7 +281,7 @@ const AddHeritage = () => {
                         </div>
                     </div>
                     <div>
-                        <Label htmlFor="coordinates.latitude">Vĩ độ</Label>
+                        <Label htmlFor="coordinates.latitude">Latitude</Label>
                         <Input
                             type="text"
                             id="coordinates.latitude"
@@ -293,7 +293,7 @@ const AddHeritage = () => {
                         {errors.coordinates && <p className="text-red-500 text-sm mt-1">{errors.coordinates}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="coordinates.longitude">Kinh độ</Label>
+                        <Label htmlFor="coordinates.longitude">Longitude</Label>
                         <Input
                             type="text"
                             id="coordinates.longitude"
@@ -304,7 +304,7 @@ const AddHeritage = () => {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="status">Trạng thái</Label>
+                        <Label htmlFor="status">Status</Label>
                         <select
                             id="status"
                             name="status"
@@ -312,12 +312,12 @@ const AddHeritage = () => {
                             value={formData.status}
                             onChange={handleInputChange}
                         >
-                            <option value="ACTIVE">Hoạt động</option>
-                            <option value="INACTIVE">Không hoạt động</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
                         </select>
                     </div>
                     <div className="col-span-2">
-                        <Label htmlFor="description">Mô tả</Label>
+                        <Label htmlFor="description">Description</Label>
                         <textarea
                             id="description"
                             name="description"
@@ -330,11 +330,11 @@ const AddHeritage = () => {
                     </div>
                 </div>
                 <div className="mt-6">
-                    <Label>Sự kiện lịch sử</Label>
+                    <Label>Historical Events</Label>
                     {formData.additionalInfo.historicalEvents.map((event, index) => (
                         <div key={index} className="mt-4 p-4 border rounded">
                             <div className="mb-2">
-                                <Label htmlFor={`additionalInfo.historicalEvents.${index}.title`}>Tiêu đề sự kiện</Label>
+                                <Label htmlFor={`additionalInfo.historicalEvents.${index}.title`}>Event Title</Label>
                                 <Input
                                     type="text"
                                     id={`additionalInfo.historicalEvents.${index}.title`}
@@ -344,7 +344,7 @@ const AddHeritage = () => {
                                 />
                             </div>
                             <div className="mb-2">
-                                <Label htmlFor={`additionalInfo.historicalEvents.${index}.description`}>Mô tả sự kiện</Label>
+                                <Label htmlFor={`additionalInfo.historicalEvents.${index}.description`}>Event Description</Label>
                                 <textarea
                                     id={`additionalInfo.historicalEvents.${index}.description`}
                                     name={`additionalInfo.historicalEvents.${index}.description`}
@@ -359,7 +359,7 @@ const AddHeritage = () => {
                                 onClick={() => removeHistoricalEvent(index)}
                                 className="text-red-500 border-red-500 hover:bg-red-50"
                             >
-                                Xóa sự kiện
+                                Delete Event
                             </Button>
                         </div>
                     ))}
@@ -368,15 +368,15 @@ const AddHeritage = () => {
                         onClick={addHistoricalEvent}
                         className="mt-4"
                     >
-                        + Thêm sự kiện lịch sử
+                        + Add Historical Event
                     </Button>
                 </div>
                 <div className="mt-6 flex space-x-4">
                     <Button onClick={handleCreate} disabled={isCreating}>
-                        {isCreating ? 'Đang tạo...' : 'Tạo'}
+                        {isCreating ? 'Creating...' : 'Create'}
                     </Button>
                     <Button variant="outline" onClick={() => navigate('/admin/heritages')}>
-                        Quay lại
+                        Back
                     </Button>
                 </div>
             </div>

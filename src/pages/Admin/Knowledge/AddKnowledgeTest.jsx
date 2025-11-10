@@ -25,16 +25,16 @@ const AddKnowledgeTest = () => {
 
     useEffect(() => {
         if (createSuccess) {
-            toast.success('Tạo bài kiểm tra thành công!')
+            toast.success('Create knowledge test successfully!')
             navigate('/admin/knowledge-tests')
         }
         if (createError) {
-            console.error('Lỗi tạo bài kiểm tra:', createErrorMessage)
-            const errorMsg = createErrorMessage?.data?.message || createErrorMessage?.error || 'Lỗi không xác định'
-            toast.error(`Tạo bài kiểm tra thất bại: ${errorMsg}`)
+            console.error('Error creating knowledge test:', createErrorMessage)
+            const errorMsg = createErrorMessage?.data?.message || createErrorMessage?.error || 'Unknown error'
+            toast.error(`Failed to create knowledge test: ${errorMsg}`)
         }
         if (heritageError) {
-            toast.error('Không thể tải danh sách di sản')
+            toast.error('Unable to load heritage list')
         }
     }, [createSuccess, createError, createErrorMessage, heritageError, navigate])
 
@@ -62,12 +62,12 @@ const AddKnowledgeTest = () => {
         if (!file) return
 
         if (file.size > 1 * 1024 * 1024) {
-            toast.error('Kích thước ảnh không được vượt quá 1MB')
+            toast.error('Image size cannot exceed 1MB')
             return
         }
         const validTypes = ['image/jpeg', 'image/png', 'image/gif']
         if (!validTypes.includes(file.type)) {
-            toast.error('Chỉ chấp nhận file ảnh định dạng JPEG, PNG hoặc GIF')
+            toast.error('Only JPEG, PNG and GIF images are accepted')
             return
         }
 
@@ -81,10 +81,10 @@ const AddKnowledgeTest = () => {
                 ...prev,
                 [questionIndex]: file,
             }))
-            toast.info('Ảnh đã được chọn', { position: 'top-right' })
+            toast.info('Image selected', { position: 'top-right' })
         }
         reader.onerror = () => {
-            toast.error('Không thể đọc file ảnh')
+            toast.error('Unable to read image file')
         }
         reader.readAsDataURL(file)
     }
@@ -105,7 +105,7 @@ const AddKnowledgeTest = () => {
             delete newFiles[questionIndex]
             return newFiles
         })
-        toast.info('Đã xóa ảnh')
+        toast.info('Image deleted')
     }
 
     const addQuestion = () => {
@@ -165,31 +165,31 @@ const AddKnowledgeTest = () => {
         const newErrors = {}
 
         if (!formData.heritageId) {
-            newErrors.heritageId = 'Vui lòng chọn một di sản'
+                    newErrors.heritageId = 'Please select a heritage'
         }
         if (!formData.title.trim() || formData.title.length < 3 || formData.title.length > 200) {
-            newErrors.title = 'Tiêu đề phải từ 3 đến 200 ký tự'
+            newErrors.title = 'Title must be between 3 and 200 characters'
         }
         if (!formData.content.trim()) {
-            newErrors.content = 'Nội dung không được để trống'
+            newErrors.content = 'Content cannot be empty'
         }
         if (formData.questions.length === 0) {
-            newErrors.questions = 'Phải có ít nhất một câu hỏi'
+            newErrors.questions = 'There must be at least one question'
         } else {
             formData.questions.forEach((q, i) => {
                 if (!q.content.trim()) {
-                    newErrors[`question_${i}_content`] = 'Nội dung câu hỏi không được để trống'
+                    newErrors[`question_${i}_content`] = 'Question content cannot be empty'
                 }
                 if (q.options.length < 2) {
-                    newErrors[`question_${i}_options`] = 'Phải có ít nhất 2 lựa chọn'
+                    newErrors[`question_${i}_options`] = 'There must be at least 2 choices'
                 } else {
                     q.options.forEach((o, j) => {
                         if (!o.optionText.trim()) {
-                            newErrors[`question_${i}_option_${j}`] = 'Lựa chọn không được để trống'
+                            newErrors[`question_${i}_option_${j}`] = 'Choice cannot be empty'
                         }
                     })
                     if (!q.options.some((o) => o.isCorrect)) {
-                        newErrors[`question_${i}_correct`] = 'Phải có ít nhất một lựa chọn đúng'
+                        newErrors[`question_${i}_correct`] = 'There must be at least one correct choice'
                     }
                 }
             })
@@ -197,7 +197,7 @@ const AddKnowledgeTest = () => {
 
         setErrors(newErrors)
         if (Object.keys(newErrors).length > 0) {
-            toast.error('Vui lòng kiểm tra lại thông tin nhập vào')
+            toast.error('Please check the information entered')
         }
         return Object.keys(newErrors).length === 0
     }
@@ -226,25 +226,25 @@ const AddKnowledgeTest = () => {
 
             await createKnowledgeTest(testData).unwrap()
         } catch (err) {
-            toast.error(`Tạo bài kiểm tra thất bại: ${err?.data?.message || err.message || 'Đã xảy ra lỗi'}`)
+            toast.error(`Failed to create knowledge test: ${err?.data?.message || err.message || 'An error occurred'}`)
         }
     }
 
     if (isHeritageLoading) {
-        return <div className="text-center p-4">Đang tải danh sách di sản...</div>
+        return <div className="text-center p-4">Loading...</div>
     }
 
     if (heritageError) {
-        return <div className="text-center text-red-500 p-4">Không thể tải danh sách di sản</div>
+        return <div className="text-center text-red-500 p-4">Unable to load heritage list</div>
     }
 
     return (
         <div className="space-y-6 mx-auto p-4">
-            <h2 className="text-2xl font-semibold text-gray-800">Thêm Bài Kiểm tra Kiến thức</h2>
+            <h2 className="text-2xl font-semibold">Add Knowledge Test</h2>
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <Label htmlFor="heritageId">Di sản</Label>
+                        <Label htmlFor="heritageId">Heritage Site Name</Label>
                         <select
                             id="heritageId"
                             name="heritageId"
@@ -252,7 +252,7 @@ const AddKnowledgeTest = () => {
                             value={formData.heritageId}
                             onChange={handleInputChange}
                         >
-                            <option value="">Chọn di sản</option>
+                            <option value="">Select Heritage Site</option>
                             {heritageNames?.map((heritage) => (
                                 <option key={heritage._id} value={heritage._id}>
                                     {heritage.name}
@@ -262,7 +262,7 @@ const AddKnowledgeTest = () => {
                         {errors.heritageId && <p className="text-red-500 text-sm mt-1">{errors.heritageId}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="title">Tiêu đề</Label>
+                        <Label htmlFor="title">Title</Label>
                         <Input
                             type="text"
                             id="title"
@@ -270,12 +270,12 @@ const AddKnowledgeTest = () => {
                             value={formData.title}
                             onChange={handleInputChange}
                             className={`mt-1 ${errors.title ? 'border-red-500' : ''}`}
-                            placeholder="Nhập tiêu đề bài kiểm tra"
+                            placeholder="Enter test title"
                         />
                         {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="status">Trạng thái</Label>
+                        <Label htmlFor="status">Status</Label>
                         <select
                             id="status"
                             name="status"
@@ -283,12 +283,12 @@ const AddKnowledgeTest = () => {
                             value={formData.status}
                             onChange={handleInputChange}
                         >
-                            <option value="ACTIVE">Hoạt động</option>
-                            <option value="INACTIVE">Không hoạt động</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
                         </select>
                     </div>
                     <div className="col-span-2">
-                        <Label htmlFor="content">Nội dung</Label>
+                        <Label htmlFor="content">Content</Label>
                         <textarea
                             id="content"
                             name="content"
@@ -296,18 +296,18 @@ const AddKnowledgeTest = () => {
                             rows="4"
                             value={formData.content}
                             onChange={handleInputChange}
-                            placeholder="Nhập nội dung bài kiểm tra"
+                            placeholder="Enter test content"
                         />
                         {errors.content && <p className="text-red-500 text-sm mt-1">{errors.content}</p>}
                     </div>
                 </div>
                 <div className="mt-6">
-                    <Label className="text-lg font-medium">Câu hỏi</Label>
+                    <Label className="text-lg font-medium">Questions</Label>
                     {errors.questions && <p className="text-red-500 text-sm mt-1">{errors.questions}</p>}
                     {formData.questions.map((question, qIndex) => (
                         <div key={qIndex} className="mt-4 p-4 border rounded-lg bg-gray-50">
                             <div className="mb-4">
-                                <Label htmlFor={`question_${qIndex}_content`}>Nội dung câu hỏi {qIndex + 1}</Label>
+                                <Label htmlFor={`question_${qIndex}_content`}>Question Content {qIndex + 1}</Label>
                                 <textarea
                                     id={`question_${qIndex}_content`}
                                     name="content"
@@ -315,14 +315,14 @@ const AddKnowledgeTest = () => {
                                     rows="3"
                                     value={question.content}
                                     onChange={(e) => handleInputChange(e, qIndex)}
-                                    placeholder="Nhập nội dung câu hỏi"
+                                    placeholder="Enter question content"
                                 />
                                 {errors[`question_${qIndex}_content`] && (
                                     <p className="text-red-500 text-sm mt-1">{errors[`question_${qIndex}_content`]}</p>
                                 )}
                             </div>
                             <div className="mb-4">
-                                <Label htmlFor={`question_${qIndex}_explanation`}>Giải thích</Label>
+                                <Label htmlFor={`question_${qIndex}_explanation`}>Explanation</Label>
                                 <textarea
                                     id={`question_${qIndex}_explanation`}
                                     name="explanation"
@@ -330,11 +330,11 @@ const AddKnowledgeTest = () => {
                                     rows="3"
                                     value={question.explanation}
                                     onChange={(e) => handleInputChange(e, qIndex)}
-                                    placeholder="Nhập giải thích (tùy chọn)"
+                                    placeholder="Enter explanation (optional)"
                                 />
                             </div>
                             <div className="mb-4">
-                                <Label htmlFor={`question_${qIndex}_image`}>Hình ảnh (tùy chọn)</Label>
+                                <Label htmlFor={`question_${qIndex}_image`}>Image (optional)</Label>
                                 <div className="flex flex-col gap-4">
                                     <div className="flex items-center gap-4">
                                         <Input
@@ -350,14 +350,14 @@ const AddKnowledgeTest = () => {
                                             onClick={() => document.getElementById(`question_${qIndex}_image`).click()}
                                             disabled={isUploadingImage}
                                         >
-                                            {isUploadingImage ? 'Đang tải ảnh...' : 'Chọn ảnh'}
+                                            {isUploadingImage ? 'Loading image...' : 'Select Image'}
                                         </Button>
                                     </div>
                                     {imagePreviews[qIndex] && (
                                         <div className="relative w-32">
                                             <img
                                                 src={imagePreviews[qIndex]}
-                                                alt={`Câu hỏi ${qIndex + 1}`}
+                                                alt={`Question ${qIndex + 1}`}
                                                 className="w-32 h-32 object-cover rounded-md"
                                             />
                                             <Button
@@ -365,14 +365,14 @@ const AddKnowledgeTest = () => {
                                                 className="absolute top-1 right-1 text-red-500 border-red-500 hover:bg-red-50"
                                                 onClick={() => removeImage(qIndex)}
                                             >
-                                                Xóa
+                                                Delete
                                             </Button>
                                         </div>
                                     )}
                                 </div>
                             </div>
                             <div className="mb-4">
-                                <Label>Lựa chọn</Label>
+                                <Label>Choice</Label>
                                 {question.options.map((option, oIndex) => (
                                     <div key={oIndex} className="flex items-center gap-3 mt-2">
                                         <Input
@@ -381,7 +381,7 @@ const AddKnowledgeTest = () => {
                                             value={option.optionText}
                                             onChange={(e) => handleInputChange(e, qIndex, oIndex)}
                                             className={`flex-1 ${errors[`question_${qIndex}_option_${oIndex}`] ? 'border-red-500' : ''}`}
-                                            placeholder={`Lựa chọn ${oIndex + 1}`}
+                                            placeholder={`Choice ${oIndex + 1}`}
                                         />
                                         <div className="flex items-center gap-2">
                                             <input
@@ -391,14 +391,14 @@ const AddKnowledgeTest = () => {
                                                 onChange={(e) => handleInputChange(e, qIndex, oIndex)}
                                                 className="h-5 w-5 text-blue-600"
                                             />
-                                            <Label>Đúng</Label>
+                                            <Label>Correct</Label>
                                         </div>
                                         <Button
                                             variant="outline"
                                             className="text-red-500 border-red-500 hover:bg-red-50"
                                             onClick={() => removeOption(qIndex, oIndex)}
                                         >
-                                            Xóa
+                                            Delete
                                         </Button>
                                         {errors[`question_${qIndex}_option_${oIndex}`] && (
                                             <p className="text-red-500 text-sm mt-1">{errors[`question_${qIndex}_option_${oIndex}`]}</p>
@@ -416,7 +416,7 @@ const AddKnowledgeTest = () => {
                                     onClick={() => addOption(qIndex)}
                                     className="mt-3 text-blue-600 border-blue-600 hover:bg-blue-50"
                                 >
-                                    + Thêm lựa chọn
+                                    + Add Choice
                                 </Button>
                             </div>
                             <Button
@@ -424,7 +424,7 @@ const AddKnowledgeTest = () => {
                                 className="text-red-500 border-red-500 hover:bg-red-50"
                                 onClick={() => removeQuestion(qIndex)}
                             >
-                                Xóa câu hỏi
+                                Delete Question
                             </Button>
                         </div>
                     ))}
@@ -433,7 +433,7 @@ const AddKnowledgeTest = () => {
                         onClick={addQuestion}
                         className="mt-4 text-blue-600 border-blue-600 hover:bg-blue-50"
                     >
-                        + Thêm câu hỏi
+                        + Add Question
                     </Button>
                 </div>
                 <div className="mt-8 flex justify-end space-x-4">
@@ -442,14 +442,14 @@ const AddKnowledgeTest = () => {
                         disabled={isCreating || isUploadingImage || isHeritageLoading}
                         className="bg-blue-600 hover:bg-blue-700 text-white"
                     >
-                        {isCreating ? 'Đang tạo...' : 'Tạo bài kiểm tra'}
+                        {isCreating ? 'Creating...' : 'Create'}
                     </Button>
                     <Button
                         variant="outline"
                         onClick={() => navigate('/admin/knowledge-tests')}
                         className="text-gray-600 border-gray-600 hover:bg-gray-100"
                     >
-                        Quay lại
+                        Back
                     </Button>
                 </div>
             </div>

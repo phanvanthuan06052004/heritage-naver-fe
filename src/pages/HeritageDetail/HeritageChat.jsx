@@ -4,76 +4,40 @@ import { Input } from '~/components/common/ui/Input'
 import { Loader2, Paperclip, Send } from 'lucide-react'
 import { toast } from 'react-toastify'
 import {
-    useGetApiResponseMutation,
-    useGetChatHistoryQuery,
+    useQueryRAGMutation,
     useUploadDocumentMutation,
-    useUploadJsonMutation, // Added for landmark data
-} from '~/store/apis/chatSlice' // Fixed import from chatSlice to chatApi
+} from '~/store/apis/chatSlice'
 
 const HeritageChat = ({ heritageId, heritageName, landmarkData }) => {
     const [messages, setMessages] = useState([])
     const [inputText, setInputText] = useState('')
-    const [sessionId, setSessionId] = useState(null)
     const [isUploading, setIsUploading] = useState(false)
-    const [isLandmarkUploaded, setIsLandmarkUploaded] = useState(false)
+    const [isSending, setIsSending] = useState(false)
     const messagesEndRef = useRef(null)
     const fileInputRef = useRef(null)
 
-    const selectedModel = 'gemini-1.5-flash'
-
-    const { data: history, isLoading: isHistoryLoading } = useGetChatHistoryQuery(sessionId, {
-        skip: !sessionId,
-    })
-
-    const [getApiResponse] = useGetApiResponseMutation()
+    // Use RAG API instead of old Gemini API
+    const [queryRAG] = useQueryRAGMutation()
     const [uploadDocument] = useUploadDocumentMutation()
-    const [uploadJson] = useUploadJsonMutation() // Added for landmark data
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, [messages])
 
+    // Initialize with welcome message
     useEffect(() => {
-        if (history && Array.isArray(history)) {
-            setMessages(
-                history.map((item) => ({
-                    id: Date.now() + Math.random(),
-                    sender: item.role === 'user' ? 'user' : 'ai',
-                    content: item.content,
-                    timestamp: new Date().toLocaleTimeString('vi-VN'),
-                }))
-            )
+        const initMessage = {
+            id: Date.now(),
+            sender: 'ai',
+            content: `Hello! I can help you learn about ${heritageName}. Ask me anything!`,
+            timestamp: new Date().toLocaleTimeString('vi-VN'),
         }
-    }, [history])
-
-    useEffect(() => {
-        const sendLandmarkData = async () => {
-            if (isLandmarkUploaded || !landmarkData) return
-            try {
-                console.log('Sending landmark data to /upload-landmark-info:', landmarkData)
-                const result = await uploadJson(landmarkData).unwrap()
-                console.log('Upload landmark response:', result)
-                setIsLandmarkUploaded(true)
-                const initMessage = {
-                    id: Date.now(),
-                    sender: 'ai',
-                    content: `Đã tải thông tin về di tích ${heritageName}. Hỏi tôi bất cứ điều gì!`,
-                    timestamp: new Date().toLocaleTimeString('vi-VN'),
-                }
-                setMessages([initMessage])
-                toast.success('Đã tải thông tin di tích!')
-            } catch (error) {
-                console.error('Upload Landmark Error:', error)
-                toast.error(`Lỗi khi tải thông tin di tích: ${error.data?.detail || error.message}`)
-            }
-        }
-
-        sendLandmarkData()
-    }, [heritageName, uploadJson, isLandmarkUploaded, landmarkData])
+        setMessages([initMessage])
+    }, [heritageName])
 
     const handleSendMessage = async () => {
         if (!inputText.trim()) {
-            toast.error('Vui lòng nhập tin nhắn!')
+            toast.error('Please enter a message!')
             return
         }
 
@@ -85,30 +49,56 @@ const HeritageChat = ({ heritageId, heritageName, landmarkData }) => {
         }
 
         setMessages((prev) => [...prev, userMessage])
+        const question = inputText
         setInputText('')
+        setIsSending(true)
 
         try {
-            const context = `Dựa trên thông tin di tích ${heritageName} (ID: ${heritageId}): ${JSON.stringify(landmarkData, null, 2)}\nCâu hỏi: ${inputText}`
-            const response = await getApiResponse({
-                question: context,
-                sessionId,
-                model: selectedModel,
+            // Build context-aware question for RAG
+            const contextualQuestion = `About the heritage site "${heritageName}": ${question}`
+            
+            // Query RAG system
+            const response = await queryRAG({
+                question: contextualQuestion,
+                topK: 5,
+                collectionName: 'heritage_documents'
             }).unwrap()
+
+            // Extract answer from RAG response
+            const answer = response?.data?.answer || 'Sorry, I cannot answer this question.'
+            const mode = response?.data?.mode || 'general'
+            const sources = response?.data?.sources || []
+
+            // Build AI message with sources info if available
+            let aiContent = answer
+            if (mode === 'rag' && sources.length > 0) {
+                aiContent += `\n\n📚 References: ${sources.length} documents`
+            }
 
             const aiMessage = {
                 id: Date.now() + 1,
                 sender: 'ai',
-                content: response.response || 'AI: Đã nhận câu hỏi.',
+                content: aiContent,
                 timestamp: new Date().toLocaleTimeString('vi-VN'),
+                mode: mode,
+                sources: sources
             }
 
             setMessages((prev) => [...prev, aiMessage])
-            if (response.session_id && !sessionId) {
-                setSessionId(response.session_id)
-            }
         } catch (error) {
-            toast.error('Lỗi khi nhận phản hồi từ AI!')
-            console.error('API Error:', error)
+            toast.error('Error receiving AI response!')
+            console.error('RAG API Error:', error)
+            
+            // Add error message to chat
+            const errorMessage = {
+                id: Date.now() + 1,
+                sender: 'ai',
+                content: 'Sorry, an error occurred. Please try again later.',
+                timestamp: new Date().toLocaleTimeString('vi-VN'),
+            }
+            setMessages((prev) => [...prev, errorMessage])
+        } finally {
+            setIsSending(false)
         }
     }
 
@@ -119,7 +109,7 @@ const HeritageChat = ({ heritageId, heritageName, landmarkData }) => {
         const maxSize = 10 * 1024 * 1024
         for (const file of files) {
             if (file.size > maxSize) {
-                toast.error(`Tệp ${file.name} vượt quá 10MB!`)
+                toast.error(`File ${file.name} exceeds 10MB!`)
                 continue
             }
 
@@ -138,28 +128,18 @@ const HeritageChat = ({ heritageId, heritageName, landmarkData }) => {
                 }
 
                 setMessages((prev) => [...prev, fileMessage])
-                toast.success(`Đã tải lên ${file.name}!`)
-
-                const context = `Người dùng đã tải lên tệp ${file.name} liên quan đến di tích ${heritageName}. Dựa trên thông tin di tích: ${JSON.stringify(landmarkData, null, 2)}.`
-                const response = await getApiResponse({
-                    question: context,
-                    sessionId,
-                    model: selectedModel,
-                }).unwrap()
+                toast.success(`Uploaded ${file.name}!`)
 
                 const aiMessage = {
                     id: Date.now() + 1,
                     sender: 'ai',
-                    content: response.response || `AI: Đã nhận tệp ${file.name}.`,
+                    content: `Received file ${file.name}. You can ask me about the content of this file!`,
                     timestamp: new Date().toLocaleTimeString('vi-VN'),
                 }
 
                 setMessages((prev) => [...prev, aiMessage])
-                if (response.session_id && !sessionId) {
-                    setSessionId(response.session_id)
-                }
             } catch (error) {
-                toast.error(`Tải lên ${file.name} thất bại!`)
+                toast.error(`Failed to upload ${file.name}!`)
                 console.error('Upload Error:', error)
             } finally {
                 setIsUploading(false)
@@ -179,12 +159,10 @@ const HeritageChat = ({ heritageId, heritageName, landmarkData }) => {
     return (
         <div className="flex flex-col h-[400px] w-[300px] bg-white rounded-lg shadow-lg">
             <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3">
-                {isHistoryLoading ? (
+                {messages.length === 0 ? (
                     <div className="text-center">
                         <Loader2 className="w-6 h-6 animate-spin mx-auto" />
                     </div>
-                ) : messages.length === 0 ? (
-                    <p className="text-center text-gray-500 text-sm">Đang tải nội dung...</p>
                 ) : (
                     messages.map((message) => (
                         <div
@@ -247,11 +225,16 @@ const HeritageChat = ({ heritageId, heritageName, landmarkData }) => {
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Hỏi gì đó..."
+                    placeholder="Your question..."
                     className="flex-1 text-sm"
+                    disabled={isSending}
                 />
-                <Button onClick={handleSendMessage} disabled={isUploading} className="p-1">
-                    <Send className="w-4 h-4" />
+                <Button onClick={handleSendMessage} disabled={isUploading || isSending} className="p-1">
+                    {isSending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                        <Send className="w-4 h-4" />
+                    )}
                 </Button>
             </div>
         </div>

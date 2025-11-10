@@ -1,10 +1,10 @@
 import { Award, MapPin, Play, Star } from 'lucide-react'
 
 const features = [
-  { value: 'leaderboard', icon: <Award className='h-8 w-8 text-heritage mx-auto mb-2' />, label: 'Bảng xếp hạng' },
-  { value: 'knowledge-test', icon: <Star className='h-8 w-8 text-heritage mx-auto mb-2' />, label: 'Kiểm tra kiến thức' },
-  { value: 'roleplay', icon: <Play className='h-8 w-8 text-heritage mx-auto mb-2' />, label: 'Trải nghiệm nhập vai' },
-  { value: 'chatroom', icon: <MapPin className='h-8 w-8 text-heritage mx-auto mb-2' />, label: 'Tham gia chatroom' },
+  { value: 'leaderboard', icon: <Award className='h-8 w-8 text-heritage mx-auto mb-2' />, label: 'Leaderboard' },
+  { value: 'knowledge-test', icon: <Star className='h-8 w-8 text-heritage mx-auto mb-2' />, label: 'Knowledge Test' },
+  { value: 'roleplay', icon: <Play className='h-8 w-8 text-heritage mx-auto mb-2' />, label: 'Role-Play Experience' },
+  { value: 'chatroom', icon: <MapPin className='h-8 w-8 text-heritage mx-auto mb-2' />, label: 'Join Chatroom' },
 ]
 
 const HeritageFeatures = ({ handleFeatureClick }) => {

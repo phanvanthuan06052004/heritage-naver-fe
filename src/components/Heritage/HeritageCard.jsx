@@ -60,7 +60,7 @@ const HeritageCard = ({ item, isFavorited: propIsFavorited, onFavoriteChange }) 
     e.stopPropagation()
     
     if (!isAuthenticated) {
-      toast.error('Vui lòng đăng nhập để thực hiện chức năng này')
+      toast.error('Please login to perform this action')
       return
     }
     
@@ -78,14 +78,14 @@ const HeritageCard = ({ item, isFavorited: propIsFavorited, onFavoriteChange }) 
           heritageId: _id 
         }).unwrap()
 
-        toast.success('Đã thêm vào danh sách yêu thích')
+        toast.success('Added to favorites')
       } else {
         await removeFromFavorites({ 
           userId: userInfo._id, 
           heritageId: _id 
         }).unwrap()
         
-        toast.success('Đã xóa khỏi danh sách yêu thích')
+        toast.success('Removed from favorites')
       }
       
       if (onFavoriteChange) {
@@ -100,7 +100,7 @@ const HeritageCard = ({ item, isFavorited: propIsFavorited, onFavoriteChange }) 
       }))
       console.log(error)
 
-      toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
+      toast.error('An error occurred. Please try again later.')
     }
   }
   

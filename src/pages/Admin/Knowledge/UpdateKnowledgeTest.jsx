@@ -44,19 +44,19 @@ const UpdateKnowledgeTest = () => {
             setImagePreviews(previews)
         }
         if (fetchError) {
-            toast.error('Không thể tải thông tin bài kiểm tra')
+            toast.error('Unable to load knowledge test information')
         }
     }, [test, fetchError, navigate])
 
     useEffect(() => {
         if (updateSuccess) {
-            toast.success('Cập nhật bài kiểm tra thành công!')
+            toast.success('Knowledge test updated successfully!')
             navigate('/admin/knowledge-tests')
         }
         if (updateError) {
-            console.error('Lỗi cập nhật bài kiểm tra:', updateErrorMessage)
-            const errorMsg = updateErrorMessage?.data?.message || updateErrorMessage?.error || 'Lỗi không xác định'
-            toast.error(`Cập nhật bài kiểm tra thất bại: ${errorMsg}`)
+            console.error('Error updating knowledge test:', updateErrorMessage)
+            const errorMsg = updateErrorMessage?.data?.message || updateErrorMessage?.error || 'Unknown error'
+            toast.error(`Failed to update knowledge test: ${errorMsg}`)
         }
     }, [updateSuccess, updateError, updateErrorMessage, navigate])
 
@@ -83,12 +83,12 @@ const UpdateKnowledgeTest = () => {
         const file = e.target.files[0]
         if (file) {
             if (file.size > 1 * 1024 * 1024) {
-                toast.error('Kích thước ảnh không được vượt quá 1MB')
+                toast.error('Image size cannot exceed 1MB')
                 return
             }
             const validTypes = ['image/jpeg', 'image/png', 'image/gif']
             if (!validTypes.includes(file.type)) {
-                toast.error('Chỉ chấp nhận file ảnh định dạng JPEG, PNG hoặc GIF')
+                toast.error('Only JPEG, PNG and GIF images are accepted')
                 return
             }
 
@@ -107,10 +107,10 @@ const UpdateKnowledgeTest = () => {
                     questions[questionIndex] = { ...questions[questionIndex], image: '' } // Clear existing image
                     return { ...prev, questions }
                 })
-                toast.info('Ảnh đã được thêm', { position: 'top-right' })
+                toast.info('Image added', { position: 'top-right' })
             }
             reader.onerror = () => {
-                toast.error('Không thể đọc file ảnh')
+                toast.error('Unable to read image file')
             }
             reader.readAsDataURL(file)
         }
@@ -132,7 +132,7 @@ const UpdateKnowledgeTest = () => {
             delete newFiles[questionIndex]
             return newFiles
         })
-        toast.info('Đã xóa ảnh')
+        toast.info('Image deleted')
     }
 
     const addQuestion = () => {
@@ -187,29 +187,29 @@ const UpdateKnowledgeTest = () => {
         const newErrors = {}
 
         if (!formData.heritageId.match(/^[0-9a-fA-F]{24}$/)) {
-            newErrors.heritageId = 'Heritage ID phải là ObjectId hợp lệ'
+                newErrors.heritageId = 'Heritage ID must be a valid ObjectId'
         }
         if (!formData.title.trim() || formData.title.length < 3 || formData.title.length > 200) {
-            newErrors.title = 'Tiêu đề phải từ 3 đến 200 ký tự'
+            newErrors.title = 'Title must be between 3 and 200 characters'
         }
         if (!formData.content.trim()) {
-            newErrors.content = 'Nội dung không được để trống'
+            newErrors.content = 'Content cannot be empty'
         }
         if (formData.questions.length > 0) {
             formData.questions.forEach((q, i) => {
                 if (!q.content.trim()) {
-                    newErrors[`question_${i}_content`] = 'Nội dung câu hỏi không được để trống'
+                    newErrors[`question_${i}_content`] = 'Question content cannot be empty'
                 }
                 if (q.options.length < 2) {
-                    newErrors[`question_${i}_options`] = 'Phải có ít nhất 2 lựa chọn'
+                    newErrors[`question_${i}_options`] = 'There must be at least 2 choices'
                 } else {
                     q.options.forEach((o, j) => {
                         if (!o.optionText.trim()) {
-                            newErrors[`question_${i}_option_${j}`] = 'Lựa chọn không được để trống'
+                            newErrors[`question_${i}_option_${j}`] = 'Choice cannot be empty'
                         }
                     })
                     if (!q.options.some((o) => o.isCorrect)) {
-                        newErrors[`question_${i}_correct`] = 'Phải có ít nhất một lựa chọn đúng'
+                        newErrors[`question_${i}_correct`] = 'There must be at least one correct choice'
                     }
                 }
             })
@@ -217,7 +217,7 @@ const UpdateKnowledgeTest = () => {
 
         setErrors(newErrors)
         if (Object.keys(newErrors).length > 0) {
-            toast.error('Vui lòng kiểm tra lại thông tin nhập vào')
+            toast.error('Please check the information entered')
         }
         return Object.keys(newErrors).length === 0
     }
@@ -258,18 +258,18 @@ const UpdateKnowledgeTest = () => {
             };
             await updateKnowledgeTest({ testId: id, data: testData }).unwrap();
         } catch (err) {
-            toast.error(`Cập nhật bài kiểm tra thất bại: ${err?.data?.message || err.message || 'Đã xảy ra lỗi'}`);
+                toast.error(`Failed to update knowledge test: ${err?.data?.message || err.message || 'An error occurred'}`);
         }
     };
 
 
     if (isFetching) {
-        return <div className="text-center">Đang tải thông tin bài kiểm tra...</div>
+        return <div className="text-center">Loading test information...</div>
     }
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Cập nhật Bài Kiểm tra Kiến thức</h2>
+            <h2 className="text-2xl font-semibold">Update Knowledge Test</h2>
             <div className="bg-white p-6 rounded-md shadow-md">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -285,7 +285,7 @@ const UpdateKnowledgeTest = () => {
                         {errors.heritageId && <p className="text-red-500 text-sm mt-1">{errors.heritageId}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="title">Tiêu đề</Label>
+                        <Label htmlFor="title">Title</Label>
                         <Input
                             type="text"
                             id="title"
@@ -297,7 +297,7 @@ const UpdateKnowledgeTest = () => {
                         {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="status">Trạng thái</Label>
+                        <Label htmlFor="status">Status</Label>
                         <select
                             id="status"
                             name="status"
@@ -305,12 +305,12 @@ const UpdateKnowledgeTest = () => {
                             value={formData.status}
                             onChange={handleInputChange}
                         >
-                            <option value="ACTIVE">Hoạt động</option>
-                            <option value="INACTIVE">Không hoạt động</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
                         </select>
                     </div>
                     <div className="col-span-2">
-                        <Label htmlFor="content">Nội dung</Label>
+                        <Label htmlFor="content">Content</Label>
                         <textarea
                             id="content"
                             name="content"
@@ -323,11 +323,11 @@ const UpdateKnowledgeTest = () => {
                     </div>
                 </div>
                 <div className="mt-6">
-                    <Label>Câu hỏi</Label>
+                    <Label>Question</Label>
                     {formData.questions.map((question, qIndex) => (
                         <div key={qIndex} className="mt-4 p-4 border rounded">
                             <div className="mb-2">
-                                <Label htmlFor={`question_${qIndex}_content`}>Nội dung câu hỏi</Label>
+                                <Label htmlFor={`question_${qIndex}_content`}>Question content</Label>
                                 <textarea
                                     id={`question_${qIndex}_content`}
                                     name="content"
@@ -341,7 +341,7 @@ const UpdateKnowledgeTest = () => {
                                 )}
                             </div>
                             <div className="mb-2">
-                                <Label htmlFor={`question_${qIndex}_explanation`}>Giải thích</Label>
+                                <Label htmlFor={`question_${qIndex}_explanation`}>Explanation</Label>
                                 <textarea
                                     id={`question_${qIndex}_explanation`}
                                     name="explanation"
@@ -352,7 +352,7 @@ const UpdateKnowledgeTest = () => {
                                 />
                             </div>
                             <div className="mb-2">
-                                <Label htmlFor={`question_${qIndex}_image`}>Hình ảnh</Label>
+                                <Label htmlFor={`question_${qIndex}_image`}>Image</Label>
                                 <div className="flex flex-col gap-4">
                                     <div className="flex items-center gap-4">
                                         <Input
@@ -366,7 +366,7 @@ const UpdateKnowledgeTest = () => {
                                             variant="outline"
                                             onClick={() => document.getElementById(`question_${qIndex}_image`).click()}
                                         >
-                                            Chọn ảnh
+                                            Select Image
                                         </Button>
                                     </div>
                                     {imagePreviews[qIndex] && (
@@ -381,14 +381,14 @@ const UpdateKnowledgeTest = () => {
                                                 className="absolute top-1 right-1 text-red-500 border-red-500 hover:bg-red-50"
                                                 onClick={() => removeImage(qIndex)}
                                             >
-                                                Xóa
+                                                Delete
                                             </Button>
                                         </div>
                                     )}
                                 </div>
                             </div>
                             <div className="mb-2">
-                                <Label>Lựa chọn</Label>
+                                <Label>Choice</Label>
                                 {question.options.map((option, oIndex) => (
                                     <div key={oIndex} className="flex items-center gap-2 mt-2">
                                         <Input
@@ -397,7 +397,7 @@ const UpdateKnowledgeTest = () => {
                                             value={option.optionText}
                                             onChange={(e) => handleInputChange(e, qIndex, oIndex)}
                                             className={errors[`question_${qIndex}_option_${oIndex}`] ? 'border-red-500' : ''}
-                                            placeholder={`Lựa chọn ${oIndex + 1}`}
+                                            placeholder={`Choice ${oIndex + 1}`}
                                         />
                                         <input
                                             type="checkbox"
@@ -406,13 +406,13 @@ const UpdateKnowledgeTest = () => {
                                             onChange={(e) => handleInputChange(e, qIndex, oIndex)}
                                             className="h-5 w-5"
                                         />
-                                        <Label>Đúng</Label>
+                                        <Label>Correct</Label>
                                         <Button
                                             variant="outline"
                                             className="text-red-500 border-red-500 hover:bg-red-50"
                                             onClick={() => removeOption(qIndex, oIndex)}
                                         >
-                                            Xóa
+                                            Delete
                                         </Button>
                                         {errors[`question_${qIndex}_option_${oIndex}`] && (
                                             <p className="text-red-500 text-sm mt-1">{errors[`question_${qIndex}_option_${oIndex}`]}</p>
@@ -430,7 +430,7 @@ const UpdateKnowledgeTest = () => {
                                     onClick={() => addOption(qIndex)}
                                     className="mt-2"
                                 >
-                                    + Thêm lựa chọn
+                                    + Add Choice
                                 </Button>
                             </div>
                             <Button
@@ -438,7 +438,7 @@ const UpdateKnowledgeTest = () => {
                                 className="text-red-500 border-red-500 hover:bg-red-50 mt-2"
                                 onClick={() => removeQuestion(qIndex)}
                             >
-                                Xóa câu hỏi
+                                Delete Question
                             </Button>
                         </div>
                     ))}
@@ -447,15 +447,15 @@ const UpdateKnowledgeTest = () => {
                         onClick={addQuestion}
                         className="mt-4"
                     >
-                        + Thêm câu hỏi
+                        + Add Question
                     </Button>
                 </div>
                 <div className="mt-6 flex space-x-4">
                     <Button onClick={handleUpdate} disabled={isUpdating || isFetching}>
-                        {isUpdating ? 'Đang cập nhật...' : 'Cập nhật'}
+                        {isUpdating ? 'Updating...' : 'Update'}
                     </Button>
                     <Button variant="outline" onClick={() => navigate('/admin/knowledge-tests')}>
-                        Quay lại
+                        Back
                     </Button>
                 </div>
             </div>
