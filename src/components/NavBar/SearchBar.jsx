@@ -50,8 +50,8 @@ const SearchBar = () => {
     <div className='flex relative items-center'>
       <input
         ref={inputRef}
-        aria-label='Tìm kiếm'
-        placeholder='Tìm kiếm di tích...'
+        aria-label='Search'
+        placeholder='Search heritage sites...'
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         value={searchValue}
@@ -59,7 +59,7 @@ const SearchBar = () => {
       />
       {searchValue && (
         <button
-          aria-label='Xóa'
+          aria-label='Clear'
           onClick={handleClear}
           className='absolute top-1/2 right-10 -translate-y-1/2 text-muted-foreground hover:text-accent-foreground transition-all active:scale-90'
         >
@@ -67,7 +67,7 @@ const SearchBar = () => {
         </button>
       )}
       <button
-        aria-label='Tìm kiếm'
+        aria-label='Search'
         onClick={handleSearch}
         className='absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground hover:text-accent-foreground transition-all active:scale-90'
       >

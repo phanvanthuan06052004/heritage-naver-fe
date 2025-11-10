@@ -71,7 +71,7 @@ export function UserList({
           <Search className='h-4 w-4 text-white/50' />
           <input
             type='text'
-            placeholder='Tìm kiếm người dùng...'
+            placeholder='Search users...'
             className='flex-1 pl-4 pr-2 bg-transparent text-sm focus:outline-none placeholder:text-white/50'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -103,7 +103,7 @@ export function UserList({
               <Users2 className='h-4 w-4' />
             </div>
             <div className='flex-1 flex justify-between items-center'>
-              <span>Phòng Cộng Đồng</span>
+              <span>Community Room</span>
               {onlineCount > 0 && (
                 <span className='text-xs font-normal bg-primary/20 px-2 py-0.5 rounded-full'>{onlineCount} online</span>
               )}
@@ -112,7 +112,7 @@ export function UserList({
 
           <div className='mt-4'>
             <div className='px-3 mb-2 text-xs font-semibold text-white/50 uppercase tracking-wider'>
-              Tin nhắn riêng tư
+              Private Messages
             </div>
 
             <div className='space-y-1'>
@@ -136,7 +136,7 @@ export function UserList({
               ))}
 
               {filteredUsers.length === 0 && (
-                <div className='text-center py-4 text-white/50 text-sm'>Không tìm thấy người dùng</div>
+                <div className='text-center py-4 text-white/50 text-sm'>No users found</div>
               )}
             </div>
           </div>
@@ -144,7 +144,7 @@ export function UserList({
       </div>
 
       <div className='p-4 border-t border-white/10 flex items-center justify-between sticky bottom-0 z-10 bg-sidebar'>
-        <UserStatus avatar={currentUser.avatar} name='Tài khoản của bạn' status='online' size='md' />
+        <UserStatus avatar={currentUser.avatar} name='Your Account' status='online' size='md' />
         <Button variant='ghost' size='icon' className='h-8 w-8 text-white/70'>
           <Smile className='h-4 w-4' />
         </Button>

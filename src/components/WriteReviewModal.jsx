@@ -31,11 +31,11 @@ const WriteReviewModal = ({ heritageId, onClose, onSubmit }) => {
 
     const validFiles = files.filter((file) => {
       if (!validTypes.includes(file.type)) {
-        toast.error(`File ${file.name} không hợp lệ. Chỉ chấp nhận JPEG, PNG, GIF, WEBP, BMP, TIFF.`)
+        toast.error(`File ${file.name} is invalid. Only JPEG, PNG, GIF, WEBP, BMP, TIFF are accepted.`)
         return false
       }
       if (file.size > maxSize) {
-        toast.error(`File ${file.name} vượt quá kích thước 1MB.`)
+        toast.error(`File ${file.name} exceeds the 1MB size limit.`)
         return false
       }
       return true
@@ -50,16 +50,16 @@ const WriteReviewModal = ({ heritageId, onClose, onSubmit }) => {
 
   const validateForm = () => {
     const newErrors = {}
-    if (rating === 0) newErrors.rating = 'Vui lòng chọn số sao đánh giá'
-    if (!content.trim()) newErrors.content = 'Nội dung đánh giá không được để trống'
-    else if (content.length < 10) newErrors.content = 'Nội dung đánh giá phải có ít nhất 10 ký tự'
+    if (rating === 0) newErrors.rating = 'Please select a star rating'
+    if (!content.trim()) newErrors.content = 'Review content cannot be empty'
+    else if (content.length < 10) newErrors.content = 'Review content must be at least 10 characters'
 
     setErrors(newErrors)
     if (Object.keys(newErrors).length > 0) {
       const firstErrorField = Object.keys(newErrors)[0]
       const errorElement = document.getElementById(firstErrorField)
       if (errorElement) errorElement.focus()
-      toast.error('Vui lòng kiểm tra lại thông tin nhập vào')
+      toast.error('Please check the information entered')
     }
     return Object.keys(newErrors).length === 0
   }
@@ -79,23 +79,23 @@ const WriteReviewModal = ({ heritageId, onClose, onSubmit }) => {
       console.log('Submitting comment...', { heritageId, rating, content, images: images.length })
       const newComment = await createNew(formData).unwrap()
       console.log('Comment submitted:', newComment)
-      toast.success('Đánh giá đã được gửi thành công!')
+      toast.success('Review submitted successfully!')
       onSubmit({ rating, comment: content, images })
       onClose()
     } catch (err) {
       hasSubmitted.current = false
       console.error('Error submitting comment:', err)
-      toast.error(`Gửi đánh giá thất bại: ${err?.data?.message || err.message || 'Đã xảy ra lỗi'}`)
+      toast.error(`Failed to submit review: ${err?.data?.message || err.message || 'An error occurred'}`)
     }
   }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
-        <h3 className="lcn-heritage-detail-title mb-4">Viết đánh giá</h3>
+        <h3 className="lcn-heritage-detail-title mb-4">Write Review</h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <p className="text-sm mb-2">Đánh giá của bạn</p>
+            <p className="text-sm mb-2">Your Rating</p>
             <div className="flex">
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
@@ -111,7 +111,7 @@ const WriteReviewModal = ({ heritageId, onClose, onSubmit }) => {
           <div className="mb-4">
             <Textarea
               id="content"
-              placeholder="Viết đánh giá của bạn..."
+              placeholder="Write your review..."
               value={content}
               onChange={handleContentChange}
               className={`h-24 resize-none border-heritage-light focus:ring-heritage-dark ${errors.content ? 'border-destructive' : ''}`}
@@ -121,7 +121,7 @@ const WriteReviewModal = ({ heritageId, onClose, onSubmit }) => {
             {errors.content && <p id="content-error" className="text-sm text-destructive mt-1">{errors.content}</p>}
           </div>
           <div className="mb-4">
-            <label className="block text-sm mb-2">Tải ảnh lên (tùy chọn, tối đa 5 ảnh)</label>
+            <label className="block text-sm mb-2">Upload images (optional, max 5 images)</label>
             <input
               type="file"
               accept="image/*"
@@ -158,7 +158,7 @@ const WriteReviewModal = ({ heritageId, onClose, onSubmit }) => {
               className="border-heritage-dark text-heritage-dark"
               disabled={isSubmitting}
             >
-              Hủy
+              Cancel
             </Button>
             <Button
               type="submit"
@@ -168,12 +168,12 @@ const WriteReviewModal = ({ heritageId, onClose, onSubmit }) => {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  Đang gửi...
+                  Submitting...
                 </>
               ) : (
                 <>
                   <Check className="h-4 w-4 mr-2" />
-                  Gửi đánh giá
+                  Submit Review
                 </>
               )}
             </Button>

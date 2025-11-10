@@ -4,7 +4,7 @@ import { cn } from '~/lib/utils'
 import { Button } from '~/components/common/ui/Button'
 import { useIsMobile } from '~/hooks/useIsMobile'
 
-export function MessageInput({ onSendMessage, onInputChange, placeholder = 'Nhập tin nhắn...', disabled = false }) {
+export function MessageInput({ onSendMessage, onInputChange, placeholder = 'Type a message...', disabled = false }) {
   const [message, setMessage] = useState('')
   const [showTools, setShowTools] = useState(false)
   const textareaRef = useRef(null)

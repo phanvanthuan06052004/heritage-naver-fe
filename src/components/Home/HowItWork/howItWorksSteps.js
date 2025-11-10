@@ -4,25 +4,25 @@ export const howItWorksSteps = [
   {
     _id: 1,
     icon: UserPlus,
-    title: 'Đăng ký tài khoản',
-    description: 'Tạo tài khoản để truy cập đầy đủ tính năng'
+    title: 'Sign Up',
+    description: 'Create an account to access all features'
   },
   {
     _id: 2,
     icon: Search,
-    title: 'Tìm kiếm di tích',
-    description: 'Khám phá các di tích lịch sử trên khắp Việt Nam'
+    title: 'Search Heritage Sites',
+    description: 'Discover historical sites across Vietnam'
   },
   {
     _id: 3,
     icon: Brain,
-    title: 'Trải nghiệm tương tác',
-    description: 'Tham gia các hoạt động tương tác và kiểm tra kiến thức'
+    title: 'Interactive Experience',
+    description: 'Participate in interactive activities and knowledge tests'
   },
   {
     _id: 4,
     icon: MessageSquare,
-    title: 'Chia sẻ & Đánh giá',
-    description: 'Chia sẻ trải nghiệm và đánh giá di tích lịch sử'
+    title: 'Share & Review',
+    description: 'Share your experience and review heritage sites'
   }
 ]

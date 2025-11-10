@@ -68,7 +68,7 @@ const UserDetail = () => {
         updateUser({ id, ...updateData })
     }
 
-    if (isLoading) return <div className="text-center">Đang tải...</div>
+    if (isLoading) return <div className="text-center">Loading...</div>
     if (isError) return <div className="text-center text-red-500">Lỗi khi tải dữ liệu: {error?.data?.message || error.error}</div>
     if (!user) return <div className="text-center">Không tìm thấy người dùng.</div>
 
@@ -78,7 +78,7 @@ const UserDetail = () => {
             <div className="bg-white p-6 rounded-md shadow-md">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <Label htmlFor="displayname">Tên hiển thị</Label>
+                        <Label htmlFor="displayname">Display Name</Label>
                         <Input
                             type="text"
                             id="displayname"
@@ -131,7 +131,7 @@ const UserDetail = () => {
 
                     {/* Add Account Status field */}
                     <div className="col-span-2">
-                        <Label htmlFor="accountStatus">Trạng thái tài khoản</Label>
+                        <Label htmlFor="accountStatus">Account Status</Label>
                         <div className="flex items-center space-x-2 mt-2">
                             <input
                                 type="checkbox"
@@ -157,7 +157,7 @@ const UserDetail = () => {
 
                     {/* Verification Status - Read Only */}
                     <div className="col-span-2">
-                        <Label>Trạng thái xác thực</Label>
+                        <Label>Verification Status</Label>
                         <div className="mt-2">
                             <span className={`px-2 py-1 rounded-full text-xs ${user?.account?.isVerified
                                 ? 'bg-blue-100 text-blue-800'

@@ -32,16 +32,16 @@ const HeritageManagement = () => {
         if (window.confirm('Bạn có chắc muốn xóa di tích này?')) {
             try {
                 await deleteHeritage(id).unwrap()
-                toast.success('Xóa di tích thành công!')
+                toast.success('Heritage site deleted successfully!')
             } catch (err) {
                 console.error('Lỗi khi xóa di tích:', err)
-                toast.error(`Xóa di tích thất bại: ${err?.data?.message || 'Lỗi không xác định'}`)
+                toast.error(`Failed to delete heritage site: ${err?.data?.message || 'Unknown error'}`)
             }
         }
     }
 
 
-    if (isLoading) return <div className="text-center">Đang tải...</div>
+    if (isLoading) return <div className="text-center">Loading...</div>
     if (isError)
         return (
             <div className="text-center text-red-500">
@@ -51,7 +51,7 @@ const HeritageManagement = () => {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Quản lý Di tích Lịch sử</h2>
+            <h2 className="text-2xl font-semibold">Heritage Site Management</h2>
             <div className="flex justify-between items-center">
                 <div className="relative w-64">
                     <Input

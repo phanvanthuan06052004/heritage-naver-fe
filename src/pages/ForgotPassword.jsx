@@ -42,12 +42,12 @@ const ForgotPassword = () => {
       const response = await forgotPassword({ email }).unwrap()
 
       // Show success message
-      toast.success(response.message || "Đã gửi mã xác nhận đến email của bạn!")
+      toast.success(response.message || "Verification code has been sent to your email!")
       setIsSubmitted(true)
       setCooldown(60) // Start cooldown timer
     } catch (err) {
       // Handle error
-      const errorMessage = err?.data?.message || "Không thể gửi email khôi phục. Vui lòng thử lại."
+      const errorMessage = err?.data?.message || "Unable to send recovery email. Please try again."
       setError(errorMessage)
       toast.error(errorMessage)
     }
@@ -59,10 +59,10 @@ const ForgotPassword = () => {
     setError(null)
     try {
       const response = await forgotPassword({ email }).unwrap()
-      toast.success(response.message || "Đã gửi lại mã xác nhận!")
+      toast.success(response.message || "Verification code resent!")
       setCooldown(60) // Reset cooldown timer
     } catch (err) {
-      const errorMessage = err?.data?.message || "Không thể gửi lại mã xác nhận. Vui lòng thử lại."
+      const errorMessage = err?.data?.message || "Unable to resend verification code. Please try again."
       setError(errorMessage)
       toast.error(errorMessage)
     }
@@ -74,13 +74,13 @@ const ForgotPassword = () => {
 
     // Validate passwords match
     if (newPassword !== confirmPassword) {
-      setError("Mật khẩu xác nhận không khớp")
+      setError("Passwords do not match")
       return
     }
 
     // Validate password strength
     if (newPassword.length < 8) {
-      setError("Mật khẩu phải có ít nhất 8 ký tự")
+      setError("Password must be at least 8 characters long")
       return
     }
 
@@ -93,7 +93,7 @@ const ForgotPassword = () => {
       }).unwrap()
 
       // Show success message
-      toast.success(response.message || "Đặt lại mật khẩu thành công!")
+      toast.success(response.message || "Password reset successful!")
       setIsResetComplete(true)
 
       // Redirect to login page after 3 seconds
@@ -102,7 +102,7 @@ const ForgotPassword = () => {
       }, 3000)
     } catch (err) {
       // Handle error
-      const errorMessage = err?.data?.message || "Mã xác nhận không hợp lệ hoặc đã hết hạn. Vui lòng thử lại."
+      const errorMessage = err?.data?.message || "Invalid or expired verification code. Please try again."
       setError(errorMessage)
       toast.error(errorMessage)
     }
@@ -114,14 +114,14 @@ const ForgotPassword = () => {
         <div className="rounded-lg shadow-lg border border-heritage-light/50 bg-card text-card-foreground">
           <div className="flex flex-col items-center p-6 gap-1">
             <h3 className="text-xl sm:text-2xl text-heritage-dark font-bold tracking-tight">
-              {isResetComplete ? "Đặt lại mật khẩu thành công" : isSubmitted ? "Đặt lại mật khẩu" : "Quên mật khẩu"}
+              {isResetComplete ? "Password Reset Successful" : isSubmitted ? "Reset Password" : "Forgot Password"}
             </h3>
             <p className="text-sm text-muted-foreground text-center">
               {isResetComplete
-                ? "Mật khẩu của bạn đã được đặt lại thành công"
+                ? "Your password has been reset successfully"
                 : isSubmitted
-                  ? "Nhập mã xác nhận và mật khẩu mới của bạn"
-                  : "Nhập email của bạn để nhận mã xác nhận"}
+                  ? "Enter verification code and your new password"
+                  : "Enter your email to receive verification code"}
             </p>
           </div>
           <div className="pt-0 p-6">
@@ -130,13 +130,13 @@ const ForgotPassword = () => {
                 <div className="bg-green-50 text-green-700 p-4 rounded-md text-sm flex items-start">
                   <Check size={18} className="mr-2 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">Mật khẩu đã được đặt lại thành công!</p>
-                    <p className="mt-1">Bạn sẽ được chuyển hướng đến trang đăng nhập trong vài giây...</p>
+                    <p className="font-medium">Password reset successful!</p>
+                    <p className="mt-1">You will be redirected to the login page in a few seconds...</p>
                   </div>
                 </div>
                 <Button type="button" className="w-full" onClick={() => navigate("/login")}>
                   <ArrowLeft size={16} />
-                  <span>Đến trang đăng nhập</span>
+                  <span>Go to Login</span>
                 </Button>
               </div>
             ) : !isSubmitted ? (
@@ -151,7 +151,7 @@ const ForgotPassword = () => {
                     id="email"
                     name="email"
                     required
-                    placeholder="Nhập email của bạn..."
+                    placeholder="Enter your email..."
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full h-10 rounded-md border px-3 py-2 placeholder:text-muted-foreground focus:ring-heritage focus:border-none focus:ring-2 focus:outline-none text-sm"
@@ -161,12 +161,12 @@ const ForgotPassword = () => {
                   {isRequestingCode ? (
                     <div className="flex items-center">
                       <div className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
-                      Đang xử lý...
+                      Processing...
                     </div>
                   ) : (
                     <>
                       <Mail size={16} />
-                      <span>Gửi mã xác nhận</span>
+                      <span>Send Verification Code</span>
                     </>
                   )}
                 </Button>
@@ -174,8 +174,8 @@ const ForgotPassword = () => {
             ) : (
               <div className="space-y-4">
                 <div className="bg-blue-50 text-blue-700 p-4 rounded-md text-sm">
-                  Chúng tôi đã gửi mã xác nhận đến <strong>{email}</strong>. Vui lòng kiểm tra hộp thư của bạn và nhập
-                  mã xác nhận bên dưới.
+                  We have sent a verification code to <strong>{email}</strong>. Please check your inbox and enter
+                  the verification code below.
                 </div>
 
                 <form onSubmit={handleVerifyCode} className="space-y-4">
@@ -183,14 +183,14 @@ const ForgotPassword = () => {
 
                   <div className="space-y-2">
                     <label className="text-sm font-medium" htmlFor="verificationCode">
-                      Mã xác nhận
+                      Verification Code
                     </label>
                     <input
                       type="text"
                       id="verificationCode"
                       name="verificationCode"
                       required
-                      placeholder="Nhập mã xác nhận..."
+                      placeholder="Enter verification code..."
                       value={verificationCode}
                       onChange={(e) => setVerificationCode(e.target.value)}
                       className="w-full h-10 rounded-md border px-3 py-2 placeholder:text-muted-foreground focus:ring-heritage focus:border-none focus:ring-2 focus:outline-none text-sm"
@@ -199,7 +199,7 @@ const ForgotPassword = () => {
 
                   <div className="space-y-2">
                     <label className="text-sm font-medium" htmlFor="newPassword">
-                      Mật khẩu mới
+                      New Password
                     </label>
                     <div className="relative">
                       <input
@@ -207,7 +207,7 @@ const ForgotPassword = () => {
                         id="newPassword"
                         name="newPassword"
                         required
-                        placeholder="Nhập mật khẩu mới..."
+                        placeholder="Enter new password..."
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         className="w-full h-10 rounded-md border px-3 py-2 placeholder:text-muted-foreground focus:ring-heritage focus:border-none focus:ring-2 focus:outline-none text-sm"
@@ -228,7 +228,7 @@ const ForgotPassword = () => {
 
                   <div className="space-y-2">
                     <label className="text-sm font-medium" htmlFor="confirmPassword">
-                      Xác nhận mật khẩu
+                      Confirm Password
                     </label>
                     <div className="relative">
                       <input
@@ -236,7 +236,7 @@ const ForgotPassword = () => {
                         id="confirmPassword"
                         name="confirmPassword"
                         required
-                        placeholder="Xác nhận mật khẩu mới..."
+                        placeholder="Confirm new password..."
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         className="w-full h-10 rounded-md border px-3 py-2 placeholder:text-muted-foreground focus:ring-heritage focus:border-none focus:ring-2 focus:outline-none text-sm"
@@ -260,12 +260,12 @@ const ForgotPassword = () => {
                       {isResetting ? (
                         <div className="flex items-center">
                           <div className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
-                          Đang xử lý...
+                          Processing...
                         </div>
                       ) : (
                         <>
                           <KeyRound size={16} />
-                          <span>Đặt lại mật khẩu</span>
+                          <span>Reset Password</span>
                         </>
                       )}
                     </Button>
@@ -278,7 +278,7 @@ const ForgotPassword = () => {
                       onClick={handleResendCode}
                     >
                       <Mail size={16} />
-                      <span>{cooldown > 0 ? `Gửi lại mã (${cooldown}s)` : "Gửi lại mã xác nhận"}</span>
+                      <span>{cooldown > 0 ? `Resend code (${cooldown}s)` : "Resend verification code"}</span>
                     </Button>
                   </div>
                 </form>
@@ -288,7 +288,7 @@ const ForgotPassword = () => {
           <div className="text-center pt-0 p-6 text-sm">
             <Link to="/login" className="text-heritage font-medium hover:underline inline-flex items-center">
               <ArrowLeft size={16} className="mr-1" />
-              Quay lại đăng nhập
+              Back to Login
             </Link>
           </div>
         </div>

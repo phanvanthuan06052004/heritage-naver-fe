@@ -1,30 +1,30 @@
 export const timelineItems = [
   {
     year: '01/2025',
-    title: 'Khởi nguồn ý tưởng',
+    title: 'Origin of Idea',
     description:
-      'Ý tưởng về một nền tảng kết hợp công nghệ và di sản văn hóa được hình thành, với mục tiêu tạo ra trải nghiệm mới mẻ cho người dùng khi tìm hiểu về di tích lịch sử.',
+      'The idea of a platform combining technology and cultural heritage was formed, with the goal of creating a new experience for users when learning about historical sites.',
     img: '/images/idea.jpg',
   },
   {
     year: '02/2025',
-    title: 'Nghiên cứu và phát triển',
+    title: 'Research and Development',
     description:
-      'Giai đoạn nghiên cứu chuyên sâu về các di tích lịch sử Việt Nam, đồng thời phát triển các công nghệ tương tác để tạo trải nghiệm người dùng tốt nhất.',
+      'In-depth research phase on Vietnamese historical sites, while developing interactive technologies to create the best user experience.',
     img: '/images/dev.jpg',
   },
   {
     year: '03/2025',
-    title: 'Ra mắt phiên bản thử nghiệm',
+    title: 'Beta Release',
     description:
-      'Phiên bản beta của nền tảng được ra mắt với các tính năng cơ bản, nhận được nhiều phản hồi tích cực từ cộng đồng.',
+      'The beta version of the platform was launched with basic features, receiving much positive feedback from the community.',
     img: '/images/web-demo.png',
   },
   {
     year: '04/2025',
-    title: 'Mở rộng và phát triển',
+    title: 'Expansion and Growth',
     description:
-      'Nền tảng được phát triển toàn diện với nhiều tính năng mới như trải nghiệm nhập vai, bản đồ tương tác, trợ lý ảo và cộng đồng người dùng ngày càng mở rộng.',
+      'The platform was comprehensively developed with many new features such as role-playing experience, interactive map, virtual assistant and an ever-expanding user community.',
     img: '/images/increase.png',
   },
 ]

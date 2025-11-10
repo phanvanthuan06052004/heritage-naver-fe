@@ -35,14 +35,14 @@ const Login = () => {
       const { userInfo, accessToken } = response
       console.log('response', response)
 
-      toast.success('Đăng nhập thành công!')
+      toast.success('Login successful!')
       dispatch(setCredentials({ user: userInfo, accessToken }))
 
       // Example: Redirect to a dashboard or home page
       window.location.href = '/'
     } catch (err) {
       // Handle error
-      const errorMessage = err?.data?.message || 'Đăng nhập thất bại. Vui lòng thử lại.'
+      const errorMessage = err?.data?.message || 'Login failed. Please try again.'
       setError(errorMessage)
       toast.error(errorMessage)
     } finally {
@@ -63,8 +63,8 @@ const Login = () => {
       <div className='max-w-md w-full animate-fade-up'>
         <div className='rounded-lg shadow-lg border border-heritage-light/50 bg-card text-card-foreground'>
           <div className='flex flex-col items-center p-6 gap-1'>
-            <h3 className='text-xl sm:text-2xl text-heritage-dark font-bold tracking-tight'>Đăng nhập vào Heritage</h3>
-            <p className='text-sm text-muted-foreground text-center'>Khám phá quá khứ, tận hưởng hiện tại</p>
+            <h3 className='text-xl sm:text-2xl text-heritage-dark font-bold tracking-tight'>Login to Heritage</h3>
+            <p className='text-sm text-muted-foreground text-center'>Discover the past, enjoy the present</p>
           </div>
           <div className='pt-0 p-6'>
             <form onSubmit={handleSubmit} className='space-y-4'>
@@ -80,7 +80,7 @@ const Login = () => {
                   id='email'
                   name='email'
                   required
-                  placeholder='Nhập email...'
+                  placeholder='Enter email...'
                   value={formData.email}
                   onChange={handleChange}
                   className='w-full h-10 rounded-md border px-3 py-2 placeholder:text-muted-foreground focus:ring-heritage focus:border-none focus:ring-2 focus:outline-none text-sm'
@@ -88,8 +88,8 @@ const Login = () => {
               </div>
               <div className='space-y-2'>
                 <div className='flex justify-between items-center'>
-                  <label className='text-sm font-medium' htmlFor='password'>Mật khẩu</label>
-                  <Link to='/forgot-password' className='text-xs text-heritage hover:underline'>Quên mật khẩu?</Link>
+                  <label className='text-sm font-medium' htmlFor='password'>Password</label>
+                  <Link to='/forgot-password' className='text-xs text-heritage hover:underline'>Forgot password?</Link>
                 </div>
                 <div className='relative'>
                   <input
@@ -123,20 +123,20 @@ const Login = () => {
                 {isLoading ? (
                   <div className='flex items-center'>
                     <div className='animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full' />
-                    Đang xử lý...
+                    Processing...
                   </div>
                 ) : (
                   <>
                     <LogIn size={16} />
-                    <span>Đăng nhập</span>
+                    <span>Login</span>
                   </>
                 )}
               </Button>
             </form>
           </div>
           <div className='text-center pt-0 p-6 text-sm'>
-            <span>Bạn chưa có tài khoản ư? </span>
-            <Link to='/register' className='text-heritage font-medium hover:underline'>Đăng ký ngay</Link>
+            <span>Don't have an account yet? </span>
+            <Link to='/register' className='text-heritage font-medium hover:underline'>Sign up now</Link>
           </div>
         </div>
       </div>

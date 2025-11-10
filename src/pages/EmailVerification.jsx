@@ -34,18 +34,18 @@ const AuthenConfirm = () => {
     setIsLoading(true)
 
     if (!/^\d{8}$/.test(code)) {
-      setError('Mã xác nhận phải là 8 chữ số.')
-      toast.error('Mã xác nhận phải là 8 chữ số.')
+      setError('Verification code must be 8 digits.')
+      toast.error('Verification code must be 8 digits.')
       setIsLoading(false)
       return
     }
 
     try {
       await verifyEmail({ email, code }).unwrap()
-      toast.success('Xác thực email thành công! Vui lòng đăng nhập.')
+      toast.success('Email verification successful! Please login.')
       navigate('/login')
     } catch (err) {
-      const errorMessage = err?.data?.message || 'Xác nhận thất bại. Vui lòng thử lại.'
+      const errorMessage = err?.data?.message || 'Verification failed. Please try again.'
       setError(errorMessage)
       toast.error(errorMessage)
       console.error('Verify email error:', err)
@@ -63,11 +63,11 @@ const AuthenConfirm = () => {
 
     try {
       await sendVerificationEmail({ email }).unwrap()
-      setResendMessage('Mã xác nhận mới đã được gửi.')
-      toast.success('Mã xác nhận mới đã được gửi đến email của bạn.')
+      setResendMessage('A new verification code has been sent.')
+      toast.success('A new verification code has been sent to your email.')
       setResendCooldown(60)
     } catch (err) {
-      const errorMessage = err?.data?.message || 'Gửi lại mã thất bại. Vui lòng thử lại.'
+      const errorMessage = err?.data?.message || 'Failed to resend code. Please try again.'
       setError(errorMessage)
       toast.error(errorMessage)
       console.error('Resend code error:', err)
@@ -86,9 +86,9 @@ const AuthenConfirm = () => {
       <div className='max-w-md w-full animate-fade-up'>
         <div className='border shadow-lg rounded-lg border-heritage-light/50 bg-card text-card-foreground'>
           <div className='text-center p-6 space-y-1'>
-            <h3 className='text-xl sm:text-2xl text-heritage-dark font-bold tracking-tight'>Xác nhận Email</h3>
+            <h3 className='text-xl sm:text-2xl text-heritage-dark font-bold tracking-tight'>Email Verification</h3>
             <p className='text-sm text-muted-foreground'>
-              Nhập mã 8 chữ số đã được gửi đến <strong>{email}</strong>
+              Enter the 8-digit code sent to <strong>{email}</strong>
             </p>
           </div>
           <div className='p-6 pt-0'>
@@ -97,14 +97,14 @@ const AuthenConfirm = () => {
               {resendMessage && <div className='text-green-500 text-sm text-center'>{resendMessage}</div>}
               <div className='space-y-2'>
                 <label htmlFor='code' className='text-sm font-medium'>
-                  Mã xác nhận
+                  Verification Code
                 </label>
                 <input
                   type='text'
                   id='code'
                   name='code'
                   required
-                  placeholder='Nhập mã 8 chữ số...'
+                  placeholder='Enter 8-digit code...'
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   maxLength={8}
@@ -115,10 +115,10 @@ const AuthenConfirm = () => {
                 {isLoading ? (
                   <div className='flex items-center'>
                     <div className='animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full' />
-                    Đang xử lý...
+                    Processing...
                   </div>
                 ) : (
-                  <span>Xác nhận</span>
+                  <span>Verify</span>
                 )}
               </Button>
             </form>
@@ -130,7 +130,7 @@ const AuthenConfirm = () => {
                   resendCooldown > 0 || isLoading ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
-                Gửi lại mã {resendCooldown > 0 ? `(${resendCooldown}s)` : ''}
+                Resend code {resendCooldown > 0 ? `(${resendCooldown}s)` : ''}
               </button>
             </div>
           </div>

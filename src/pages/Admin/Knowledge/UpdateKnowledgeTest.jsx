@@ -264,7 +264,7 @@ const UpdateKnowledgeTest = () => {
 
 
     if (isFetching) {
-        return <div className="text-center">Đang tải thông tin bài kiểm tra...</div>
+        return <div className="text-center">Loading test information...</div>
     }
 
     return (
@@ -297,7 +297,7 @@ const UpdateKnowledgeTest = () => {
                         {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
                     </div>
                     <div>
-                        <Label htmlFor="status">Trạng thái</Label>
+                        <Label htmlFor="status">Status</Label>
                         <select
                             id="status"
                             name="status"
@@ -381,7 +381,7 @@ const UpdateKnowledgeTest = () => {
                                                 className="absolute top-1 right-1 text-red-500 border-red-500 hover:bg-red-50"
                                                 onClick={() => removeImage(qIndex)}
                                             >
-                                                Xóa
+                                                Delete
                                             </Button>
                                         </div>
                                     )}
@@ -430,7 +430,7 @@ const UpdateKnowledgeTest = () => {
                                     onClick={() => addOption(qIndex)}
                                     className="mt-2"
                                 >
-                                    + Thêm lựa chọn
+                                    + Add Choice
                                 </Button>
                             </div>
                             <Button
@@ -438,7 +438,7 @@ const UpdateKnowledgeTest = () => {
                                 className="text-red-500 border-red-500 hover:bg-red-50 mt-2"
                                 onClick={() => removeQuestion(qIndex)}
                             >
-                                Xóa câu hỏi
+                                Delete Question
                             </Button>
                         </div>
                     ))}
@@ -447,7 +447,7 @@ const UpdateKnowledgeTest = () => {
                         onClick={addQuestion}
                         className="mt-4"
                     >
-                        + Thêm câu hỏi
+                        + Add Question
                     </Button>
                 </div>
                 <div className="mt-6 flex space-x-4">

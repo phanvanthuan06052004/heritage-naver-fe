@@ -8,8 +8,8 @@ import { useLazyGetNearestHeritagesQuery } from '~/store/apis/heritageApi'
 
 function GenericMapExplorer({
     items = [],
-    itemName = 'Di sản',
-    locationName = 'địa điểm',
+    itemName = 'Heritage',
+    locationName = 'location',
     initialCenter = { lat: 16.047079, lng: 108.20623 },
 }) {
     const [mapCenter, setMapCenter] = useState(initialCenter)
@@ -30,7 +30,7 @@ function GenericMapExplorer({
     const handleMarkerClick = useCallback(
         async ({ lat, lng }) => {
             if (typeof lat !== 'number' || typeof lng !== 'number') {
-                console.log('Tọa độ marker không hợp lệ:', { lat, lng })
+                console.log('Invalid marker coordinates:', { lat, lng })
                 return
             }
 
@@ -40,25 +40,25 @@ function GenericMapExplorer({
 
             try {
                 const { data } = await triggerGetNearestHeritages({ latitude: lat, longitude: lng, limit: 6 })
-                // console.log('Dữ liệu từ getNearestHeritages (marker click):', data || 'Không có dữ liệu')
+                // console.log('Data from getNearestHeritages (marker click):', data || 'No data')
                 setNearbyItems(data || [])
             } catch (err) {
-                console.error('Lỗi khi gọi getNearestHeritages (marker):', err)
+                console.error('Error calling getNearestHeritages (marker):', err)
             }
         },
         [triggerGetNearestHeritages]
     )
 
-    // Handle select button click (from "Chọn" button)
+    // Handle select button click (from "Select" button)
     const handleSelectCoordinates = useCallback(
         async (coordinates) => {
             if (!coordinates || typeof coordinates.lat !== 'number' || typeof coordinates.lng !== 'number') {
-                // console.log('Tọa độ không hợp lệ từ "Chọn" button:', coordinates)
+                // console.log('Invalid coordinates from "Select" button:', coordinates)
                 return
             }
 
             const { lat, lng } = coordinates
-            // console.log('Chuẩn bị fetch API với tọa độ:', { lat, lng })
+            // console.log('Preparing to fetch API with coordinates:', { lat, lng })
 
             const newLocation = { lat, lng }
             setSelectedLocation(newLocation)
@@ -66,10 +66,10 @@ function GenericMapExplorer({
 
             try {
                 const { data } = await triggerGetNearestHeritages({ latitude: lat, longitude: lng, limit: 6 })
-                // console.log('Dữ liệu từ getNearestHeritages (select button):', data || 'Không có dữ liệu')
+                // console.log('Data from getNearestHeritages (select button):', data || 'No data')
                 setNearbyItems(data || [])
             } catch (err) {
-                console.error('Lỗi khi gọi getNearestHeritages (select):', err)
+                console.error('Error calling getNearestHeritages (select):', err)
             }
         },
         [triggerGetNearestHeritages]
@@ -103,8 +103,8 @@ function GenericMapExplorer({
                 if (data.features && data.features.length > 0) {
                     const [lng, lat] = data.features[0].center
                     if (typeof lat !== 'number' || typeof lng !== 'number') {
-                        console.log('Tọa độ tìm kiếm không hợp lệ:', { lat, lng })
-                        setSearchError('Tọa độ không hợp lệ.')
+                        console.log('Invalid search coordinates:', { lat, lng })
+                        setSearchError('Invalid coordinates.')
                         return
                     }
 
@@ -118,17 +118,17 @@ function GenericMapExplorer({
                             longitude: lng,
                             limit: 6,
                         })
-                        console.log('Dữ liệu từ getNearestHeritages (search):', searchData || 'Không có dữ liệu')
+                        console.log('Data from getNearestHeritages (search):', searchData || 'No data')
                         setNearbyItems(searchData?.heritages?.heritages || [])
                         setDisplayedItems(searchData?.heritages?.heritages || [])
                     } catch (err) {
-                        console.error('Lỗi khi gọi getNearestHeritages (search):', err)
+                        console.error('Error calling getNearestHeritages (search):', err)
                     }
                 } else {
-                    setSearchError('Không tìm thấy địa điểm.')
+                    setSearchError('Location not found.')
                 }
             } catch (error) {
-                setSearchError('Lỗi khi tìm kiếm địa điểm.')
+                setSearchError('Error searching for location.')
                 console.error('Search error:', error)
             }
         },
@@ -184,13 +184,13 @@ function GenericMapExplorer({
                     {/* Item Lists */}
                     <div className="space-y-6">
                         {isLoading && selectedLocation ? (
-                            <p>Đang tải dữ liệu...</p>
+                            <p>Loading data...</p>
                         ) : isError && selectedLocation ? (
-                            <p>Lỗi khi tải dữ liệu: {error.message}</p>
+                            <p>Error loading data: {error.message}</p>
                         ) : selectedLocation || searchQuery ? (
                             <>
                                 <h2 className="text-xl font-medium text-heritage-dark">
-                                    {searchQuery ? `Kết quả tìm kiếm ${itemName}` : `${itemName} gần ${locationName}`}
+                                    {searchQuery ? `Search results for ${itemName}` : `${itemName} near ${locationName}`}
                                 </h2>
                                 <HeritageList heritages={nearbyItems?.heritages} />
                             </>

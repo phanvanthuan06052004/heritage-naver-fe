@@ -64,7 +64,7 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
       await deleteComment(deleteModal.commentId).unwrap()
       setDeleteModal({ open: false, commentId: null })
     } catch {
-      toast.error('Xóa bình luận thất bại!')
+      toast.error('Failed to delete comment!')
     }
   }
 
@@ -74,44 +74,44 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
     try {
       await likeComment(commentId).unwrap()
     } catch {
-      toast.error('Thao tác like thất bại!')
+      toast.error('Failed to like!')
     }
   }
 
   return (
     <Tabs defaultValue="overview">
       <TabsList>
-        <TabsTrigger value="overview">Tổng quan</TabsTrigger>
-        <TabsTrigger value="history">Lịch sử</TabsTrigger>
-        <TabsTrigger value="gallery">Hình ảnh</TabsTrigger>
-        <TabsTrigger value="review">Đánh giá</TabsTrigger>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="history">History</TabsTrigger>
+        <TabsTrigger value="gallery">Gallery</TabsTrigger>
+        <TabsTrigger value="review">Reviews</TabsTrigger>
       </TabsList>
 
       <TabsContent value="overview" className="space-y-6">
-        <h3 className="lcn-heritage-detail-title">Giới thiệu</h3>
+        <h3 className="lcn-heritage-detail-title">Introduction</h3>
         <p className="text-justify">{data?.description}</p>
         <p className="text-justify">
-          Khi đến thăm {data?.name}, du khách sẽ được chiêm ngưỡng những công trình kiến trúc độc đáo, tìm hiểu về lịch
-          sử hình thành và phát triển của di tích, cũng như khám phá những câu chuyện thú vị liên quan đến di tích này.
+          When visiting {data?.name}, visitors will be able to admire unique architectural works, learn about the
+          formation and development history of the site, as well as discover interesting stories related to this heritage.
         </p>
       </TabsContent>
 
       <TabsContent value="history" className="space-y-6">
-        <h3 className="lcn-heritage-detail-title">Các sự kiện lịch sử</h3>
-        <Suspense fallback={<div>Đang tải...</div>}>
+        <h3 className="lcn-heritage-detail-title">Historical Events</h3>
+        <Suspense fallback={<div>Loading...</div>}>
           <HistoryTab historicalEvents={data?.additionalInfo?.historicalEvents} />
         </Suspense>
       </TabsContent>
 
       <TabsContent value="gallery" className="space-y-6">
-        <h3 className="lcn-heritage-detail-title">Hình ảnh</h3>
-        <Suspense fallback={<div>Đang tải...</div>}>
+        <h3 className="lcn-heritage-detail-title">Gallery</h3>
+        <Suspense fallback={<div>Loading...</div>}>
           <GalleryTab images={data?.images} name={data?.name} />
         </Suspense>
       </TabsContent>
 
       <TabsContent value="review" className="space-y-6">
-        <h3 className="lcn-heritage-detail-title">Đánh giá</h3>
+        <h3 className="lcn-heritage-detail-title">Reviews</h3>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <div className="text-3xl font-bold mr-2">{averageRating.toFixed(1)}</div>
@@ -125,12 +125,12 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
                   />
                 ))}
               </div>
-              <span className="text-sm text-muted-foreground">{data?.stats?.totalReviews || comments.length} đánh giá</span>
+              <span className="text-sm text-muted-foreground">{data?.stats?.totalReviews || comments.length} reviews</span>
             </div>
           </div>
           {isAuthenticated && (
             <Button onClick={handleWriteReview} className="bg-blue-500 hover:bg-blue-600 text-white">
-              Viết đánh giá
+              Write Review
             </Button>
           )}
         </div>
@@ -138,7 +138,7 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
         {isCommentsLoading ? (
           <div className="text-center py-4">
             <Loader2 className="w-6 h-6 animate-spin mx-auto" />
-            <p className="text-sm text-muted-foreground">Đang tải đánh giá...</p>
+            <p className="text-sm text-muted-foreground">Loading reviews...</p>
           </div>
         ) : hasComments ? (
           <div className="space-y-6">
@@ -152,9 +152,9 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
                       size="md"
                     />
                     <div>
-                      <div className="font-medium">{comment.user?.displayName || comment.user?.id || 'Ẩn danh'}</div>
+                      <div className="font-medium">{comment.user?.displayName || comment.user?.id || 'Anonymous'}</div>
                       <div className="text-sm text-muted-foreground">
-                        {new Date(comment.createdAt).toLocaleDateString('vi-VN', {
+                        {new Date(comment.createdAt).toLocaleDateString('en-US', {
                           day: '2-digit',
                           month: '2-digit',
                           year: 'numeric',
@@ -191,7 +191,7 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
                               onClick={() => { setOpenMenuId(null); openDeleteModal(comment._id) }}
                               className="flex items-center gap-2 px-3 py-2 text-red-600 hover:bg-gray-100 w-full"
                             >
-                              <Trash2 size={16} /> Xóa
+                              <Trash2 size={16} /> Delete
                             </button>
                           </div>
                         )}
@@ -206,7 +206,7 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
                       <img
                         key={index}
                         src={image}
-                        alt={`Hình ảnh ${index + 1}`}
+                        alt={`Image ${index + 1}`}
                         className="max-w-[150px] rounded-lg mt-2"
                       />
                     ))}
@@ -218,11 +218,11 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
         ) : (
           <div className="text-center py-12 border border-dashed rounded-lg">
             <Star size={40} className="mx-auto text-muted-foreground mb-4 opacity-50" />
-            <p className="text-muted-foreground">Chưa có đánh giá nào cho di tích này.</p>
+            <p className="text-muted-foreground">No reviews yet for this heritage site.</p>
             {!isAuthenticated && (
               <div className="mt-4">
-                <p className="text-sm mb-3">Đăng nhập để viết đánh giá về trải nghiệm của bạn</p>
-                <Button onClick={() => navigate('/login')}>Đăng nhập</Button>
+                <p className="text-sm mb-3">Login to write a review about your experience</p>
+                <Button onClick={() => navigate('/login')}>Login</Button>
               </div>
             )}
           </div>
@@ -236,12 +236,12 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
         )}
         <Dialog open={deleteModal.open} onClose={closeDeleteModal}>
           <DialogHeader>
-            <DialogTitle>Xác nhận xóa bình luận</DialogTitle>
-            <DialogDescription>Bạn có chắc chắn muốn xóa bình luận này? Hành động này không thể hoàn tác.</DialogDescription>
+            <DialogTitle>Confirm Delete Comment</DialogTitle>
+            <DialogDescription>Are you sure you want to delete this comment? This action cannot be undone.</DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-3 p-4">
-            <Button variant="outline" onClick={closeDeleteModal}>Hủy</Button>
-            <Button variant="destructive" onClick={confirmDelete}>Xóa</Button>
+            <Button variant="outline" onClick={closeDeleteModal}>Cancel</Button>
+            <Button variant="destructive" onClick={confirmDelete}>Delete</Button>
           </div>
         </Dialog>
       </TabsContent>

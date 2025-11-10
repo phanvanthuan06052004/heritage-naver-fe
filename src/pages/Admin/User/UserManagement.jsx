@@ -33,28 +33,28 @@ const UserManagement = () => {
     if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
       try {
         await deleteUser(id).unwrap()
-        toast.success('Xóa người dùng thành công!')
+        toast.success('User deleted successfully!')
       } catch (err) {
         console.error('Lỗi khi xóa người dùng:', err)
-        toast.error('Xóa người dùng thất bại!')
+        toast.error('Failed to delete user!')
       }
     }
   }
 
-  if (isLoading) return <div className="text-center">Đang tải...</div>
+  if (isLoading) return <div className="text-center">Loading...</div>
   if (isError) return <div className="text-center text-red-500">Lỗi: {error?.data?.message || 'Không thể tải danh sách người dùng'}</div>
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
         <UserCog className="w-8 h-8" />
-        <h2 className="text-2xl font-semibold">Quản lý Người dùng</h2>
+        <h2 className="text-2xl font-semibold">User Management</h2>
       </div>
 
       <div className="flex justify-between items-center">
         <div className="relative w-64">
           <Input
-            placeholder="Tìm kiếm theo tên/email"
+            placeholder="Search by name/email"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -77,12 +77,12 @@ const UserManagement = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Tên hiển thị</TableHead>
+            <TableHead>Display Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Vai trò</TableHead>
-            <TableHead>Trạng thái</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead>Ngày tạo</TableHead>
-            <TableHead>Hành động</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

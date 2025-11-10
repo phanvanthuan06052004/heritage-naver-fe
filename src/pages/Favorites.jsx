@@ -73,10 +73,10 @@ const Favorites = () => {
             hasFavorites && (
               <>
                 <h1 className='text-3xl sm:text-4xl font-medium text-heritage-dark mb-4'>
-                  Khám phá những di tích bạn yêu thích
+                  Explore Your Favorite Heritage Sites
                 </h1>
                 <p className='text-muted-foreground max-w-2xl mx-auto'>
-                  Lưu giữ và theo dõi những địa danh lịch sử, văn hóa mà bạn quan tâm nhất
+                  Save and track the historical and cultural landmarks you care about most
                 </p>
               </>
             )
@@ -84,11 +84,11 @@ const Favorites = () => {
         </div>
         {favoritesError && (
           <div className='text-center py-4 text-red-500'>
-            <p className='font-medium'>Có lỗi xảy ra khi tải danh sách yêu thích</p>
+            <p className='font-medium'>An error occurred while loading favorites list</p>
             <p className='text-sm mt-2'>
               {favoritesError.status === 404
-                ? 'Bạn chưa có danh sách yêu thích nào.'
-                : favoritesError.data?.message || 'Vui lòng thử lại sau.'}
+                ? 'You don\'t have any favorites yet.'
+                : favoritesError.data?.message || 'Please try again later.'}
             </p>
           </div>
         )}
@@ -128,11 +128,11 @@ const Favorites = () => {
         ) : (
           <div className='text-center py-12 space-y-4'>
             <Heart className='h-16 w-16 mx-auto text-muted-foreground' />
-            <h2 className='text-xl font-medium'>Chưa có di tích yêu thích</h2>
+            <h2 className='text-xl font-medium'>No Favorite Heritage Sites Yet</h2>
             <p className='text-muted-foreground max-w-md mx-auto mb-6'>
-              Khám phá các di tích lịch sử và thêm vào danh sách yêu thích của bạn để xem lại sau.
+              Explore historical sites and add them to your favorites to view later.
             </p>
-            <Button onClick={() => navigate('/heritages')}>Khám phá di tích</Button>
+            <Button onClick={() => navigate('/heritages')}>Explore Heritage Sites</Button>
           </div>
         )}
       </div>

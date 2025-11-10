@@ -7,20 +7,20 @@ const FOOTER_CONFIG = {
   socialLinks: [
     {
       name: 'Facebook',
-      url: 'https://www.facebook.com/le.chi.nghia.621880/',
+      url: 'https://www.facebook.com/duc.nhatt.nguyen',
       icon: siFacebook.path,
     },
     {
       name: 'Instagram',
-      url: 'https://www.instagram.com/nghialc81/',
+      url: 'https://www.instagram.com/nhatt.1510/',
       icon: siInstagram.path,
     },
   ],
-  email: 'lechinghia202@gmail.com',
+  email: 'ducnhat0910@gmail.com',
   navLinks: [
-    { to: '/heritages', label: 'Di tích lịch sử' },
-    { to: '/explore', label: 'Khám phá' },
-    { to: '/about', label: 'Giới thiệu' },
+    { to: '/heritages', label: 'Heritage Sites' },
+    { to: '/explore', label: 'Explore' },
+    { to: '/about', label: 'About' },
   ],
 }
 
@@ -32,7 +32,7 @@ const Footer = () => {
           {/* Brand & Social */}
           <div className='flex flex-col items-center md:items-start space-y-4'>
             <h4 className='text-xl font-semibold tracking-tight text-heritage'>Heritage Reborn</h4>
-            <p className='text-sm text-muted-foreground'>Khám phá kỳ quan văn hóa</p>
+            <p className='text-sm text-muted-foreground'>Discover Cultural Wonders</p>
             <div className='flex space-x-4'>
               {FOOTER_CONFIG.socialLinks.map((social) => (
                 <SocialIcon

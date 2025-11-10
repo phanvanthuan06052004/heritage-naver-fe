@@ -14,7 +14,7 @@ const FeatureItem = ({ item, showButton = true, className }) => {
       {showButton && (
         <Link to={item.to} className='w-full' aria-label={`Khám phá ${item.title}`}>
           <Button className='w-full' variant='outline'>
-            Khám phá ngay
+            Explore now
             <MoveRight className='ml-2' size={16} />
           </Button>
         </Link>

@@ -2,22 +2,22 @@ import { BookOpen, Headset, Heart, House, Map, UserPlus } from 'lucide-react'
 
 export const navLinks = [
   { 
-    name: 'Trang chủ', 
+    name: 'Home', 
     to: '/', 
     icon: () => <House className='h-5 w-5' /> 
   },
   { 
-    name: 'Di tích', 
+    name: 'Heritage Sites', 
     to: '/heritages', 
     icon: () => <BookOpen className='h-5 w-5' /> 
   },
   { 
-    name: 'Khám phá', 
+    name: 'Explore', 
     to: '/explore', 
     icon: () => <Map className='h-5 w-5' /> 
   },
   { 
-    name: 'Giới thiệu', 
+    name: 'About', 
     to: '/about', 
     icon: () => <Headset className='h-5 w-5' /> 
   },
