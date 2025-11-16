@@ -6,6 +6,7 @@ import { cn } from '~/lib/utils'
 import AuthButton from './AuthButton'
 import UserMenu from './UserMenu'
 import NavLinks from './NavLinks'
+import LanguageSwitcher from './LanguageSwitcher'
 import MobileMenu from './MobileMenu'
 import { Button } from '~/components/common/ui/Button'
 import SearchBar from './SearchBar'
@@ -86,6 +87,8 @@ const NavBar = () => {
                   <Menu className='w-5 h-5 text-muted-foreground' />
               }
             </Button>
+             {/* Language Switcher */}
+            <LanguageSwitcher />
           </div>
         </div>
       </header>
