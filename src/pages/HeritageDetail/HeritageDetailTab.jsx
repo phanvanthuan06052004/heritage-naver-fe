@@ -12,6 +12,7 @@ import { selectCurrentUser } from '~/store/slices/authSlice'
 import { useDeleteCommentMutation, useLikeCommentMutation } from '~/store/apis/commentApi'
 import { toast } from 'react-toastify'
 import { Dialog, DialogHeader, DialogTitle, DialogDescription } from '~/components/common/ui/Dialog'
+import { useTranslation } from 'react-i18next'
 
 const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
   const [showWriteReview, setShowWriteReview] = useState(false)
@@ -20,6 +21,7 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
   const currentUser = useSelector(selectCurrentUser)
   const [deleteComment] = useDeleteCommentMutation()
   const [likeComment] = useLikeCommentMutation()
+  const { t } = useTranslation()
 
   // Sử dụng useMemo để memoize query options, tránh re-render không cần thiết
   const queryOptions = useMemo(() => ({
@@ -81,14 +83,14 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
   return (
     <Tabs defaultValue="overview">
       <TabsList>
-        <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="history">History</TabsTrigger>
-        <TabsTrigger value="gallery">Gallery</TabsTrigger>
-        <TabsTrigger value="review">Reviews</TabsTrigger>
+        <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
+        <TabsTrigger value="history">{t("tabs.history")}</TabsTrigger>
+        <TabsTrigger value="gallery">{t("tabs.gallery")}</TabsTrigger>
+        <TabsTrigger value="review">{t("tabs.reviews")}</TabsTrigger>
       </TabsList>
 
       <TabsContent value="overview" className="space-y-6">
-        <h3 className="lcn-heritage-detail-title">Introduction</h3>
+        <h3 className="lcn-heritage-detail-title">{t("tabs.introduction")}</h3>
         <p className="text-justify">{data?.description}</p>
         <p className="text-justify">
           When visiting {data?.name}, visitors will be able to admire unique architectural works, learn about the
@@ -97,21 +99,21 @@ const HeritageDetailTabs = ({ data, isAuthenticated, navigate }) => {
       </TabsContent>
 
       <TabsContent value="history" className="space-y-6">
-        <h3 className="lcn-heritage-detail-title">Historical Events</h3>
+        <h3 className="lcn-heritage-detail-title">{t("tabs.historicalEvents")}</h3>
         <Suspense fallback={<div>Loading...</div>}>
           <HistoryTab historicalEvents={data?.additionalInfo?.historicalEvents} />
         </Suspense>
       </TabsContent>
 
       <TabsContent value="gallery" className="space-y-6">
-        <h3 className="lcn-heritage-detail-title">Gallery</h3>
+        <h3 className="lcn-heritage-detail-title">{t("tabs.gallery")}</h3>
         <Suspense fallback={<div>Loading...</div>}>
           <GalleryTab images={data?.images} name={data?.name} />
         </Suspense>
       </TabsContent>
 
       <TabsContent value="review" className="space-y-6">
-        <h3 className="lcn-heritage-detail-title">Reviews</h3>
+        <h3 className="lcn-heritage-detail-title">{t("tabs.reviews")}</h3>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <div className="text-3xl font-bold mr-2">{averageRating.toFixed(1)}</div>

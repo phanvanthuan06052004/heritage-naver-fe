@@ -1,13 +1,19 @@
 import { BASE_URL } from '~/constants/fe.constant'
 import { apiSlice } from './apiSlice'
 
+// Helper function to get current language
+const getCurrentLanguage = () => {
+  return localStorage.getItem('lang') || 'vi'
+}
+
 export const favoriteSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getFavoritesByUserId: builder.query({
-      query: ({ userId, page = 1, limit = 9 }) => {
+      query: ({ userId, page = 1, limit = 9, language }) => {
         const params = new URLSearchParams()
         params.append('page', page.toString())
         params.append('limit', limit.toString())
+        params.append('language', language || getCurrentLanguage())
         return `${BASE_URL}/favorites/user/${userId}?${params.toString()}`
       },
       transformResponse: (response) => {

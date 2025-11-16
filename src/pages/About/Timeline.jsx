@@ -1,7 +1,17 @@
+import { useTranslation } from 'react-i18next'
 import Title from '~/components/common/Title'
 import { timelineItems } from './data/timelineData'
 
 const Timeline = () => {
+  const { t } = useTranslation()
+
+  const translatedItems = [
+    { ...timelineItems[0], year: t('about.timeline.item1.year'), title: t('about.timeline.item1.title'), description: t('about.timeline.item1.description') },
+    { ...timelineItems[1], year: t('about.timeline.item2.year'), title: t('about.timeline.item2.title'), description: t('about.timeline.item2.description') },
+    { ...timelineItems[2], year: t('about.timeline.item3.year'), title: t('about.timeline.item3.title'), description: t('about.timeline.item3.description') },
+    { ...timelineItems[3], year: t('about.timeline.item4.year'), title: t('about.timeline.item4.title'), description: t('about.timeline.item4.description') }
+  ]
+
   return (
     <div className='relative'>
       {/* Timeline Line */}
@@ -9,7 +19,7 @@ const Timeline = () => {
 
       {/* Timeline Items */}
       <div className='space-y-24'>
-        {timelineItems.map((item, index) => (
+        {translatedItems.map((item, index) => (
           <div key={index} className='relative'>
             {/* Timeline Dot */}
             <div className='absolute left-1/2 transform -translate-x-1/2 -mt-4 w-8 h-8 rounded-full bg-primary border-4 border-white z-10'></div>

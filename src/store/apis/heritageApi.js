@@ -1,10 +1,15 @@
 import { BASE_URL } from '~/constants/fe.constant'
 import { apiSlice } from './apiSlice'
 
+// Helper function to get current language
+const getCurrentLanguage = () => {
+  return localStorage.getItem('lang') || 'vi'
+}
+
 export const heritageSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getHeritages: builder.query({
-      query: ({ page = 1, limit = 9, name = '', status = 'ALL', sort = 'name', order = 'asc' }) => {
+      query: ({ page = 1, limit = 9, name = '', status = 'ALL', sort = 'name', order = 'asc', language }) => {
         const params = new URLSearchParams()
         params.append('page', page.toString())
         params.append('limit', limit.toString())
@@ -12,6 +17,7 @@ export const heritageSlice = apiSlice.injectEndpoints({
         if (status !== 'ALL') params.append('status', status)
         if (sort) params.append('sort', sort)
         if (order) params.append('order', order)
+        params.append('language', language || getCurrentLanguage())
         return `${BASE_URL}/heritages?${params.toString()}`
       },
       providesTags: (result) =>
@@ -25,35 +31,36 @@ export const heritageSlice = apiSlice.injectEndpoints({
 
 
     getHeritagesById: builder.query({
-      query: (id) => ({
-        url: `${BASE_URL}/heritages/id/${id}`,
+      query: ({ id, language }) => ({
+        url: `${BASE_URL}/heritages/id/${id}?language=${language || getCurrentLanguage()}`,
         method: 'GET',
       }),
       providesTags: (result, error, id) => [{ type: 'Heritages', id }],
     }),
 
     getAllHeritageNames: builder.query({
-      query: () => ({
-        url: `${BASE_URL}/heritages/all-name`,
+      query: (language) => ({
+        url: `${BASE_URL}/heritages/all-name?language=${language || getCurrentLanguage()}`,
         method: 'GET',
       }),
       providesTags: (result, error, id) => [{ type: 'Heritages', id }],
     }),
 
     getHeritagesBySlug: builder.query({
-      query: (nameSlug) => `${BASE_URL}/heritages/${nameSlug}`,
+      query: ({ nameSlug, language }) => 
+        `${BASE_URL}/heritages/${nameSlug}?language=${language || getCurrentLanguage()}`,
       providesTags: (result, error, id) => [{ type: 'Heritages', id }],
     }),
 
     getNearestHeritages: builder.query({
-      query: ({ latitude, longitude, limit }) =>
-        `${BASE_URL}/heritages/explore?latitude=${latitude}&longitude=${longitude}&limit=${limit}`,
+      query: ({ latitude, longitude, limit, language }) =>
+        `${BASE_URL}/heritages/explore?latitude=${latitude}&longitude=${longitude}&limit=${limit}&language=${language || getCurrentLanguage()}`,
       providesTags: (result, error, id) => [{ type: 'Heritages', id }],
     }),
 
     createHeritage: builder.mutation({
-      query: (data) => ({
-        url: `${BASE_URL}/heritages`,
+      query: ({ data, language }) => ({
+        url: `${BASE_URL}/heritages?language=${language || getCurrentLanguage()}`,
         method: 'POST',
         body: data,
       }),
@@ -61,8 +68,8 @@ export const heritageSlice = apiSlice.injectEndpoints({
     }),
 
     updateHeritage: builder.mutation({
-      query: ({ id, data }) => ({
-        url: `${BASE_URL}/heritages/id/${id}`,
+      query: ({ id, data, language }) => ({
+        url: `${BASE_URL}/heritages/id/${id}?language=${language || getCurrentLanguage()}`,
         method: 'PUT',
         body: data,
       }),
@@ -70,8 +77,8 @@ export const heritageSlice = apiSlice.injectEndpoints({
     }),
 
     deleteHeritage: builder.mutation({
-      query: (id) => ({
-        url: `${BASE_URL}/heritages/id${id}`,
+      query: ({ id, language }) => ({
+        url: `${BASE_URL}/heritages/id/${id}?language=${language || getCurrentLanguage()}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Heritages'],
