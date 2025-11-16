@@ -4,10 +4,12 @@ import { ArrowLeft, Mail, KeyRound, Eye, EyeOff, Check } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 import { Button } from "~/components/common/ui/Button"
 import { useForgotPasswordMutation, useResetPasswordMutation } from "~/store/apis/authSlice"
 
 const ForgotPassword = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [email, setEmail] = useState("")
   const [verificationCode, setVerificationCode] = useState("")
@@ -42,12 +44,12 @@ const ForgotPassword = () => {
       const response = await forgotPassword({ email }).unwrap()
 
       // Show success message
-      toast.success(response.message || "Verification code has been sent to your email!")
+      toast.success(response.message || t('auth.forgotPassword.codeSent'))
       setIsSubmitted(true)
       setCooldown(60) // Start cooldown timer
     } catch (err) {
       // Handle error
-      const errorMessage = err?.data?.message || "Unable to send recovery email. Please try again."
+      const errorMessage = err?.data?.message || t('auth.forgotPassword.errors.sendFailed')
       setError(errorMessage)
       toast.error(errorMessage)
     }
@@ -59,10 +61,10 @@ const ForgotPassword = () => {
     setError(null)
     try {
       const response = await forgotPassword({ email }).unwrap()
-      toast.success(response.message || "Verification code resent!")
+      toast.success(response.message || t('auth.forgotPassword.codeResent'))
       setCooldown(60) // Reset cooldown timer
     } catch (err) {
-      const errorMessage = err?.data?.message || "Unable to resend verification code. Please try again."
+      const errorMessage = err?.data?.message || t('auth.forgotPassword.errors.resendFailed')
       setError(errorMessage)
       toast.error(errorMessage)
     }
@@ -74,13 +76,13 @@ const ForgotPassword = () => {
 
     // Validate passwords match
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match")
+      setError(t('auth.forgotPassword.errors.passwordMismatch'))
       return
     }
 
     // Validate password strength
     if (newPassword.length < 8) {
-      setError("Password must be at least 8 characters long")
+      setError(t('auth.forgotPassword.errors.passwordTooShort'))
       return
     }
 
@@ -93,7 +95,7 @@ const ForgotPassword = () => {
       }).unwrap()
 
       // Show success message
-      toast.success(response.message || "Password reset successful!")
+      toast.success(response.message || t('auth.forgotPassword.resetSuccess'))
       setIsResetComplete(true)
 
       // Redirect to login page after 3 seconds
@@ -102,7 +104,7 @@ const ForgotPassword = () => {
       }, 3000)
     } catch (err) {
       // Handle error
-      const errorMessage = err?.data?.message || "Invalid or expired verification code. Please try again."
+      const errorMessage = err?.data?.message || t('auth.forgotPassword.errors.invalidCode')
       setError(errorMessage)
       toast.error(errorMessage)
     }
@@ -114,14 +116,18 @@ const ForgotPassword = () => {
         <div className="rounded-lg shadow-lg border border-heritage-light/50 bg-card text-card-foreground">
           <div className="flex flex-col items-center p-6 gap-1">
             <h3 className="text-xl sm:text-2xl text-heritage-dark font-bold tracking-tight">
-              {isResetComplete ? "Password Reset Successful" : isSubmitted ? "Reset Password" : "Forgot Password"}
+              {isResetComplete 
+                ? t('auth.forgotPassword.titleSuccess') 
+                : isSubmitted 
+                  ? t('auth.forgotPassword.titleReset') 
+                  : t('auth.forgotPassword.title')}
             </h3>
             <p className="text-sm text-muted-foreground text-center">
               {isResetComplete
-                ? "Your password has been reset successfully"
+                ? t('auth.forgotPassword.subtitleSuccess')
                 : isSubmitted
-                  ? "Enter verification code and your new password"
-                  : "Enter your email to receive verification code"}
+                  ? t('auth.forgotPassword.subtitleReset')
+                  : t('auth.forgotPassword.subtitle')}
             </p>
           </div>
           <div className="pt-0 p-6">
@@ -130,13 +136,13 @@ const ForgotPassword = () => {
                 <div className="bg-green-50 text-green-700 p-4 rounded-md text-sm flex items-start">
                   <Check size={18} className="mr-2 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium">Password reset successful!</p>
-                    <p className="mt-1">You will be redirected to the login page in a few seconds...</p>
+                    <p className="font-medium">{t('auth.forgotPassword.resetSuccessMessage')}</p>
+                    <p className="mt-1">{t('auth.forgotPassword.redirectMessage')}</p>
                   </div>
                 </div>
                 <Button type="button" className="w-full" onClick={() => navigate("/login")}>
                   <ArrowLeft size={16} />
-                  <span>Go to Login</span>
+                  <span>{t('auth.forgotPassword.goToLogin')}</span>
                 </Button>
               </div>
             ) : !isSubmitted ? (
@@ -144,14 +150,14 @@ const ForgotPassword = () => {
                 {error && <div className="text-red-500 text-sm text-center">{error}</div>}
                 <div className="space-y-2">
                   <label className="text-sm font-medium" htmlFor="email">
-                    Email
+                    {t('auth.email')}
                   </label>
                   <input
                     type="email"
                     id="email"
                     name="email"
                     required
-                    placeholder="Enter your email..."
+                    placeholder={t('auth.forgotPassword.emailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full h-10 rounded-md border px-3 py-2 placeholder:text-muted-foreground focus:ring-heritage focus:border-none focus:ring-2 focus:outline-none text-sm"
@@ -161,36 +167,35 @@ const ForgotPassword = () => {
                   {isRequestingCode ? (
                     <div className="flex items-center">
                       <div className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
-                      Processing...
+                      {t('auth.processing')}
                     </div>
                   ) : (
                     <>
                       <Mail size={16} />
-                      <span>Send Verification Code</span>
+                      <span>{t('auth.forgotPassword.sendCodeButton')}</span>
                     </>
                   )}
                 </Button>
               </form>
             ) : (
               <div className="space-y-4">
-                <div className="bg-blue-50 text-blue-700 p-4 rounded-md text-sm">
-                  We have sent a verification code to <strong>{email}</strong>. Please check your inbox and enter
-                  the verification code below.
-                </div>
+                <div className="bg-blue-50 text-blue-700 p-4 rounded-md text-sm" dangerouslySetInnerHTML={{
+                  __html: t('auth.forgotPassword.emailSentMessage', { email })
+                }} />
 
                 <form onSubmit={handleVerifyCode} className="space-y-4">
                   {error && <div className="text-red-500 text-sm text-center">{error}</div>}
 
                   <div className="space-y-2">
                     <label className="text-sm font-medium" htmlFor="verificationCode">
-                      Verification Code
+                      {t('auth.forgotPassword.verificationCode')}
                     </label>
                     <input
                       type="text"
                       id="verificationCode"
                       name="verificationCode"
                       required
-                      placeholder="Enter verification code..."
+                      placeholder={t('auth.forgotPassword.verificationCodePlaceholder')}
                       value={verificationCode}
                       onChange={(e) => setVerificationCode(e.target.value)}
                       className="w-full h-10 rounded-md border px-3 py-2 placeholder:text-muted-foreground focus:ring-heritage focus:border-none focus:ring-2 focus:outline-none text-sm"
@@ -199,7 +204,7 @@ const ForgotPassword = () => {
 
                   <div className="space-y-2">
                     <label className="text-sm font-medium" htmlFor="newPassword">
-                      New Password
+                      {t('auth.forgotPassword.newPassword')}
                     </label>
                     <div className="relative">
                       <input
@@ -207,7 +212,7 @@ const ForgotPassword = () => {
                         id="newPassword"
                         name="newPassword"
                         required
-                        placeholder="Enter new password..."
+                        placeholder={t('auth.forgotPassword.newPasswordPlaceholder')}
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         className="w-full h-10 rounded-md border px-3 py-2 placeholder:text-muted-foreground focus:ring-heritage focus:border-none focus:ring-2 focus:outline-none text-sm"
@@ -228,7 +233,7 @@ const ForgotPassword = () => {
 
                   <div className="space-y-2">
                     <label className="text-sm font-medium" htmlFor="confirmPassword">
-                      Confirm Password
+                      {t('auth.confirmPassword')}
                     </label>
                     <div className="relative">
                       <input
@@ -236,7 +241,7 @@ const ForgotPassword = () => {
                         id="confirmPassword"
                         name="confirmPassword"
                         required
-                        placeholder="Confirm new password..."
+                        placeholder={t('auth.forgotPassword.confirmPasswordPlaceholder')}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         className="w-full h-10 rounded-md border px-3 py-2 placeholder:text-muted-foreground focus:ring-heritage focus:border-none focus:ring-2 focus:outline-none text-sm"
@@ -260,12 +265,12 @@ const ForgotPassword = () => {
                       {isResetting ? (
                         <div className="flex items-center">
                           <div className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
-                          Processing...
+                          {t('auth.processing')}
                         </div>
                       ) : (
                         <>
                           <KeyRound size={16} />
-                          <span>Reset Password</span>
+                          <span>{t('auth.forgotPassword.resetButton')}</span>
                         </>
                       )}
                     </Button>
@@ -278,7 +283,7 @@ const ForgotPassword = () => {
                       onClick={handleResendCode}
                     >
                       <Mail size={16} />
-                      <span>{cooldown > 0 ? `Resend code (${cooldown}s)` : "Resend verification code"}</span>
+                      <span>{cooldown > 0 ? t('auth.forgotPassword.resendCodeCooldown', { time: cooldown }) : t('auth.forgotPassword.resendCode')}</span>
                     </Button>
                   </div>
                 </form>
@@ -288,7 +293,7 @@ const ForgotPassword = () => {
           <div className="text-center pt-0 p-6 text-sm">
             <Link to="/login" className="text-heritage font-medium hover:underline inline-flex items-center">
               <ArrowLeft size={16} className="mr-1" />
-              Back to Login
+              {t('auth.forgotPassword.backToLogin')}
             </Link>
           </div>
         </div>

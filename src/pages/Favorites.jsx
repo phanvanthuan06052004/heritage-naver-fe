@@ -2,6 +2,7 @@ import { Heart } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { selectCurrentUser } from '~/store/slices/authSlice'
 import { useGetFavoritesByUserIdQuery } from '~/store/apis/favoritesSlice'
@@ -15,17 +16,20 @@ import {
   selectFavoritesCurrentPage,
   selectFavoritesItemsPerPage
 } from '~/store/selectors/paginationSelectors'
+import { useLanguage, useLanguageChange } from '~/hooks/useLanguage'
 
 const Favorites = () => {
+  const { t } = useTranslation()
+  const { language } = useLanguage()
   const navigate = useNavigate()
   const user = useSelector(selectCurrentUser)
   const isAuthenticated = !!user
   const dispatch = useDispatch()
-  
+
   const currentPage = useSelector(selectFavoritesCurrentPage)
   const itemsPerPage = useSelector(selectFavoritesItemsPerPage)
-  
-  const { 
+
+  const {
     data: favoritesData,
     isLoading: isFavoritesLoading,
     error: favoritesError,
@@ -34,9 +38,10 @@ const Favorites = () => {
   } = useGetFavoritesByUserIdQuery({
     userId: user?._id,
     page: currentPage,
-    limit: itemsPerPage
-  }, { 
-    skip: !isAuthenticated 
+    limit: itemsPerPage,
+    language
+  }, {
+    skip: !isAuthenticated
   })
   
   const favoriteItems = favoritesData?.items || []
@@ -60,6 +65,11 @@ const Favorites = () => {
     }
   }, [isAuthenticated, navigate])
 
+  // Refetch when language changes
+  useLanguageChange(() => {
+    refetch()
+  })
+
   if (!isAuthenticated) return null
 
   const isLoading = isFavoritesLoading || isFavoritesFetching
@@ -73,10 +83,10 @@ const Favorites = () => {
             hasFavorites && (
               <>
                 <h1 className='text-3xl sm:text-4xl font-medium text-heritage-dark mb-4'>
-                  Explore Your Favorite Heritage Sites
+                  {t('favorites.title')}
                 </h1>
                 <p className='text-muted-foreground max-w-2xl mx-auto'>
-                  Save and track the historical and cultural landmarks you care about most
+                  {t('favorites.subtitle')}
                 </p>
               </>
             )
@@ -84,11 +94,11 @@ const Favorites = () => {
         </div>
         {favoritesError && (
           <div className='text-center py-4 text-red-500'>
-            <p className='font-medium'>An error occurred while loading favorites list</p>
+            <p className='font-medium'>{t('favorites.errorLoading')}</p>
             <p className='text-sm mt-2'>
               {favoritesError.status === 404
-                ? 'You don\'t have any favorites yet.'
-                : favoritesError.data?.message || 'Please try again later.'}
+                ? t('favorites.errorNoFavorites')
+                : favoritesError.data?.message || t('favorites.errorTryAgain')}
             </p>
           </div>
         )}
@@ -128,11 +138,11 @@ const Favorites = () => {
         ) : (
           <div className='text-center py-12 space-y-4'>
             <Heart className='h-16 w-16 mx-auto text-muted-foreground' />
-            <h2 className='text-xl font-medium'>No Favorite Heritage Sites Yet</h2>
+            <h2 className='text-xl font-medium'>{t('favorites.empty')}</h2>
             <p className='text-muted-foreground max-w-md mx-auto mb-6'>
-              Explore historical sites and add them to your favorites to view later.
+              {t('favorites.emptyDescription')}
             </p>
-            <Button onClick={() => navigate('/heritages')}>Explore Heritage Sites</Button>
+            <Button onClick={() => navigate('/heritages')}>{t('favorites.exploreHeritages')}</Button>
           </div>
         )}
       </div>

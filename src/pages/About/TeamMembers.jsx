@@ -1,11 +1,21 @@
 import { Facebook, Linkedin } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { teamMembers } from './data/teamMembersData'
 
 const TeamMembers = () => {
+  const { t } = useTranslation()
+
+  const translatedMembers = [
+    { ...teamMembers[0], role: t('about.teamRoles.founderLeader'), bio: t('about.teamBios.bio1') },
+    { ...teamMembers[1], role: t('about.teamRoles.backendDev'), bio: t('about.teamBios.bio2') },
+    { ...teamMembers[2], role: t('about.teamRoles.frontendDev'), bio: t('about.teamBios.bio3') },
+    { ...teamMembers[3], role: t('about.teamRoles.frontendDev'), bio: t('about.teamBios.bio3') }
+  ]
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16'>
-      {teamMembers.map((member, index) => (
+      {translatedMembers.map((member, index) => (
         <div key={index} className='group text-center'>
           <div className='relative mb-6 overflow-hidden rounded-xl aspect-square text-left'>
             <img
@@ -23,7 +33,7 @@ const TeamMembers = () => {
                   <Link
                     to={member.social.facebook}
                     className='text-white hover:text-heritage-light transition-colors'
-                    aria-label={`Facebook của ${member.name}`}
+                    aria-label={`Facebook ${member.name}`}
                     target='_blank'
                     rel='noopener noreferrer'
                   >
@@ -32,7 +42,7 @@ const TeamMembers = () => {
                   <Link
                     to={member.social.linkedin}
                     className='text-white hover:text-heritage-light transition-colors'
-                    aria-label={`LinkedIn của ${member.name}`}
+                    aria-label={`LinkedIn ${member.name}`}
                     target='_blank'
                     rel='noopener noreferrer'
                   >

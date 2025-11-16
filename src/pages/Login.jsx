@@ -3,11 +3,13 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/common/ui/Button'
 import { useLoginMutation } from '~/store/apis/authSlice'
 import { setCredentials } from '~/store/slices/authSlice'
 
 const Login = () => {
+  const { t } = useTranslation()
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
@@ -35,14 +37,14 @@ const Login = () => {
       const { userInfo, accessToken } = response
       console.log('response', response)
 
-      toast.success('Login successful!')
+      toast.success(t('auth.loginSuccess'))
       dispatch(setCredentials({ user: userInfo, accessToken }))
 
       // Example: Redirect to a dashboard or home page
       window.location.href = '/'
     } catch (err) {
       // Handle error
-      const errorMessage = err?.data?.message || 'Login failed. Please try again.'
+      const errorMessage = err?.data?.message || t('common.error')
       setError(errorMessage)
       toast.error(errorMessage)
     } finally {
@@ -63,8 +65,8 @@ const Login = () => {
       <div className='max-w-md w-full animate-fade-up'>
         <div className='rounded-lg shadow-lg border border-heritage-light/50 bg-card text-card-foreground'>
           <div className='flex flex-col items-center p-6 gap-1'>
-            <h3 className='text-xl sm:text-2xl text-heritage-dark font-bold tracking-tight'>Login to Heritage</h3>
-            <p className='text-sm text-muted-foreground text-center'>Discover the past, enjoy the present</p>
+            <h3 className='text-xl sm:text-2xl text-heritage-dark font-bold tracking-tight'>{t('auth.login_page.title')}</h3>
+            <p className='text-sm text-muted-foreground text-center'>{t('auth.login_page.subtitle')}</p>
           </div>
           <div className='pt-0 p-6'>
             <form onSubmit={handleSubmit} className='space-y-4'>
@@ -74,13 +76,13 @@ const Login = () => {
                 </div>
               )}
               <div className='space-y-2'>
-                <label className='text-sm font-medium' htmlFor='email'>Email</label>
+                <label className='text-sm font-medium' htmlFor='email'>{t('auth.email')}</label>
                 <input
                   type='email'
                   id='email'
                   name='email'
                   required
-                  placeholder='Enter email...'
+                  placeholder={t('auth.login_page.emailPlaceholder')}
                   value={formData.email}
                   onChange={handleChange}
                   className='w-full h-10 rounded-md border px-3 py-2 placeholder:text-muted-foreground focus:ring-heritage focus:border-none focus:ring-2 focus:outline-none text-sm'
@@ -88,8 +90,8 @@ const Login = () => {
               </div>
               <div className='space-y-2'>
                 <div className='flex justify-between items-center'>
-                  <label className='text-sm font-medium' htmlFor='password'>Password</label>
-                  <Link to='/forgot-password' className='text-xs text-heritage hover:underline'>Forgot password?</Link>
+                  <label className='text-sm font-medium' htmlFor='password'>{t('auth.password')}</label>
+                  <Link to='/forgot-password' className='text-xs text-heritage hover:underline'>{t('auth.forgotPasswordLink')}</Link>
                 </div>
                 <div className='relative'>
                   <input
@@ -97,7 +99,7 @@ const Login = () => {
                     id='password'
                     name='password'
                     required
-                    placeholder='••••••••'
+                    placeholder={t('auth.login_page.passwordPlaceholder')}
                     value={formData.password}
                     onChange={handleChange}
                     className='w-full h-10 rounded-md border px-3 py-2 placeholder:text-muted-foreground focus:ring-heritage focus:border-none focus:ring-2 focus:outline-none text-sm'
@@ -123,20 +125,20 @@ const Login = () => {
                 {isLoading ? (
                   <div className='flex items-center'>
                     <div className='animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full' />
-                    Processing...
+                    {t('auth.processing')}
                   </div>
                 ) : (
                   <>
                     <LogIn size={16} />
-                    <span>Login</span>
+                    <span>{t('auth.login_page.loginButton')}</span>
                   </>
                 )}
               </Button>
             </form>
           </div>
           <div className='text-center pt-0 p-6 text-sm'>
-            <span>Don't have an account yet? </span>
-            <Link to='/register' className='text-heritage font-medium hover:underline'>Sign up now</Link>
+            <span>{t('auth.dontHaveAccount')} </span>
+            <Link to='/register' className='text-heritage font-medium hover:underline'>{t('auth.signUpNow')}</Link>
           </div>
         </div>
       </div>

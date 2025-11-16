@@ -1,8 +1,10 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { cn } from '~/lib/utils'
 
 const NavLinks = ({ navLinks }) => {
   const location = useLocation()
+  const { t } = useTranslation()
 
   return (
     <nav className='hidden sm:flex items-center gap-6'>
@@ -21,7 +23,7 @@ const NavLinks = ({ navLinks }) => {
             )}
           >
             {link.icon()}
-            {link.name}
+            {t(link.nameKey)}
           </Link>
         )
       })}

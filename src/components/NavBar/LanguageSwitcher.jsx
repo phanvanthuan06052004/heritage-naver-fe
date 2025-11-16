@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Globe } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const LANGS = [
   { code: "vi", label: "Tiếng Việt", icon: "https://flagcdn.com/vn.svg" },
@@ -7,14 +8,17 @@ const LANGS = [
 ];
 
 const LanguageSwitcher = () => {
+  const { i18n } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [lang, setLang] = useState(localStorage.getItem("lang") || "vi");
+  const [lang, setLang] = useState(i18n.language || "vi");
 
   const changeLang = (code) => {
     setLang(code);
     localStorage.setItem("lang", code);
+    i18n.changeLanguage(code);
     setOpen(false);
-    window.location.reload();
+    // Dispatch custom event để các components khác có thể lắng nghe
+    window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language: code } }));
   };
 
   // Close dropdown when clicking outside

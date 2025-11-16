@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Search } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import HeritageMapView from './HeritageMapView'
 import HeritageList from '~/components/Heritage/HeritageList'
 import { Input } from '~/components/common/ui/Input'
 import { cn } from '~/lib/utils'
 import { useLazyGetNearestHeritagesQuery } from '~/store/apis/heritageApi'
+import { useLanguage } from '~/hooks/useLanguage'
 
 function GenericMapExplorer({
     items = [],
@@ -12,6 +14,8 @@ function GenericMapExplorer({
     locationName = 'location',
     initialCenter = { lat: 16.047079, lng: 108.20623 },
 }) {
+    const { t } = useTranslation()
+    const { language } = useLanguage()
     const [mapCenter, setMapCenter] = useState(initialCenter)
     const [selectedLocation, setSelectedLocation] = useState(null)
     const [searchQuery, setSearchQuery] = useState('')
@@ -39,14 +43,14 @@ function GenericMapExplorer({
             setMapCenter(newLocation)
 
             try {
-                const { data } = await triggerGetNearestHeritages({ latitude: lat, longitude: lng, limit: 6 })
+                const { data } = await triggerGetNearestHeritages({ latitude: lat, longitude: lng, limit: 6, language })
                 // console.log('Data from getNearestHeritages (marker click):', data || 'No data')
                 setNearbyItems(data || [])
             } catch (err) {
                 console.error('Error calling getNearestHeritages (marker):', err)
             }
         },
-        [triggerGetNearestHeritages]
+        [triggerGetNearestHeritages, language]
     )
 
     // Handle select button click (from "Select" button)
@@ -65,14 +69,14 @@ function GenericMapExplorer({
             setMapCenter(newLocation)
 
             try {
-                const { data } = await triggerGetNearestHeritages({ latitude: lat, longitude: lng, limit: 6 })
+                const { data } = await triggerGetNearestHeritages({ latitude: lat, longitude: lng, limit: 6, language })
                 // console.log('Data from getNearestHeritages (select button):', data || 'No data')
                 setNearbyItems(data || [])
             } catch (err) {
                 console.error('Error calling getNearestHeritages (select):', err)
             }
         },
-        [triggerGetNearestHeritages]
+        [triggerGetNearestHeritages, language]
     )
 
     // Handle print coordinates
@@ -117,6 +121,7 @@ function GenericMapExplorer({
                             latitude: lat,
                             longitude: lng,
                             limit: 6,
+                            language
                         })
                         console.log('Data from getNearestHeritages (search):', searchData || 'No data')
                         setNearbyItems(searchData?.heritages?.heritages || [])
@@ -125,14 +130,14 @@ function GenericMapExplorer({
                         console.error('Error calling getNearestHeritages (search):', err)
                     }
                 } else {
-                    setSearchError('Location not found.')
+                    setSearchError(t('explore.locationNotFound'))
                 }
             } catch (error) {
-                setSearchError('Error searching for location.')
+                setSearchError(t('explore.searchError'))
                 console.error('Search error:', error)
             }
         },
-        [searchQuery, triggerGetNearestHeritages]
+        [searchQuery, triggerGetNearestHeritages, language, t]
     )
 
     // Update displayed and nearby items
@@ -184,13 +189,13 @@ function GenericMapExplorer({
                     {/* Item Lists */}
                     <div className="space-y-6">
                         {isLoading && selectedLocation ? (
-                            <p>Loading data...</p>
+                            <p>{t('explore.loadingData')}</p>
                         ) : isError && selectedLocation ? (
-                            <p>Error loading data: {error.message}</p>
+                            <p>{t('explore.errorLoading')}: {error.message}</p>
                         ) : selectedLocation || searchQuery ? (
                             <>
                                 <h2 className="text-xl font-medium text-heritage-dark">
-                                    {searchQuery ? `Search results for ${itemName}` : `${itemName} near ${locationName}`}
+                                    {searchQuery ? `${t('explore.searchResults')} ${itemName}` : `${itemName} ${t('explore.nearLocation')} ${locationName}`}
                                 </h2>
                                 <HeritageList heritages={nearbyItems?.heritages} />
                             </>

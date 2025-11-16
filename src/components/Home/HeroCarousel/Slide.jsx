@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { BookOpen, Map } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '~/components/common/ui/Button'
 
 const Slide = ({ slide, index, activeIndex }) => {
+  const { t } = useTranslation()
   const isActive = index === activeIndex
   const slideStyle = {
     backgroundImage: `url(${slide.image})`,
@@ -28,7 +30,7 @@ const Slide = ({ slide, index, activeIndex }) => {
                 size='lg'
                 className=' w-56'>
                 <BookOpen className='mr-2' size={20} />
-                Explore Heritage
+                {t('nav.heritageSites')}
               </Button>
             </Link>
             <Link to='/explore'>
@@ -37,7 +39,7 @@ const Slide = ({ slide, index, activeIndex }) => {
                 variant='outline'
                 className='bg-primary-foreground/10 backdrop-blur-sm text-primary-foreground hover:bg-primary-foreground/20 w-56'>
                 <Map className='mr-2' size={20} />
-                Explore Map
+                {t('about.exploreMap')}
               </Button>
             </Link>
           </div>

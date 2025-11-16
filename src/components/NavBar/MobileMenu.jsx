@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { LogIn, UserPlus } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import { cn } from '~/lib/utils'
@@ -13,18 +14,19 @@ const MobileMenu = ({ isOpen, navLinks, userMenuLinks, onClose }) => {
   const isAuthenticated = !!userInfo
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { t } = useTranslation()
 
   if (!isOpen) return null
 
   const handleLogout = () => {
     try {
       dispatch(logOut())
-      toast.success('Logged out successfully!')
+      toast.success(t('auth.logoutSuccess'))
       navigate('/')
       onClose()
     } catch (error) {
       console.error('Logout failed:', error)
-      toast.error('Logout failed. Please try again!')
+      toast.error(t('common.error'))
     }
   }
 
@@ -43,8 +45,8 @@ const MobileMenu = ({ isOpen, navLinks, userMenuLinks, onClose }) => {
                 : 'hover:bg-accent hover:text-accent-foreground')}
           >
             <div className='flex items-center space-x-3'>
-              {item.icon}
-              <span>{item.name}</span>
+              {item.icon()}
+              <span>{t(item.nameKey)}</span>
             </div>
           </Link>
         ))}
@@ -61,13 +63,13 @@ const MobileMenu = ({ isOpen, navLinks, userMenuLinks, onClose }) => {
                     : 'hover:bg-accent' )}
               >
                 <div className='flex items-center space-x-3'>
-                  {item.icon}
-                  <span>{item.name}</span>
+                  {item.icon()}
+                  <span>{t(item.nameKey)}</span>
                 </div>
               </Link>
             ))}
             <Button variant='destructive' onClick={handleLogout}>
-              Logout
+              {t('nav.logout')}
             </Button>
           </>
         ) : (
@@ -75,13 +77,13 @@ const MobileMenu = ({ isOpen, navLinks, userMenuLinks, onClose }) => {
             <Link to='/login'>
               <Button variant='outline' className='w-full'>
                 <LogIn className='h-5 w-5 mr-3' />
-                <span>Login</span>
+                <span>{t('nav.login')}</span>
               </Button>
             </Link>
             <Link to='/register'>
               <Button className='w-full'>
                 <UserPlus className='h-5 w-5 mr-3' />
-                <span>Register</span>
+                <span>{t('nav.register')}</span>
               </Button>
             </Link>
           </div>

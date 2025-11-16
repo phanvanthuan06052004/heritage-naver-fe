@@ -1,21 +1,31 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { heroSlides } from './heroSlides'
 import Slide from './Slide'
 import ArrowButton from './ArrowButton'
 
 const HeroCarousel = () => {
+  const { t } = useTranslation()
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const timeoutRef = useRef(null)
-  const slidesLength = heroSlides.length
+  
+  // Translate slides
+  const translatedSlides = useMemo(() => heroSlides.map((slide, index) => ({
+    ...slide,
+    title: t(`home.hero.slide${index + 1}Title`),
+    subTitle: t(`home.hero.slide${index + 1}Subtitle`)
+  })), [t])
+  
+  const slidesLength = translatedSlides.length
   // Auto play Carousel
   useEffect(() => {
     if (isPaused) return
     const intervalId = setInterval(() => {
-      setActiveIndex(prev => (prev + 1) % heroSlides.length)
+      setActiveIndex(prev => (prev + 1) % translatedSlides.length)
     }, 4000)
     return () => clearInterval(intervalId)
-  }, [isPaused])
+  }, [isPaused, translatedSlides.length])
 
   const handleSlideChange = (newIndex) => {
     if (activeIndex === newIndex) return
@@ -46,7 +56,7 @@ const HeroCarousel = () => {
     <section className='relative w-full pt-navbar-mobile sm:pt-navbar' aria-label='Carousel di sản văn hóa'>
       <div className='relative w-full h-[calc(100vh-theme(spacing.navbar-mobile))] sm:h-[calc(100vh-theme(spacing.navbar))] overflow-hidden'>
         {
-          heroSlides.map((slide, index) => (
+          translatedSlides.map((slide, index) => (
             <Slide key={slide._id} slide={slide} index={index} activeIndex={activeIndex} />
           ))
         }
@@ -61,7 +71,7 @@ const HeroCarousel = () => {
         {/* Dot */}
         <div className='absolute bottom-8 z-30 left-0 right-0 flex justify-center gap-2'>
           {
-            heroSlides.map((_, index) => (
+            translatedSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => handleSlideChange(index)}
