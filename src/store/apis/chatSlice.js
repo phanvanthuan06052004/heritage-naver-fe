@@ -7,16 +7,24 @@ export const chatSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // RAG Query - Naver CLOVA Studio RAG System
     queryRAG: builder.mutation({
-      query: ({ question, heritageId, topK, collectionName }) => ({
-        url: "/rag/query",
-        method: "POST",
-        body: {
+      query: ({ question, heritageId, topK, collectionName }) => {
+        const body = {
           question,
-          heritageId: heritageId || null,
           topK: topK || 5,
           collectionName: collectionName || "heritage_documents",
-        },
-      }),
+        };
+        
+        // Only include heritageId if it's provided
+        if (heritageId) {
+          body.heritageId = heritageId;
+        }
+        
+        return {
+          url: "/rag/query",
+          method: "POST",
+          body,
+        };
+      },
       invalidatesTags: [{ type: "Chat", id: "LIST" }],
     }),
 
