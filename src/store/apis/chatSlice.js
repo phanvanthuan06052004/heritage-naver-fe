@@ -1,76 +1,81 @@
 /* eslint-disable no-unused-vars */
-import { apiSlice } from './apiSlice'
+import { apiSlice } from "./apiSlice";
 
-const API_BASE_URL = 'http://localhost:8000'
+const API_BASE_URL = "http://localhost:8000";
 
 export const chatSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // RAG Query - Naver CLOVA Studio RAG System
     queryRAG: builder.mutation({
-      query: ({ question, topK, collectionName }) => ({
-        url: '/rag/query',
-        method: 'POST',
-        body: { 
-          question, 
+      query: ({ question, heritageId, topK, collectionName }) => ({
+        url: "/rag/query",
+        method: "POST",
+        body: {
+          question,
+          heritageId: heritageId || null,
           topK: topK || 5,
-          collectionName: collectionName || 'heritage_documents'
+          collectionName: collectionName || "heritage_documents",
         },
       }),
-      invalidatesTags: [{ type: 'Chat', id: 'LIST' }],
+      invalidatesTags: [{ type: "Chat", id: "LIST" }],
     }),
 
     getApiResponse: builder.mutation({
       query: ({ question, sessionId, model }) => ({
         url: `${API_BASE_URL}/chat`,
-        method: 'POST',
+        method: "POST",
         body: { question, session_id: sessionId, model },
       }),
       invalidatesTags: (result, error, { sessionId }) =>
-        sessionId ? [{ type: 'Chat', id: sessionId }] : [],
+        sessionId ? [{ type: "Chat", id: sessionId }] : [],
     }),
 
     getChatHistory: builder.query({
       query: (sessionId) => `${API_BASE_URL}/chat/history/${sessionId}`,
-      transformResponse: (response) => (Array.isArray(response) ? response : []),
+      transformResponse: (response) =>
+        Array.isArray(response) ? response : [],
       providesTags: (result, error, sessionId) =>
         sessionId
-          ? [{ type: 'Chat', id: sessionId }, { type: 'Chat', id: 'LIST' }]
-          : [{ type: 'Chat', id: 'LIST' }],
+          ? [
+              { type: "Chat", id: sessionId },
+              { type: "Chat", id: "LIST" },
+            ]
+          : [{ type: "Chat", id: "LIST" }],
     }),
 
     uploadDocument: builder.mutation({
       query: (file) => {
-        const formData = new FormData()
-        formData.append('file', file, file.name)
+        const formData = new FormData();
+        formData.append("file", file, file.name);
         return {
           url: `${API_BASE_URL}/upload-file`,
-          method: 'POST',
+          method: "POST",
           body: formData,
           headers: {}, // Remove Content-Type for FormData
-        }
+        };
       },
-      invalidatesTags: (result, error) => [{ type: 'Chat', id: 'LIST' }],
+      invalidatesTags: (result, error) => [{ type: "Chat", id: "LIST" }],
     }),
 
     uploadWebsite: builder.mutation({
       query: (payload) => ({
         url: `${API_BASE_URL}/upload-website`,
-        method: 'POST',
+        method: "POST",
         body: payload,
       }),
-      invalidatesTags: (result, error) => [{ type: 'Chat', id: 'LIST' }],
+      invalidatesTags: (result, error) => [{ type: "Chat", id: "LIST" }],
     }),
 
     uploadJson: builder.mutation({
       query: (data) => ({
         url: `${API_BASE_URL}/upload-landmark-info`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: (result, error) => [{ type: 'Chat', id: 'LIST' }],
+      invalidatesTags: (result, error) => [{ type: "Chat", id: "LIST" }],
     }),
   }),
-})
+});
 
 export const {
   useQueryRAGMutation,
@@ -78,5 +83,5 @@ export const {
   useGetChatHistoryQuery,
   useUploadDocumentMutation,
   useUploadWebsiteMutation,
-  useUploadJsonMutation
-} = chatSlice
+  useUploadJsonMutation,
+} = chatSlice;
