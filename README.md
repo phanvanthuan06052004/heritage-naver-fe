@@ -1,42 +1,97 @@
-# Vietnam Heritage Frontend
+# Heritage Naver - Frontend
 
-## Project Structure
+React + Vite frontend application for Vietnamese historical heritage sites exploration with AI-powered chatbot.
 
-```
-vn-heritage/
-├── src/
-│   ├── api/                  # API configuration
-│   ├── assets/              # Static assets, images
-│   ├── components/          # Reusable components
-│   │   ├── common/         # Shared components
-│   │   ├── Footer/
-│   │   ├── Heritage/       # Heritage related components
-│   │   ├── Home/           # Home components
-│   │   └── ToastProvider/  # Toast notifications
-│   ├── config/             # App configurations
-│   ├── constants/          # Constants and environment vars
-│   ├── hooks/             # Custom React hooks
-│   ├── layout/            # Layout components
-│   ├── lib/               # Library utilities
-│   ├── pages/             # Page components
-│   ├── routes/            # Route configurations
-│   │   ├── index.jsx
-│   │   ├── privateRoutes.jsx
-│   │   └── publicRoutes.jsx
-│   └── store/             # Redux store
-│       ├── apis/          # RTK Query API slices
-│       ├── selectors/     # Redux selectors
-│       └── slices/        # Redux slices
-```
+## 🚀 Features
 
-## Tech Stack
+- **Heritage Discovery**: Browse and search Vietnamese historical sites
+- **Interactive Map**: Google Maps integration for heritage locations
+- **AI Chatbot**: Real-time RAG-powered chatbot for heritage Q&A
+- **User System**: Authentication, favorites, reviews
+- **Knowledge Tests**: Interactive quizzes about heritage sites
+- **Leaderboard**: Competitive ranking system
+- **Real-time Chat**: Socket.io for live discussions
 
-- **Framework**: React
-- **State Management**: Redux Toolkit + RTK Query
+## 🛠️ Tech Stack
+
+- **Framework**: React 18 + Vite
+- **Styling**: Tailwind CSS
+- **State Management**: Redux Toolkit
 - **Routing**: React Router v6
-- **Styling**: TailwindCSS
-- **Build Tool**: Vite
-- **Code Quality**: ESLint
+- **Maps**: @react-google-maps/api
+- **Real-time**: Socket.io-client
+- **Forms**: React Hook Form
+- **HTTP Client**: RTK Query
+- **UI Components**: Radix UI, Lucide Icons
+
+## 📦 Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Create .env file
+cp .env.example .env
+```
+
+## 🔧 Environment Variables
+
+Create `.env` file:
+
+```env
+VITE_API_URL=http://localhost:8017
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_key
+VITE_SOCKET_URL=http://localhost:8017
+```
+
+## 🏃 Running the App
+
+```bash
+# Development mode
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Lint code
+npm run lint
+```
+
+## 📁 Project Structure
+
+```
+src/
+├── api/            # API integration & socket
+├── assets/         # Static assets
+├── components/     # Reusable components
+│   ├── common/     # Shared UI components
+│   ├── Footer/
+│   ├── NavBar/
+│   ├── Heritage/
+│   └── Home/
+├── config/         # Configuration files
+├── constants/      # App constants
+├── hooks/          # Custom React hooks
+├── layout/         # Layout components
+├── pages/          # Page components
+│   ├── Admin/
+│   ├── ChatHeritagePage/
+│   ├── HeritageDetail/
+│   └── GoogleMapHeritage/
+├── routes/         # Route definitions
+├── store/          # Redux store & slices
+│   ├── apis/       # RTK Query APIs
+│   └── slices/     # Redux slices
+└── utils/          # Utility functions
+```
+
+## 🔗 Related Repositories
+
+- **Backend API**: [heritage-naver-api](https://github.com/phanvanthuan06052004/heritage-naver-api)
+- **ML Classifier**: [train-model-classifier](https://github.com/phanvanthuan06052004/train-model-classifier)
 
 ## Key Features
 
