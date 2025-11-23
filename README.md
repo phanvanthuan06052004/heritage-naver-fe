@@ -91,7 +91,7 @@ src/
 ## 🔗 Related Repositories
 
 - **Backend API**: [heritage-naver-api](https://github.com/phanvanthuan06052004/heritage-naver-api)
-- **ML Classifier**: [train-model-classifier](https://github.com/phanvanthuan06052004/train-model-classifier)
+- **ML Classifier**: [train-model-classifier](https://github.com/th4nh-phat09/Model_Classifier)
 
 ## Key Features
 
