@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState, Suspense, useMemo } from 'react'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import { useGetHeritagesBySlugQuery, useGetHeritagesQuery } from '~/store/apis/heritageApi'
 import HeritageCard from '~/components/Heritage/HeritageCard'
 import HeritageDetailSkeleton from './HeritageDetailSkeleton'
@@ -19,18 +20,22 @@ import {
 } from '~/components/lazyComponents'
 import DiscussionSection from './DiscussionSection'
 import ErrorBoundary from './ErrorBoundary'
+import { useLanguage } from '~/hooks/useLanguage'
 
 
 const HeritageDetail = () => {
   const { nameSlug } = useParams()
   const navigate = useNavigate()
-  const { data, isFetching, isLoading, isError } = useGetHeritagesBySlugQuery(nameSlug)
+  const { t } = useTranslation()
+  const { language } = useLanguage()
+  const { data, isFetching, isLoading, isError } = useGetHeritagesBySlugQuery({ nameSlug, language })
   const id = data?._id
   const userInfo = useSelector(selectCurrentUser)
   const isAuthenticated = !!userInfo
   const { data: allHeritages } = useGetHeritagesQuery({
     page: 1,
-    limit: 50
+    limit: 50,
+    language
   })
 
   // Memoize related heritages để tránh tính toán lại khi không cần thiết
@@ -74,9 +79,9 @@ const HeritageDetail = () => {
   if (isError) {
     return (
       <div className='lcn-container-x py-16 text-center'>
-        <h2 className='text-2xl font-medium mb-4'>An Error Occurred</h2>
-        <p className='text-muted-foreground mb-6'>Unable to load heritage information. Please try again later.</p>
-        <Button onClick={() => navigate('/heritages')}>Back to Heritage List</Button>
+        <h2 className='text-2xl font-medium mb-4'>{t('heritageDetail.errorOccurred')}</h2>
+        <p className='text-muted-foreground mb-6'>{t('heritageDetail.unableToLoad')}</p>
+        <Button onClick={() => navigate('/heritages')}>{t('heritageDetail.backToList')}</Button>
       </div>
     )
   }
@@ -97,20 +102,20 @@ const HeritageDetail = () => {
                   <HeritageDetailTabs data={data} isAuthenticated={isAuthenticated} navigate={navigate} />
                 </ErrorBoundary>
                 <div className='mt-10'>
-                  <h3 className='lcn-heritage-detail-title mb-4'>Interactive Features</h3>
+                  <h3 className='lcn-heritage-detail-title mb-4'>{t('heritageDetail.interactiveFeatures')}</h3>
                   <HeritageFeatures handleFeatureClick={handleFeatureClick} />
                 </div>
                 {!isAuthenticated && (
                   <div className='p-6 bg-heritage-light/30 rounded-md border border-heritage-light text-center mt-6'>
-                    <h4 className='text-lg font-medium mb-2'>Login to Experience</h4>
+                    <h4 className='text-lg font-medium mb-2'>{t('heritageDetail.loginToExperience')}</h4>
                     <p className='text-sm text-muted-foreground mb-4'>
-                      Login to use all interactive and personalized features.
+                      {t('heritageDetail.loginToUseFeatures')}
                     </p>
-                    <Button onClick={() => navigate('/login')}>Login Now</Button>
+                    <Button onClick={() => navigate('/login')}>{t('heritageDetail.loginNow')}</Button>
                   </div>
                 )}
                 <div className='mt-10'>
-                  <h3 className='lcn-heritage-detail-title mb-4'>Related Heritage Sites</h3>
+                  <h3 className='lcn-heritage-detail-title mb-4'>{t('heritageDetail.relatedHeritages')}</h3>
                   <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
                     {getRandomRelatedHeritages.map((item) => (
                       <HeritageCard key={item._id} item={item} />
@@ -135,7 +140,7 @@ const HeritageDetail = () => {
           {isAuthenticated && isChatOpen && (
             <div className='fixed bottom-6 right-6 w-[300px] bg-white rounded-lg shadow-xl z-50'>
               <div className='flex justify-between items-center p-3 bg-blue-500 text-white rounded-t-lg'>
-                <h3 className='text-sm font-medium'>Chat about {data?.name}</h3>
+                <h3 className='text-sm font-medium'>{t('heritageDetail.chatAbout')} {data?.name}</h3>
                 <Button
                   className='p-1 bg-transparent hover:bg-blue-600'
                   onClick={toggleChat}
@@ -153,9 +158,9 @@ const HeritageDetail = () => {
           )}
           <Dialog open={activeFeature === 'leaderboard'} onClose={closeFeatureDialog}>
             <DialogHeader>
-              <DialogTitle>Leaderboard</DialogTitle>
+              <DialogTitle>{t('heritageDetail.leaderboardTitle')}</DialogTitle>
               <DialogDescription>
-                See your ranking compared to others when exploring {data?.name}
+                {t('heritageDetail.leaderboardDescription')} {data?.name}
               </DialogDescription>
             </DialogHeader>
             <div className='py-4'>
@@ -168,8 +173,8 @@ const HeritageDetail = () => {
           </Dialog>
           <Dialog open={activeFeature === 'knowledge-test'} onClose={closeFeatureDialog} className='max-h-[90vh]'>
             <DialogHeader>
-              <DialogTitle>Knowledge Test</DialogTitle>
-              <DialogDescription>Test your knowledge about {data?.name}</DialogDescription>
+              <DialogTitle>{t('heritageDetail.knowledgeTestTitle')}</DialogTitle>
+              <DialogDescription>{t('heritageDetail.knowledgeTestDescription')} {data?.name}</DialogDescription>
             </DialogHeader>
             <div className='py-4 overflow-auto'>
               <HeritageKnowledgeTest heritageId={id} heritageName={data?.name} />

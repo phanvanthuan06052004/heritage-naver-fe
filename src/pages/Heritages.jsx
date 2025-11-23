@@ -1,14 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useCallback, useEffect, useMemo } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { heritageSlice, useLazyGetHeritagesQuery } from '~/store/apis/heritageApi'
 import HeritageList from '~/components/Heritage/HeritageList'
 import HeritageSkeleton from '~/components/Heritage/HeritageSkeleton'
 import { setHeritagesPage } from '~/store/slices/paginationSlice'
 import { selectHeritagesCurrentPage, selectHeritagesItemsPerPage, selectHeritagesSearchQuery } from '~/store/selectors/paginationSelectors'
+import { useLanguage, useLanguageChange } from '~/hooks/useLanguage'
 
 const Heritages = () => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
+  const { language } = useLanguage()
   const currentPage = useSelector(selectHeritagesCurrentPage)
   const itemsPerPage = useSelector(selectHeritagesItemsPerPage)
   const searchQuery = useSelector(selectHeritagesSearchQuery)
@@ -16,8 +20,9 @@ const Heritages = () => {
   const queryParams = useMemo(() => ({
     page: currentPage,
     limit: itemsPerPage,
-    name: searchQuery || undefined
-  }), [currentPage, itemsPerPage, searchQuery])
+    name: searchQuery || undefined,
+    language
+  }), [currentPage, itemsPerPage, searchQuery, language])
 
 
   const [trigger, { data: response, isLoading, isFetching, error }] = useLazyGetHeritagesQuery()
@@ -33,6 +38,11 @@ const Heritages = () => {
     trigger(queryParams)
   }, [queryParams, trigger])
 
+  // Refetch when language changes
+  useLanguageChange(() => {
+    trigger(queryParams)
+  })
+
   // Handle page change
   const handlePageChange = useCallback((page) => {
     if (page >= 1 && page <= totalPages) {
@@ -47,7 +57,8 @@ const Heritages = () => {
       const nextPageParams = {
         page: currentPage + 1,
         limit: itemsPerPage,
-        name: searchQuery || undefined
+        name: searchQuery || undefined,
+        language
       }
       dispatch(heritageSlice.util.prefetch('getHeritages', nextPageParams, { force: false }))
     }
@@ -166,11 +177,10 @@ const Heritages = () => {
         {/* Header */}
         <div className='text-center animate-fade-up'>
           <h1 className='text-3xl sm:text-4xl font-medium text-heritage-dark mb-4'>
-            Explore Historical Heritage Sites
+            {t('home.title')}
           </h1>
           <p className='text-muted-foreground max-w-2xl mx-auto'>
-            Discover prominent cultural and historical landmarks across Vietnam,
-            where our nation's civilization was shaped.
+            {t('home.subtitle')}
           </p>
         </div>
 

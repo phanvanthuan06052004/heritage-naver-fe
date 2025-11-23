@@ -1,6 +1,7 @@
 import { Map, MessageSquare, Rocket, Telescope, UserPlus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '~/components/common/ui/Button'
 import SectionContainer from './SectionContainer'
@@ -15,6 +16,7 @@ const CoreValues = lazy(() => import('./CoreValues'))
 const Timeline = lazy(() => import('./Timeline'))
 
 const About = () => {
+  const { t } = useTranslation()
   const [activeSection, setActiveSection] = useState('vision')
 
   // Handle scroll-based section activation
@@ -61,26 +63,25 @@ const About = () => {
             <div className='max-w-3xl mx-auto text-justify order-1 sm:order-2'>
               <div className='text-center'>
                 <div className='inline-block px-5 py-2 bg-heritage/90 text-white rounded-full font-medium mb-4 '>
-                  Vision & Mission
+                  {t('about.visionMission')}
                 </div>
               </div>
               <div className='text-center'>
-                <Title title='Connecting the Past with the Present' className='text-3xl sm:text-4xl mb-6' />
+                <Title title={t('about.connectingPast')} className='text-3xl sm:text-4xl mb-6' />
               </div>
               <p className='text-lg mb-8 leading-relaxed'>
-                The Heritage project was born with the mission to preserve, promote and spread the cultural and historical values
-                of the nation to the community, especially the younger generation through modern technology platforms.
+                {t('about.missionText')}
               </p>
               <div className='space-y-6'>
                 <VisionItem
                   icon={<Telescope className='text-heritage-dark' />}
-                  title='Vision'
-                  description='Become the leading platform for preserving and promoting the value of Vietnamese cultural heritage, connecting people with national history through modern technology.'
+                  title={t('about.vision')}
+                  description={t('about.visionText')}
                 />
                 <VisionItem
                   icon={<Rocket className='text-heritage-dark' />}
-                  title='Mission'
-                  description='Use technology to preserve, spread and educate about Vietnamese cultural heritage, creating interactive and engaging experiences for users.'
+                  title={t('about.mission')}
+                  description={t('about.missionDetailText')}
                 />
               </div>
             </div>
@@ -90,11 +91,11 @@ const About = () => {
         {/* Our Story - Timeline */}
         <SectionContainer id='story' className='py-24 bg-primary/5'>
           <SectionHeader
-            eyebrow='Our Story'
-            title='Development Journey'
-            description='From idea to reality, our journey is a testament to our passion for cultural heritage and technology.'
+            eyebrow={t('about.ourStory')}
+            title={t('about.developmentJourney')}
+            description={t('about.journeyDescription')}
           />  
-          <Suspense fallback={<div className='h-96 flex items-center justify-center'>Loading...</div>}>
+          <Suspense fallback={<div className='h-96 flex items-center justify-center'>{t('common.loading')}</div>}>
             <Timeline />
           </Suspense>
           
@@ -103,11 +104,11 @@ const About = () => {
         {/* Core Values */}
         <SectionContainer id='values' className='py-24'>
           <SectionHeader 
-            eyebrow='Core Values'
-            title='Values We Pursue'
-            description='The principles and values that guide all our activities in the journey of cultural heritage preservation.'
+            eyebrow={t('about.coreValues')}
+            title={t('about.valuesPursue')}
+            description={t('about.valuesDescription')}
           />
-          <Suspense fallback={<div className='h-96 flex items-center justify-center'>Loading...</div>}>
+          <Suspense fallback={<div className='h-96 flex items-center justify-center'>{t('common.loading')}</div>}>
             <CoreValues />
           </Suspense>
         </SectionContainer>
@@ -115,11 +116,11 @@ const About = () => {
         {/* Team */}
         <SectionContainer id='team' className='py-24 bg-secondary/50'>
           <SectionHeader 
-            eyebrow='Team'
-            title='Talented People'
-            description='Meet the passionate and talented people behind the Heritage project.'
+            eyebrow={t('about.team')}
+            title={t('about.talentedPeople')}
+            description={t('about.teamDescription')}
           />
-          <Suspense fallback={<div className='h-96 flex items-center justify-center'>Loading...</div>}>
+          <Suspense fallback={<div className='h-96 flex items-center justify-center'>{t('common.loading')}</div>}>
             <TeamMembers />
           </Suspense>
         </SectionContainer>
@@ -127,8 +128,8 @@ const About = () => {
         {/* Call to Action */}
         <section className='py-24 bg-heritage/85 text-white'>
           <div className='lcn-container-x text-center'>
-            <Title title='Join Us' className='text-3xl sm:text-4xl mb-6 text-white' />
-            <p className='text-xl mb-8'>Become part of the journey to preserve and promote the values of Vietnamese cultural heritage.</p>
+            <Title title={t('about.joinUs')} className='text-3xl sm:text-4xl mb-6 text-white' />
+            <p className='text-xl mb-8'>{t('about.joinDescription')}</p>
             <div className='flex flex-wrap justify-center gap-4'>
               <Link to='/register'>
                 <Button
@@ -137,7 +138,7 @@ const About = () => {
                   className='w-52 text-muted-foreground backdrop-blur-sm border-white hover:bg-white/20 hover:text-white'
                 >
                   <UserPlus className='mr-2' size={20} />
-                  Sign Up Now
+                  {t('about.signUpNow')}
                 </Button>
               </Link>
               <Link to='/explore'>
@@ -147,7 +148,7 @@ const About = () => {
                   className='bg-white/10 backdrop-blur-sm text-white border-white hover:bg-white/20 w-62'
                 >
                   <Map className='mr-2' size={20} />
-                  Explore Map
+                  {t('about.exploreMap')}
                 </Button>
               </Link>
             </div>
@@ -157,11 +158,11 @@ const About = () => {
         {/* Contact */}
         <SectionContainer id='contact' className='py-24 bg-secondary/50'>
           <SectionHeader 
-            eyebrow='Contact'
-            title='Connect With Us'
-            description='We are always ready to listen to your feedback and answer your questions. Contact us through the following channels:'
+            eyebrow={t('about.contact')}
+            title={t('about.connectWithUs')}
+            description={t('about.contactDescription')}
           />
-          <Suspense fallback={<div className='h-96 flex items-center justify-center'>Loading...</div>}>
+          <Suspense fallback={<div className='h-96 flex items-center justify-center'>{t('common.loading')}</div>}>
             <ContactInfo />
           </Suspense>
         </SectionContainer>

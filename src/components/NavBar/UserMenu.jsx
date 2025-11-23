@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Heart, Settings } from 'lucide-react'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 import { selectCurrentUser } from '~/store/slices/authSlice'
 
 import { Button } from '~/components/common/ui/Button'
@@ -10,6 +11,7 @@ import Avatar from '~/components/common/Avatar'
 import { logOut } from '~/store/slices/authSlice'
 
 const UserMenu = ({ userMenuLinks }) => {
+  const { t } = useTranslation()
   const currentUser = useSelector(selectCurrentUser)
   const isAdmin = currentUser?.role === 'admin'
   
@@ -21,7 +23,7 @@ const UserMenu = ({ userMenuLinks }) => {
   const handleLogout = () => {
     try {
       dispatch(logOut())
-      toast.success('Logged out successfully!', {
+      toast.success(t('auth.logoutSuccess'), {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -34,7 +36,7 @@ const UserMenu = ({ userMenuLinks }) => {
       setIsOpen(false)
     } catch (error) {
       console.error('Logout failed:', error)
-      toast.error('Logout failed. Please try again!')
+      toast.error(t('common.error'))
     }
   }
 
@@ -52,7 +54,7 @@ const UserMenu = ({ userMenuLinks }) => {
       <Link to='/favorites'>
         <Button variant='ghost'>
           <Heart size={20} />
-          <span>Favorites</span>
+          <span>{t('nav.favorites')}</span>
         </Button>
       </Link>
       {isAdmin && (
@@ -78,7 +80,7 @@ const UserMenu = ({ userMenuLinks }) => {
               <div className='px-4 py-2'>
                 <p className='text-sm font-medium truncate'>{currentUser?.displayname}</p>
                 {isAdmin && (
-                  <p className='text-xs text-heritage'>Quản trị viên</p>
+                  <p className='text-xs text-heritage'>{t('nav.admin')}</p>
                 )}
               </div>
               <hr className='border-gray-100'/>
@@ -86,8 +88,8 @@ const UserMenu = ({ userMenuLinks }) => {
                 userMenuLinks.map(item => (
                   <Link key={item.to} to={item.to} onClick={() => setIsOpen(false)}>
                      <Button variant='ghost' className='!flex w-full h-full !justify-start' >
-                      {item.icon}
-                      <span>{item.name}</span>
+                      {item.icon()}
+                      <span>{t(item.nameKey)}</span>
                     </Button>
                   </Link>
                 ))
@@ -98,7 +100,7 @@ const UserMenu = ({ userMenuLinks }) => {
                 className='w-full text-destructive hover:text-destructive'
                 variant='ghost'
               >
-                Logout
+                {t('nav.logout')}
               </Button>
             </div>
           )

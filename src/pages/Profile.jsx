@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useGetUserProfileQuery, useUpdateUserProfileMutation, useUploadAvatarMutation } from '../store/apis/userSlice'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/common/ui/Button'
 import Title from '~/components/common/Title'
 import { Camera, Check, Loader2, X } from 'lucide-react'
@@ -11,6 +12,7 @@ import { setUser } from '~/store/slices/authSlice'
 const DEFAULT_AVATAR = '/images/avatar-default.jpg'
 
 const UserProfile = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const { data: user } = useGetUserProfileQuery()
 
@@ -55,12 +57,12 @@ const UserProfile = () => {
     const file = e.target.files[0]
     if (file) {
       if (file.size > 1 * 1024 * 1024) {
-        toast.error('Image size must not exceed 1MB')
+        toast.error(t('profile.messages.imageSizeExceeded'))
         return
       }
       const validTypes = ['image/jpeg', 'image/png', 'image/gif']
       if (!validTypes.includes(file.type)) {
-        toast.error('Only JPEG, PNG or GIF image files are accepted')
+        toast.error(t('profile.messages.imageTypeInvalid'))
         return
       }
 
@@ -70,12 +72,12 @@ const UserProfile = () => {
         setAvatarPreview(dataUrl)
         setAvatarFile(file)
         setIsAvatarChanged(true)
-        toast.info('Avatar will be updated when you save changes', {
+        toast.info(t('profile.messages.avatarUpdateInfo'), {
           position: 'top-right',
         })
       }
       reader.onerror = () => {
-        toast.error('Unable to read image file')
+        toast.error(t('profile.messages.unableToReadImage'))
       }
       reader.readAsDataURL(file)
     }
@@ -86,13 +88,13 @@ const UserProfile = () => {
     const newErrors = {}
 
     if (!formData.displayname.trim()) {
-      newErrors.displayname = 'Display name cannot be empty'
+      newErrors.displayname = t('profile.errors.displayNameRequired')
     } else if (formData.displayname.length < 3) {
-      newErrors.displayname = 'Display name must be at least 3 characters'
+      newErrors.displayname = t('profile.errors.displayNameMinLength')
     }
 
     if (formData.phone && !/^\d{10,11}$/.test(formData.phone)) {
-      newErrors.phone = 'Please enter a valid phone number (10-11 digits)'
+      newErrors.phone = t('profile.errors.phoneInvalid')
     }
 
     setErrors(newErrors)
@@ -101,7 +103,7 @@ const UserProfile = () => {
       const firstErrorField = Object.keys(newErrors)[0]
       const errorElement = document.getElementById(firstErrorField)
       if (errorElement) errorElement.focus()
-      toast.error('Please check the information entered')
+      toast.error(t('profile.errors.checkInfo'))
     }
 
     return Object.keys(newErrors).length === 0
@@ -137,7 +139,7 @@ const UserProfile = () => {
       setAvatarFile(null)
       setAvatarPreview(avatarUrl || DEFAULT_AVATAR)
 
-      toast.success('Profile updated successfully!', {
+      toast.success(t('profile.messages.updateSuccess'), {
         position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
@@ -147,7 +149,7 @@ const UserProfile = () => {
         progress: undefined,
       })
     } catch (err) {
-      toast.error(`Update failed: ${err?.data?.message || err.message || 'An error occurred'}`)
+      toast.error(`${t('profile.messages.updateFailed')}: ${err?.data?.message || err.message || t('common.error')}`)
     }
   }
 
@@ -183,12 +185,12 @@ const UserProfile = () => {
         {/* Header */}
         <div className='relative bg-gradient-to-r from-heritage-light to-accent p-6 sm:p-8 flex flex-col sm:flex-row justify-between'>
           <div>
-            <Title title='Personal Information' />
-            <p className='text-muted-foreground mt-2'>Manage your personal information</p>
+            <Title title={t('profile.title')} />
+            <p className='text-muted-foreground mt-2'>{t('profile.subtitle')}</p>
           </div>
           <div className='mt-4 sm:mt-0'>
             {!isEditing && (
-              <Button onClick={() => setIsEditing(true)}>Edit</Button>
+              <Button onClick={() => setIsEditing(true)}>{t('profile.edit')}</Button>
             )}
           </div>
         </div>
@@ -249,11 +251,11 @@ const UserProfile = () => {
 
           {/* Personal Info */}
           <div className='space-y-6'>
-            <h3 className='text-lg font-medium text-heritage-dark'>Personal Information</h3>
+            <h3 className='text-lg font-medium text-heritage-dark'>{t('profile.personalInfo')}</h3>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
               <div className='space-y-2'>
                 <label htmlFor='displayname' className='block text-sm font-medium text-foreground'>
-                  Display Name
+                  {t('profile.displayName')}
                 </label>
                 <input
                   type='text'
@@ -264,7 +266,7 @@ const UserProfile = () => {
                   disabled={!isEditing}
                   className={`w-full pl-4 px-3 py-2 bg-background border ${errors.displayname ? 'border-destructive' : ''
                     } rounded-md disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-ring transition-colors`}
-                  placeholder='Enter display name'
+                  placeholder={t('profile.placeholders.displayName')}
                   aria-required='true'
                   aria-invalid={!!errors.displayname}
                   aria-describedby={errors.displayname ? 'displayname-error' : undefined}
@@ -277,7 +279,7 @@ const UserProfile = () => {
               </div>
               <div className='space-y-2'>
                 <label htmlFor='gender' className='block text-sm font-medium text-foreground'>
-                  Gender
+                  {t('profile.gender')}
                 </label>
                 <select
                   id='gender'
@@ -288,14 +290,14 @@ const UserProfile = () => {
                   className='w-full px-3 py-2 bg-background border rounded-md disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-ring transition-colors'
                   aria-label='Select gender'
                 >
-                  <option value='other'>Other</option>
-                  <option value='men'>Male</option>
-                  <option value='woman'>Female</option>
+                  <option value='other'>{t('profile.genderOptions.other')}</option>
+                  <option value='men'>{t('profile.genderOptions.men')}</option>
+                  <option value='woman'>{t('profile.genderOptions.woman')}</option>
                 </select>
               </div>
               <div className='space-y-2'>
                 <label htmlFor='phone' className='block text-sm font-medium text-foreground'>
-                  Phone Number
+                  {t('profile.phone')}
                 </label>
                 <input
                   type='tel'
@@ -306,7 +308,7 @@ const UserProfile = () => {
                   disabled={!isEditing}
                   className={`w-full pl-4 px-3 py-2 bg-background border ${errors.phone ? 'border-destructive' : 'border-input'
                     } rounded-md focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-70 disabled:cursor-not-allowed transition-colors`}
-                  placeholder='Enter phone number'
+                  placeholder={t('profile.placeholders.phone')}
                   aria-invalid={!!errors.phone}
                   aria-describedby={errors.phone ? 'phone-error' : undefined}
                 />
@@ -318,7 +320,7 @@ const UserProfile = () => {
               </div>
               <div className='space-y-2'>
                 <label htmlFor='dateOfBirth' className='block text-sm font-medium text-foreground'>
-                  Date of Birth
+                  {t('profile.dateOfBirth')}
                 </label>
                 <input
                   type='date'
@@ -338,7 +340,7 @@ const UserProfile = () => {
             <div className='flex justify-end gap-4 pt-4 border-t border-border'>
               <Button type='button' onClick={handleCancel} variant='outline' className='flex items-center gap-2'>
                 <X size={16} />
-                <span>Cancel</span>
+                <span>{t('profile.cancel')}</span>
               </Button>
               <Button
                 type='submit'
@@ -348,12 +350,12 @@ const UserProfile = () => {
                 {(isUpdating || isUploadingAvatar) ? (
                   <>
                     <Loader2 className='h-4 w-4 animate-spin' />
-                    <span>Saving...</span>
+                    <span>{t('profile.saving')}</span>
                   </>
                 ) : (
                   <>
                     <Check size={16} />
-                    <span>Save Changes</span>
+                    <span>{t('profile.save')}</span>
                   </>
                 )}
               </Button>
